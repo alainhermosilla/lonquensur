@@ -1,0 +1,112 @@
+<section class="services">
+  <div class="contenido">
+    <p class="eyebrow">Qué hacemos</p>
+
+    <h2>Soluciones tecnológicas para necesidades reales.</h2>
+
+    <div class="servicios">
+      <article class="servicio">
+        <span class="numero">01</span>
+        <h3>Desarrollo tecnológico</h3>
+        <p>
+          Aplicaciones y soluciones digitales pensadas para resolver
+          necesidades concretas.
+        </p>
+      </article>
+
+      <article class="servicio">
+        <span class="numero">02</span>
+        <h3>Automatización</h3>
+        <p>
+          Integramos herramientas y procesos para hacer el trabajo más
+          simple y eficiente.
+        </p>
+      </article>
+
+      <article class="servicio">
+        <span class="numero">03</span>
+        <h3>Soluciones a medida</h3>
+        <p>
+          Diseñamos soluciones adaptadas a las necesidades reales de personas,
+          empresas y organizaciones.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services {
+    padding: 7rem 2rem;
+    background: #ffffff;
+  }
+
+  .contenido {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    max-width: 700px;
+    margin: 0;
+    color: var(--color-text);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+
+  .servicios {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4rem;
+    margin-top: 5rem;
+  }
+
+  .servicio {
+    border-top: 2px solid var(--color-primary);
+    padding-top: 1.5rem;
+  }
+
+  .numero {
+    display: block;
+    margin-bottom: 2rem;
+    color: var(--color-accent);
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.1rem;
+  }
+
+  h3 {
+    margin: 0 0 1rem;
+    color: var(--color-text);
+    font-size: 1.35rem;
+  }
+
+  .servicio p {
+    margin: 0;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 800px) {
+    .services {
+      padding: 5rem 1.5rem;
+    }
+
+    .servicios {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      margin-top: 3.5rem;
+    }
+  }
+</style>

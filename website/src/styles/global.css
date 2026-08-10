@@ -1,0 +1,46 @@
+:root {
+
+    /* ===========================
+       Colores corporativos
+       =========================== */
+
+    --color-primary: #2563eb;
+    --color-accent: #ea580c;
+
+    --color-background: #eef4ff;
+    --color-surface: #ffffff;
+
+    --color-text: #1f2937;
+    --color-text-light: #4b5563;
+
+
+    /* ===========================
+       Tipografía
+       =========================== */
+
+    --font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+
+    /* ===========================
+       Espaciados
+       =========================== */
+
+    --space-xs: .5rem;
+    --space-sm: 1rem;
+    --space-md: 2rem;
+    --space-lg: 4rem;
+    --space-xl: 8rem;
+
+
+    /* ===========================
+       Bordes
+       =========================== */
+
+    --radius: .75rem;
+
+}

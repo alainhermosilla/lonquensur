@@ -1,0 +1,109 @@
+<section class="hero">
+  <div class="contenido">
+    <p class="subtitulo">Tecnología con propósito</p>
+
+    <h1>LONQUEN<span>S</span>UR</h1>
+
+    <p class="descripcion">
+      Soluciones tecnológicas simples, modernas y confiables para personas,
+      empresas y organizaciones.
+    </p>
+
+    <a href="#" class="boton">
+      Conócenos
+    </a>
+  </div>
+</section>
+
+<style>
+  :global(body) {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #f5f7fa;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+      radial-gradient(
+        circle at 50% 35%,
+       rgba(255, 255, 255, 0.95) 0%,
+       rgba(238, 244, 255, 0.9) 40%,
+       rgba(200, 220, 247, 1) 100%
+      );
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+
+  .contenido {
+    max-width: 760px;
+    text-align: center;
+  }
+
+  .subtitulo {
+    margin: 0 0 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3rem;
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: clamp(3.5rem, 9vw, 6rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+
+  h1 span {
+    color: var(--color-accent);
+  }
+
+  .descripcion {
+    max-width: 620px;
+    margin: 2rem auto;
+    color: var(--color-text-light);
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    line-height: 1.8;
+  }
+
+  .boton {
+    display: inline-block;
+    background: var(--color-primary);
+    color: white;
+    padding: 0.9rem 1.8rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 700;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .boton:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+  }
+
+  @media (max-width: 600px) {
+    .hero {
+      padding: 1.5rem;
+    }
+
+    .subtitulo {
+      letter-spacing: 0.2rem;
+    }
+
+    .descripcion {
+      line-height: 1.6;
+    }
+  }
+</style>
