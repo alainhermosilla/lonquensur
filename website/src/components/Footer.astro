@@ -1,0 +1,68 @@
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <strong>Lonquensur</strong>
+    </div>
+
+    <div class="footer-contact">
+      <span>Contacto</span>
+    </div>
+
+    <div class="footer-location">
+      <span>Ubicación</span>
+    </div>
+
+    <div class="footer-copy">
+      <span>© {new Date().getFullYear()} Lonquensur</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    width: 100%;
+    margin-top: 4rem;
+    padding: 2rem 1.5rem;
+    background: linear-gradient(
+      to bottom,
+      #dcecf5 0%,
+      #b9d8e8 50%,
+      #8fbfd4 100%
+    );
+    color: #17384a;
+  }
+
+  .footer-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-content p,
+  .footer-content span {
+    margin: 0;
+  }
+
+  .footer-brand {
+    font-size: 1rem;
+  }
+
+  .footer-contact,
+  .footer-location,
+  .footer-copy {
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
+
+  @media (max-width: 700px) {
+    .footer-content {
+      justify-content: center;
+      text-align: center;
+      gap: 0.8rem 1.5rem;
+    }
+  }
+</style>
