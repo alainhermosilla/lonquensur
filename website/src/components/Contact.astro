@@ -1,0 +1,121 @@
+<section id="contacto" class="contact">
+  <div class="contenido">
+    <p class="eyebrow">Contacto</p>
+
+    <h2>
+      Hablemos de lo que necesitas.
+    </h2>
+
+    <p class="intro">
+      Si tienes una necesidad, un problema o una idea que pueda resolverse
+      con tecnología, conversemos.
+    </p>
+
+    <div class="contact-grid">
+      <a href="mailto:info@lonquensur.cl" class="contact-item">
+        <span class="label">Correo</span>
+        <span class="value">info@lonquensur.cl</span>
+      </a>
+
+      <a
+        href="https://wa.me/56966396574"
+        class="contact-item"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span class="label">Teléfono / WhatsApp</span>
+        <span class="value">+56 9 6639 6574</span>
+      </a>
+
+      <div class="contact-item">
+        <span class="label">Ubicación</span>
+        <span class="value">Lonquén · Chile</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    width: 100%;
+    padding: 7rem 2rem;
+    background: var(--color-surface);
+  }
+
+  .contenido {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    max-width: 800px;
+    margin: 0 0 1.5rem;
+    color: var(--color-text);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+
+  .intro {
+    max-width: 650px;
+    margin: 0 0 4rem;
+    color: var(--color-text-light);
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--color-primary);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .contact-item:hover .value {
+    color: var(--color-primary);
+  }
+
+  .label {
+    color: var(--color-accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12rem;
+  }
+
+  .value {
+    color: var(--color-text);
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: color 0.2s ease;
+  }
+
+  @media (max-width: 800px) {
+    .contact {
+      padding: 5rem 1.5rem;
+    }
+
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+</style>
