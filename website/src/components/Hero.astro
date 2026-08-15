@@ -1,9 +1,303 @@
 <section class="hero">
-  <div class="hero-image" aria-hidden="true">
-    <img
-      src="/images/hero-lonquensur.png"
-      alt=""
-    />
+  <div class="hero-grafico" aria-hidden="true">
+    <svg
+      class="grafico-svg"
+      viewBox="0 0 900 760"
+      preserveAspectRatio="xMidYMid meet"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <!-- Río -->
+        <linearGradient id="rio" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#28d9c7" />
+          <stop offset="55%" stop-color="#09c4e8" />
+          <stop offset="100%" stop-color="#2563eb" />
+        </linearGradient>
+
+        <!-- Montañas -->
+        <linearGradient id="montanaVerde" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#b9e6c5" stop-opacity="0.18" />
+          <stop offset="45%" stop-color="#62c99b" stop-opacity="0.28" />
+          <stop offset="100%" stop-color="#51b9d8" stop-opacity="0.16" />
+        </linearGradient>
+
+        <linearGradient id="montanaAzul" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#9bd8d2" stop-opacity="0.12" />
+          <stop offset="50%" stop-color="#55b8d5" stop-opacity="0.20" />
+          <stop offset="100%" stop-color="#5d9fe0" stop-opacity="0.18" />
+        </linearGradient>
+
+        <!-- Líneas topográficas -->
+        <linearGradient id="topografia" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#f4b400" stop-opacity="0.18" />
+          <stop offset="45%" stop-color="#45c9a7" stop-opacity="0.42" />
+          <stop offset="100%" stop-color="#3da5df" stop-opacity="0.24" />
+        </linearGradient>
+
+        <!-- Red -->
+        <linearGradient id="red" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f4b400" />
+          <stop offset="42%" stop-color="#18d8c5" />
+          <stop offset="100%" stop-color="#2563eb" />
+        </linearGradient>
+
+        <!-- Halo -->
+        <radialGradient id="halo">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+          <stop offset="55%" stop-color="#dff4ff" stop-opacity="0.42" />
+          <stop offset="100%" stop-color="#dff4ff" stop-opacity="0" />
+        </radialGradient>
+
+        <pattern
+          id="dots"
+          width="22"
+          height="22"
+          patternUnits="userSpaceOnUse"
+        >
+          <circle
+            cx="3"
+            cy="3"
+            r="1.8"
+            fill="#2563eb"
+            opacity="0.28"
+          />
+        </pattern>
+
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- Halo general -->
+      <ellipse
+        cx="555"
+        cy="390"
+        rx="390"
+        ry="350"
+        fill="url(#halo)"
+      />
+
+      <!-- =====================================================
+           MONTAÑAS SUTILES
+           ===================================================== -->
+
+      <!-- Cordillera posterior -->
+      <path
+        d="M0 310
+           C75 265 125 275 185 245
+           C245 215 285 250 345 215
+           C410 175 465 210 525 175
+           C590 135 650 180 715 150
+           C775 122 835 150 900 125
+           L900 390
+           L0 390 Z"
+        fill="url(#montanaAzul)"
+      />
+
+      <!-- Cordillera intermedia -->
+      <path
+        d="M0 335
+           C70 300 125 315 190 275
+           C245 240 300 290 355 255
+           C415 220 470 255 525 220
+           C585 180 645 235 705 205
+           C765 175 825 205 900 170
+           L900 405
+           L0 405 Z"
+        fill="url(#montanaVerde)"
+      />
+
+      <!-- Cordillera frontal -->
+      <path
+        d="M0 360
+           C80 325 145 345 205 305
+           C270 265 325 325 385 285
+           C445 245 505 300 565 260
+           C625 220 690 280 750 245
+           C805 215 855 250 900 225
+           L900 425
+           L0 425 Z"
+        fill="#76cfa5"
+        opacity="0.10"
+      />
+
+      <!-- Relieves suaves -->
+      <g
+        fill="none"
+        stroke="#5dbda5"
+        stroke-width="1.2"
+        opacity="0.22"
+      >
+        <path d="M70 335 C135 300 180 320 235 285 C295 248 345 305 400 270" />
+        <path d="M210 350 C270 310 320 345 380 305 C440 265 495 315 550 280" />
+        <path d="M380 345 C440 305 500 340 555 300 C620 255 675 310 735 275" />
+        <path d="M560 340 C625 300 680 330 740 295 C805 260 850 295 900 270" />
+      </g>
+
+      <!-- =====================================================
+           LÍNEAS TOPOGRÁFICAS
+           ===================================================== -->
+
+      <g
+        fill="none"
+        stroke="url(#topografia)"
+        stroke-width="1.35"
+      >
+        <path d="M20 245 C125 170 220 210 305 165 C390 120 470 175 560 140 C660 100 760 150 890 110" />
+        <path d="M10 270 C120 195 225 235 315 190 C400 145 480 200 570 165 C670 125 770 175 900 135" />
+        <path d="M0 295 C115 220 230 260 325 215 C415 170 490 225 580 190 C680 150 780 200 900 160" />
+        <path d="M0 320 C105 245 235 285 335 240 C425 195 500 250 590 215 C695 175 790 225 900 185" />
+        <path d="M0 345 C95 270 240 310 345 265 C435 220 510 275 600 240 C705 200 800 250 900 210" />
+        <path d="M0 370 C85 295 245 335 355 290 C445 245 520 300 610 265 C715 225 810 275 900 235" />
+        <path d="M0 395 C75 320 250 360 365 315 C455 270 530 325 620 290 C725 250 820 300 900 260" />
+        <path d="M0 420 C65 345 255 385 375 340 C465 295 540 350 630 315 C735 275 830 325 900 285" />
+        <path d="M0 445 C55 370 260 410 385 365 C475 320 550 375 640 340 C745 300 840 350 900 310" />
+        <path d="M0 470 C45 395 265 435 395 390 C485 345 560 400 650 365 C755 325 850 375 900 335" />
+        <path d="M0 495 C35 420 270 460 405 415 C495 370 570 425 660 390 C765 350 860 400 900 360" />
+        <path d="M0 520 C25 445 275 485 415 440 C505 395 580 450 670 415 C775 375 870 425 900 385" />
+        <path d="M0 545 C15 470 280 510 425 465 C515 420 590 475 680 440 C785 400 880 450 900 410" />
+        <path d="M0 570 C5 495 285 535 435 490 C525 445 600 500 690 465 C795 425 890 475 900 435" />
+        <path d="M0 595 C0 520 290 560 445 515 C535 470 610 525 700 490 C805 450 900 500 900 460" />
+      </g>
+
+      <!-- =====================================================
+           RÍO / FLUJO
+           ===================================================== -->
+
+      <path
+        d="M430 115
+           C385 180 450 225 415 290
+           C380 355 285 365 325 435
+           C360 500 470 490 455 560
+           C440 625 370 650 395 720"
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="30"
+        opacity="0.72"
+      />
+
+      <path
+        d="M430 115
+           C385 180 450 225 415 290
+           C380 355 285 365 325 435
+           C360 500 470 490 455 560
+           C440 625 370 650 395 720"
+        fill="none"
+        stroke="url(#rio)"
+        stroke-width="15"
+        stroke-linecap="round"
+        filter="url(#glow)"
+      />
+
+      <!-- =====================================================
+           RED TECNOLÓGICA
+           ===================================================== -->
+
+      <g
+        fill="none"
+        stroke="url(#red)"
+        stroke-width="1.5"
+        opacity="0.88"
+      >
+        <path d="M540 180 L655 120 L760 190 L850 135" />
+        <path d="M540 180 L595 295 L710 255 L760 190" />
+        <path d="M595 295 L555 410 L650 395 L710 255" />
+        <path d="M710 255 L805 335 L865 270" />
+        <path d="M650 395 L750 465 L805 335" />
+        <path d="M555 410 L510 525 L620 560 L750 465" />
+        <path d="M750 465 L845 535 L875 445" />
+        <path d="M620 560 L715 635 L845 535" />
+        <path d="M715 635 L805 690 L870 610" />
+        <path d="M510 525 L455 605 L620 560" />
+      </g>
+
+      <!-- Líneas secundarias -->
+      <g
+        fill="none"
+        stroke="#2563eb"
+        stroke-width="1"
+        opacity="0.30"
+      >
+        <path d="M655 120 L595 295 L510 525 L455 605" />
+        <path d="M760 190 L710 255 L650 395 L620 560 L715 635" />
+        <path d="M850 135 L805 335 L845 535 L805 690" />
+        <path d="M540 180 L710 255 L805 335 L875 445" />
+      </g>
+
+      <!-- =====================================================
+           PUNTOS
+           ===================================================== -->
+
+      <path
+        d="M585 450
+           C665 395 790 410 900 465
+           L900 735
+           L550 735
+           C530 650 535 525 585 450Z"
+        fill="url(#dots)"
+        opacity="0.65"
+      />
+
+      <!-- =====================================================
+           NODOS
+           ===================================================== -->
+
+      <g filter="url(#glow)">
+        <circle cx="540" cy="180" r="15" fill="#ffffff" stroke="#f4b400" stroke-width="2" />
+        <circle cx="540" cy="180" r="7" fill="#f4b400" />
+
+        <circle cx="655" cy="120" r="17" fill="#ffffff" stroke="#18d8c5" stroke-width="2" />
+        <circle cx="655" cy="120" r="8" fill="#18d8c5" />
+
+        <circle cx="760" cy="190" r="17" fill="#ffffff" stroke="#2563eb" stroke-width="2" />
+        <circle cx="760" cy="190" r="8" fill="#2563eb" />
+
+        <circle cx="595" cy="295" r="13" fill="#18d8c5" />
+
+        <circle cx="710" cy="255" r="18" fill="#ffffff" stroke="#18d8c5" stroke-width="2" />
+        <circle cx="710" cy="255" r="8" fill="#18d8c5" />
+
+        <circle cx="805" cy="335" r="15" fill="#ffffff" stroke="#f4b400" stroke-width="2" />
+        <circle cx="805" cy="335" r="7" fill="#f4b400" />
+
+        <circle cx="555" cy="410" r="16" fill="#ffffff" stroke="#f4b400" stroke-width="2" />
+        <circle cx="555" cy="410" r="8" fill="#f4b400" />
+
+        <circle cx="650" cy="395" r="18" fill="#ffffff" stroke="#18d8c5" stroke-width="2" />
+        <circle cx="650" cy="395" r="8" fill="#18d8c5" />
+
+        <circle cx="750" cy="465" r="17" fill="#ffffff" stroke="#2563eb" stroke-width="2" />
+        <circle cx="750" cy="465" r="8" fill="#2563eb" />
+
+        <circle cx="510" cy="525" r="13" fill="#18d8c5" />
+
+        <circle cx="620" cy="560" r="17" fill="#ffffff" stroke="#f4b400" stroke-width="2" />
+        <circle cx="620" cy="560" r="8" fill="#f4b400" />
+
+        <circle cx="845" cy="535" r="16" fill="#ffffff" stroke="#18d8c5" stroke-width="2" />
+        <circle cx="845" cy="535" r="8" fill="#18d8c5" />
+
+        <circle cx="715" cy="635" r="17" fill="#ffffff" stroke="#2563eb" stroke-width="2" />
+        <circle cx="715" cy="635" r="8" fill="#2563eb" />
+
+        <circle cx="805" cy="690" r="13" fill="#18d8c5" />
+      </g>
+
+      <!-- Nodos pequeños -->
+      <g>
+        <circle cx="850" cy="135" r="7" fill="#2563eb" />
+        <circle cx="865" cy="270" r="6" fill="#18d8c5" />
+        <circle cx="875" cy="445" r="7" fill="#2563eb" />
+        <circle cx="870" cy="610" r="6" fill="#f4b400" />
+        <circle cx="455" cy="605" r="6" fill="#18d8c5" />
+        <circle cx="475" cy="470" r="5" fill="#2563eb" />
+        <circle cx="490" cy="320" r="5" fill="#f4b400" />
+      </g>
+    </svg>
   </div>
 
   <div class="contenido">
@@ -37,71 +331,72 @@
 <style>
   .hero {
     position: relative;
-    min-height: 100vh;
+    min-height: calc(100vh - 92px);
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background:
-      radial-gradient(
-        circle at 35% 38%,
-        rgba(255, 255, 255, 0.99) 0%,
-        rgba(242, 247, 253, 0.98) 52%,
-        rgba(224, 235, 247, 1) 100%
-      );
     padding: 2rem;
     box-sizing: border-box;
+
+    background:
+      radial-gradient(
+        circle at 72% 38%,
+        rgba(213, 246, 238, 0.62) 0%,
+        rgba(213, 246, 238, 0.28) 24%,
+        rgba(213, 246, 238, 0) 48%
+      ),
+      radial-gradient(
+        circle at 52% 70%,
+        rgba(207, 231, 255, 0.75) 0%,
+        rgba(207, 231, 255, 0.30) 38%,
+        rgba(207, 231, 255, 0) 70%
+      ),
+      linear-gradient(
+        120deg,
+        #ffffff 0%,
+        #f8fbff 42%,
+        #edf7fb 72%,
+        #e9f5ff 100%
+      );
   }
 
-  .hero-image {
+  .hero-grafico {
     position: absolute;
     top: 0;
-    right: 0;
-    width: 50%;
+    right: 3%;
+    width: 57%;
     height: 100%;
     z-index: 0;
-    overflow: hidden;
+    overflow: visible;
+    pointer-events: none;
   }
 
-  .hero-image::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
+  .hero-grafico::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -75%;
+  width: 175%;
+  z-index: 2;
+  pointer-events: none;
 
-    background:
-      linear-gradient(
-        to right,
-        rgba(242, 247, 253, 1) 0%,
-        rgba(242, 247, 253, 0.98) 8%,
-        rgba(242, 247, 253, 0.90) 18%,
-        rgba(242, 247, 253, 0.70) 30%,
-        rgba(242, 247, 253, 0.40) 44%,
-        rgba(242, 247, 253, 0.16) 58%,
-        rgba(242, 247, 253, 0) 74%
-      );
-  }
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.94) 22%,
+    rgba(255, 255, 255, 0.82) 38%,
+    rgba(255, 255, 255, 0.58) 52%,
+    rgba(255, 255, 255, 0.30) 67%,
+    rgba(255, 255, 255, 0.10) 82%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
 
-  .hero-image::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(242, 247, 253, 0.08) 0%,
-        rgba(242, 247, 253, 0) 45%,
-        rgba(242, 247, 253, 0.12) 100%
-      );
-  }
-
-  .hero-image img {
+  .grafico-svg {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center;
     display: block;
   }
 
@@ -126,7 +421,7 @@
 
   .marca-hero {
     margin: 0;
-    color: #1f2937;
+    color: #172033;
     font-size: clamp(3rem, 7vw, 5rem);
     font-weight: 800;
     letter-spacing: -0.05em;
@@ -134,7 +429,7 @@
 
     text-shadow:
       -1px -1px 1px rgba(255, 255, 255, 0.95),
-      2px 2px 3px rgba(31, 41, 55, 0.16);
+      2px 2px 3px rgba(31, 41, 55, 0.12);
   }
 
   .marca-hero span {
@@ -197,28 +492,22 @@
       padding: 5rem 1.5rem;
     }
 
-    .hero-image {
+    .hero-grafico {
       width: 100%;
-      height: 42%;
+      height: 52%;
       top: auto;
       bottom: 0;
-      opacity: 0.24;
+      opacity: 0.48;
     }
 
-    .hero-image::before {
-      background:
-        linear-gradient(
-          to bottom,
-          rgba(242, 247, 253, 1) 0%,
-          rgba(242, 247, 253, 0.92) 15%,
-          rgba(242, 247, 253, 0.65) 32%,
-          rgba(242, 247, 253, 0.25) 55%,
-          rgba(242, 247, 253, 0) 78%
-        );
-    }
-
-    .hero-image::after {
-      background: none;
+    .hero-grafico::before {
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 0.92) 15%,
+        rgba(255, 255, 255, 0.55) 38%,
+        rgba(255, 255, 255, 0) 72%
+      );
     }
 
     .contenido {
@@ -241,10 +530,6 @@
     .frase-principal,
     .frase-secundaria {
       font-size: 1.35rem;
-    }
-
-    .frase-secundaria {
-      margin-top: 0.2rem;
     }
 
     .descripcion {
