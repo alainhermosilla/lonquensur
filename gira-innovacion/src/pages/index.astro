@@ -1,0 +1,260 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+	<main>
+		<section class="hero">
+			<div class="brand">
+				<span class="brand-line"></span>
+				<span>LONQUENSUR</span>
+			</div>
+
+			<div class="hero-content">
+				<p class="eyebrow">AGROCOOPINNOVA 2026</p>
+
+				<h1>Gira Tecnológica<br />de Innovación</h1>
+
+				<p class="intro">
+					Cinco días para conocer, aprender y compartir
+					experiencias de innovación.
+				</p>
+			</div>
+		</section>
+
+		<section class="menu" aria-label="Menú principal">
+			<a href="#" class="menu-card">
+				<span class="icon">📅</span>
+				<span>
+					<strong>Programa</strong>
+					<small>¿Qué hacemos cada día?</small>
+				</span>
+			</a>
+
+			<a href="#" class="menu-card">
+				<span class="icon">📍</span>
+				<span>
+					<strong>Visitas</strong>
+					<small>Conoce los lugares que visitaremos</small>
+				</span>
+			</a>
+
+			<a href="#" class="menu-card">
+				<span class="icon">📚</span>
+				<span>
+					<strong>Información</strong>
+					<small>Material para la gira</small>
+				</span>
+			</a>
+
+			<a href="#" class="menu-card">
+				<span class="icon">📝</span>
+				<span>
+					<strong>Encuestas</strong>
+					<small>Cuéntanos qué te pareció cada visita</small>
+				</span>
+			</a>
+
+			<a href="#" class="menu-card">
+				<span class="icon">📖</span>
+				<span>
+					<strong>Bitácora</strong>
+					<small>Mira lo que vamos viviendo</small>
+				</span>
+			</a>
+		</section>
+
+		<section class="today">
+			<p class="today-label">PRÓXIMA JORNADA</p>
+
+			<h2>Lunes 7 de septiembre</h2>
+
+			<p class="today-place">📍 Fundación Origen · Pirque</p>
+
+			<a href="#" class="today-button">Ver jornada</a>
+		</section>
+
+		<footer>
+			<p>Gira Tecnológica de Innovación 2026</p>
+			<p>AgroCoopInnova · Lonquensur</p>
+		</footer>
+	</main>
+</Layout>
+
+<style>
+	:global(*) {
+		box-sizing: border-box;
+	}
+
+	:global(body) {
+		margin: 0;
+		font-family:
+			Arial, Helvetica, sans-serif;
+		background: #f5f3ed;
+		color: #24352a;
+	}
+
+	main {
+		min-height: 100vh;
+	}
+
+	.hero {
+		background: #294936;
+		color: white;
+		padding: 24px 20px 42px;
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-size: 13px;
+		font-weight: 700;
+		letter-spacing: 2px;
+		opacity: 0.9;
+	}
+
+	.brand-line {
+		width: 24px;
+		height: 2px;
+		background: #d9b85c;
+	}
+
+	.hero-content {
+		max-width: 620px;
+		margin: 58px auto 0;
+	}
+
+	.eyebrow {
+		margin: 0 0 12px;
+		font-size: 13px;
+		font-weight: 700;
+		letter-spacing: 1.5px;
+		color: #e4c96e;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: clamp(38px, 10vw, 64px);
+		line-height: 1.02;
+		letter-spacing: -1.5px;
+	}
+
+	.intro {
+		max-width: 430px;
+		margin: 22px 0 0;
+		font-size: 18px;
+		line-height: 1.5;
+		color: #e5ebe6;
+	}
+
+	.menu {
+		max-width: 620px;
+		margin: 0 auto;
+		padding: 22px 16px 8px;
+	}
+
+	.menu-card {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 18px 16px;
+		margin-bottom: 12px;
+		background: white;
+		border-radius: 14px;
+		color: #24352a;
+		text-decoration: none;
+		box-shadow: 0 2px 8px rgba(30, 50, 35, 0.08);
+	}
+
+	.menu-card:active {
+		transform: scale(0.99);
+	}
+
+	.icon {
+		flex: 0 0 46px;
+		width: 46px;
+		height: 46px;
+		display: grid;
+		place-items: center;
+		border-radius: 12px;
+		background: #edf2eb;
+		font-size: 24px;
+	}
+
+	.menu-card strong,
+	.menu-card small {
+		display: block;
+	}
+
+	.menu-card strong {
+		font-size: 19px;
+		margin-bottom: 4px;
+	}
+
+	.menu-card small {
+		font-size: 14px;
+		line-height: 1.35;
+		color: #667268;
+	}
+
+	.today {
+		max-width: 620px;
+		margin: 14px auto 0;
+		padding: 24px 20px;
+		background: #e7ddbc;
+	}
+
+	.today-label {
+		margin: 0 0 8px;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 1.4px;
+		color: #5b5133;
+	}
+
+	.today h2 {
+		margin: 0;
+		font-size: 24px;
+		line-height: 1.2;
+	}
+
+	.today-place {
+		margin: 10px 0 18px;
+		font-size: 16px;
+	}
+
+	.today-button {
+		display: inline-block;
+		padding: 13px 20px;
+		border-radius: 10px;
+		background: #294936;
+		color: white;
+		text-decoration: none;
+		font-weight: 700;
+	}
+
+	footer {
+		max-width: 620px;
+		margin: 0 auto;
+		padding: 28px 20px 36px;
+		text-align: center;
+		font-size: 12px;
+		line-height: 1.5;
+		color: #788078;
+	}
+
+	footer p {
+		margin: 3px 0;
+	}
+
+	@media (min-width: 700px) {
+		.hero {
+			padding: 30px 32px 58px;
+		}
+
+		.menu {
+			padding-top: 30px;
+		}
+	}
+</style>
