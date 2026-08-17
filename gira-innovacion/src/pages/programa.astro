@@ -31,6 +31,15 @@ import Layout from '../layouts/Layout.astro';
 					con organizaciones que han desarrollado soluciones
 					aplicables a la realidad de las cooperativas.
 				</p>
+
+				<a
+					class="download-button"
+					href="/programa-gira-innovacion-2026.pdf"
+					download
+				>
+					<span>↓</span>
+					Descargar programa completo
+				</a>
 			</div>
 
 			<!-- DOMINGO 6 DE SEPTIEMBRE DE 2026 -->
@@ -602,6 +611,30 @@ import Layout from '../layouts/Layout.astro';
 
 	.return-session h2 {
 		font-size: 21px;
+	}
+
+	.download-button {
+		display: inline-flex;
+		align-items: center;
+		gap: 9px;
+		margin-top: 18px;
+		padding: 13px 20px;
+		border-radius: 10px;
+		background: #294936;
+		color: white;
+		text-decoration: none;
+		font-weight: 700;
+		transition: transform 0.2s ease, opacity 0.2s ease;
+	}
+
+	.download-button span {
+		font-size: 18px;
+		line-height: 1;
+	}
+
+	.download-button:hover {
+		transform: translateY(-2px);
+		opacity: 0.9;
 	}
 
 	.closing {
