@@ -1,0 +1,528 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const visitas = [
+	{
+		numero: '01',
+		nombre: 'Fundación Origen',
+		lugar: 'Pirque · Región Metropolitana',
+		descripcion:
+			'Agroecología, formación, conservación de semillas tradicionales y comercialización campesina directa.',
+		temas: [
+			'Agroecología',
+			'Semillas tradicionales',
+			'Formación',
+			'Mercado Campesino',
+			'Comercialización directa',
+		],
+		interes:
+			'Cómo una organización conecta producción, territorio, educación y comercialización.',
+		pregunta:
+			'¿Qué experiencia de Fundación Origen te gustaría conversar con tu cooperativa al regresar?',
+		web: 'https://www.fundacionorigen.cl/web/',
+	},
+	{
+		numero: '02',
+		nombre: 'Centro Tecnológico para la Innovación Alimentaria, CeTA',
+		lugar: 'Laguna Carén · Región Metropolitana',
+		descripcion:
+			'Centro tecnológico para la innovación alimentaria, donde conoceremos infraestructura, equipamiento y procesos para desarrollar y mejorar productos.',
+		temas: [
+			'Innovación alimentaria',
+			'Nuevos productos',
+			'Tecnología',
+			'Pilotaje',
+			'Agregación de valor',
+		],
+		interes:
+			'Cómo una cooperativa puede apoyarse en capacidades tecnológicas especializadas para transformar materias primas, mejorar productos y explorar oportunidades de mercado.',
+		pregunta:
+			'¿Qué producto o materia prima de tu cooperativa podría tener una oportunidad de innovación?',
+		web: 'https://www.cetalimentos.cl/',
+	},
+	{
+		numero: '03',
+		nombre: 'Agrícola Cinco Valles',
+		lugar: 'Melipilla · Región Metropolitana',
+		descripcion:
+			'Experiencia asociativa de pequeños productores que combina producción, servicios técnicos y apoyo a agricultores.',
+		temas: [
+			'Asociatividad',
+			'Servicios técnicos',
+			'Riego',
+			'Asistencia técnica',
+			'Diversificación',
+		],
+		interes:
+			'Cómo una organización puede generar valor para sus integrantes mediante servicios compartidos y diversificar sus actividades.',
+		pregunta:
+			'¿Qué servicio o actividad de Cinco Valles podría ser interesante para tu cooperativa?',
+		web: 'https://www.agricolacincovalles.cl/',
+	},
+	{
+		numero: '04',
+		nombre: 'COOPEUMO',
+		lugar: "Peumo · Región del Libertador General Bernardo O’Higgins",
+		descripcion:
+			'Experiencia consolidada de cooperativismo campesino, con una trayectoria de desarrollo de servicios y apoyo integral a sus socios.',
+		temas: [
+			'Cooperativismo',
+			'Servicios a socios',
+			'Gestión',
+			'Comercialización',
+			'Desarrollo organizacional',
+		],
+		interes:
+			'Cómo una cooperativa puede crecer y mantenerse en el tiempo fortaleciendo sus servicios, su gestión y su capacidad de responder a las necesidades de sus socios.',
+		pregunta:
+			'¿Qué aspecto del modelo de COOPEUMO te gustaría conversar con tu cooperativa?',
+		web: 'https://www.coopeumo.cl/',
+	},
+	{
+		numero: '05',
+		nombre: 'Cooperativa Loncomilla',
+		lugar: 'San Javier · Región del Maule',
+		descripcion:
+			'Experiencia vitivinícola que combina trayectoria cooperativa, innovación, agregación de valor, certificación y desarrollo de productos.',
+		temas: [
+			'Vitivinicultura',
+			'Innovación',
+			'Agregación de valor',
+			'Invicto',
+			'Fairtrade',
+		],
+		interes:
+			'Cómo una cooperativa puede transformar su producción mediante innovación, nuevos productos y estrategias de posicionamiento y comercialización.',
+		pregunta:
+			'¿Qué aprendizaje de Loncomilla podría adaptarse a la realidad de tu cooperativa?',
+		web: 'https://www.cooploncomilla.cl/',
+	},
+	{
+		numero: '06',
+		nombre: 'Cooperativa Tres Piedras',
+		lugar: 'Pelluhue · Región del Maule',
+		descripcion:
+			'Experiencia de innovación productiva que muestra cómo una organización puede acceder a tecnología y conocimiento mediante alianzas.',
+		temas: [
+			'Innovación productiva',
+			'Tecnología',
+			'Alianzas',
+			'Frutillas',
+			'Packing',
+		],
+		interes:
+			'Cómo las alianzas pueden facilitar el acceso a innovación, nuevas variedades, tecnologías y mejoras en procesos productivos y de postcosecha.',
+		pregunta:
+			'¿Qué innovación o alianza observada aquí podría ser interesante para tu cooperativa?',
+		web: 'https://www.cooperativatrespiedras.cl/',
+	},
+	{
+		numero: '07',
+		nombre: 'COOPCAM · Mujeres de Pelarco',
+		lugar: 'Pelarco · Región del Maule',
+		descripcion:
+			'Cooperativa liderada por mujeres que desarrolla alimentos balanceados para animales y trabaja en producción, gestión y comercialización.',
+		temas: [
+			'Cooperativismo de mujeres',
+			'Alimentos balanceados',
+			'Valor agregado',
+			'Gestión',
+			'Comercialización',
+		],
+		interes:
+			'Cómo una cooperativa puede transformar materias primas, desarrollar productos con valor agregado y construir una actividad económica desde la organización de sus socias.',
+		pregunta:
+			'¿Qué aspecto de COOPCAM te gustaría llevar como idea para conversar con tu cooperativa?',
+		web: 'https://www.alimentosavicolaspelarco.cl/',
+	},
+];
+---
+
+<Layout>
+	<main>
+		<header class="page-header">
+			<a href="/" class="back">← Volver</a>
+
+			<div class="brand">
+				<span class="brand-line"></span>
+				<span>LONQUENSUR</span>
+			</div>
+
+			<div class="header-content">
+				<p class="eyebrow">AGROCOOPINNOVA 2026</p>
+				<h1>Visitas</h1>
+				<p>
+					Conoce las organizaciones anfitrionas y descubre qué podemos
+					aprender de cada experiencia.
+				</p>
+			</div>
+		</header>
+
+		<section class="visitas">
+			<div class="section-intro">
+				<p class="section-label">ORGANIZACIONES ANFITRIONAS</p>
+				<h2>Experiencias para conocer, conversar y aprender</h2>
+				<p>
+					Cada visita nos acerca a una experiencia concreta de
+					cooperativismo, innovación y desarrollo productivo.
+				</p>
+			</div>
+
+			<div class="cards">
+				{
+					visitas.map((visita) => (
+						<article class="card">
+							<div class="card-top">
+								<span class="badge">
+									Visita {visita.numero} · AGROCOOPINNOVA 2026
+								</span>
+
+								<h2>{visita.nombre}</h2>
+
+								<p class="place">📍 {visita.lugar}</p>
+							</div>
+
+							<div class="card-body">
+								<p class="intro">{visita.descripcion}</p>
+
+								<p class="title">Lo que vamos a conocer</p>
+
+								<div class="tags">
+									{visita.temas.map((tema) => (
+										<span class="tag">{tema}</span>
+									))}
+								</div>
+
+								<div class="why">
+									<strong>💡 ¿Por qué es interesante para la gira?</strong>
+									<p>{visita.interes}</p>
+								</div>
+
+								<div class="question">
+									<strong>🌱 Una pregunta para llevarnos</strong>
+									<p>{visita.pregunta}</p>
+								</div>
+
+								<a
+									class="web-button"
+									href={visita.web}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									🌐 Visitar sitio web
+								</a>
+							</div>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<footer>
+			<p>Gira Tecnológica de Innovación 2026</p>
+			<p>AgroCoopInnova · Lonquensur</p>
+		</footer>
+	</main>
+</Layout>
+
+<style>
+	:global(*) {
+		box-sizing: border-box;
+	}
+
+	:global(body) {
+		margin: 0;
+		background: #e9ece8;
+		color: #19352a;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+
+	main {
+		min-height: 100vh;
+	}
+
+	.page-header {
+		padding: 24px 20px 48px;
+		background: linear-gradient(135deg, #245b45, #173e30);
+		color: white;
+	}
+
+	.back {
+		display: inline-block;
+		margin-bottom: 30px;
+		color: white;
+		text-decoration: none;
+		font-size: 14px;
+		font-weight: 700;
+		opacity: 0.9;
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin-bottom: 34px;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 2px;
+	}
+
+	.brand-line {
+		width: 28px;
+		height: 2px;
+		background: #c79a43;
+	}
+
+	.header-content {
+		max-width: 680px;
+		margin: 0 auto;
+		text-align: center;
+	}
+
+	.eyebrow,
+	.section-label {
+		margin: 0 0 8px;
+		font-size: 11px;
+		font-weight: 800;
+		letter-spacing: 1.6px;
+		text-transform: uppercase;
+	}
+
+	.header-content .eyebrow {
+		color: #d8bd7a;
+	}
+
+	.header-content h1 {
+		margin: 0 0 12px;
+		font-size: clamp(36px, 8vw, 54px);
+		line-height: 1;
+	}
+
+	.header-content p {
+		margin: 0;
+		font-size: 15px;
+		line-height: 1.55;
+		opacity: 0.9;
+	}
+
+	.visitas {
+		max-width: 1180px;
+		margin: 0 auto;
+		padding: 38px 18px 50px;
+	}
+
+	.section-intro {
+		max-width: 720px;
+		margin: 0 auto 30px;
+		text-align: center;
+	}
+
+	.section-intro .section-label {
+		color: #3e7b5d;
+	}
+
+	.section-intro h2 {
+		margin: 0 0 12px;
+		font-size: clamp(24px, 5vw, 34px);
+		line-height: 1.15;
+	}
+
+	.section-intro > p:last-child {
+		margin: 0;
+		color: #5f6962;
+		font-size: 14px;
+		line-height: 1.55;
+	}
+
+	.cards {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+		gap: 22px;
+	}
+
+	.card {
+		overflow: hidden;
+		border-radius: 22px;
+		background: white;
+		box-shadow: 0 8px 28px rgba(24, 50, 40, 0.12);
+	}
+
+	.card-top {
+		min-height: 190px;
+		padding: 25px;
+		background: linear-gradient(135deg, #245b45, #3e7b5d);
+		color: white;
+	}
+
+	.card:nth-child(2n) .card-top {
+		background: linear-gradient(135deg, #496a54, #2b4d3c);
+	}
+
+	.card:nth-child(3n) .card-top {
+		background: linear-gradient(135deg, #8b6a37, #b08b4b);
+	}
+
+	.badge {
+		display: inline-block;
+		padding: 6px 10px;
+		border: 1px solid rgba(255, 255, 255, 0.35);
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.12);
+		font-size: 10px;
+		font-weight: 800;
+		letter-spacing: 0.4px;
+		text-transform: uppercase;
+	}
+
+	.card-top h2 {
+		margin: 15px 0 7px;
+		font-size: 26px;
+		line-height: 1.08;
+	}
+
+	.place {
+		margin: 0;
+		font-size: 13px;
+		opacity: 0.9;
+	}
+
+	.card-body {
+		padding: 22px 24px 25px;
+	}
+
+	.intro {
+		margin: 0;
+		color: #405148;
+		font-size: 14px;
+		line-height: 1.55;
+	}
+
+	.title {
+		margin: 18px 0 10px;
+		color: #3e7b5d;
+		font-size: 12px;
+		font-weight: 800;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 7px;
+	}
+
+	.tag {
+		padding: 7px 9px;
+		border: 1px solid #d8e5da;
+		border-radius: 10px;
+		background: #eef4ef;
+		color: #315844;
+		font-size: 12px;
+	}
+
+	.why,
+	.question {
+		margin-top: 18px;
+		padding: 14px;
+		border-radius: 0 12px 12px 0;
+		font-size: 13px;
+		line-height: 1.5;
+	}
+
+	.why {
+		border-left: 4px solid #c79a43;
+		background: #fbf8f0;
+	}
+
+	.question {
+		background: #f0f5f1;
+		border-radius: 13px;
+	}
+
+	.why strong,
+	.question strong {
+		display: block;
+		margin-bottom: 5px;
+	}
+
+	.why p,
+	.question p {
+		margin: 0;
+	}
+
+	.web-button {
+		display: inline-flex;
+		align-items: center;
+		gap: 7px;
+		margin-top: 16px;
+		padding: 10px 14px;
+		border-radius: 12px;
+		background: #245b45;
+		color: white;
+		text-decoration: none;
+		font-size: 13px;
+		font-weight: 700;
+		transition: 0.2s;
+	}
+
+	.web-button:hover {
+		transform: translateY(-1px);
+		opacity: 0.92;
+	}
+
+	footer {
+		padding: 28px 20px 36px;
+		border-top: 1px solid #e1e6e2;
+		background: #f7f8f6;
+		color: #788078;
+		text-align: center;
+		font-size: 12px;
+		line-height: 1.5;
+	}
+
+	footer p {
+		margin: 3px 0;
+	}
+
+	@media (max-width: 600px) {
+		.visitas {
+			padding-right: 10px;
+			padding-left: 10px;
+		}
+
+		.cards {
+			grid-template-columns: 1fr;
+		}
+
+		.card-top h2 {
+			font-size: 24px;
+		}
+	}
+
+	@media print {
+		:global(body) {
+			background: white;
+		}
+
+		.back,
+		.web-button {
+			display: none;
+		}
+
+		.visitas {
+			max-width: none;
+			padding: 10px;
+		}
+
+		.cards {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.card {
+			break-inside: avoid;
+			box-shadow: none;
+			border: 1px solid #ddd;
+		}
+	}
+</style>
