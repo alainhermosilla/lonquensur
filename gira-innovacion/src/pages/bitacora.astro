@@ -1,0 +1,204 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const albumUrl = 'https://photos.app.goo.gl/wsbJSgrxwGQv2eht9';
+---
+
+<Layout>
+	<main>
+		<header class="page-header">
+			<a class="back" href="/">← Volver al inicio</a>
+			<p class="eyebrow">GIRA TECNOLÓGICA DE INNOVACIÓN</p>
+			<h1>Bitácora</h1>
+			<p class="intro">Fotografías y videos de lo que vamos viviendo durante la gira.</p>
+		</header>
+
+		<section class="entries" aria-label="Entradas de la bitácora">
+			<article class="entry">
+				<div class="entry-cover" aria-hidden="true">
+					<span class="camera">📷</span>
+					<span class="video">▶</span>
+				</div>
+
+				<div class="entry-content">
+					<p class="date">13–16 DE AGOSTO DE 2026</p>
+					<h2>Primeros días de la gira</h2>
+					<p class="description">
+						Revisa las fotografías y videos compartidos en nuestro álbum de Google Fotos.
+					</p>
+
+					<a class="album-button" href={albumUrl} target="_blank" rel="noopener noreferrer">
+						Ver fotos y videos <span aria-hidden="true">↗</span>
+					</a>
+				</div>
+			</article>
+		</section>
+
+		<footer>
+			<p>Gira Tecnológica de Innovación 2026</p>
+			<p>AgroCoopInnova · Lonquensur</p>
+		</footer>
+	</main>
+</Layout>
+
+<style>
+	:global(*) {
+		box-sizing: border-box;
+	}
+
+	:global(body) {
+		margin: 0;
+		font-family: Arial, Helvetica, sans-serif;
+		background: #f5f3ed;
+		color: #24352a;
+	}
+
+	main {
+		min-height: 100vh;
+	}
+
+	.page-header {
+		padding: 22px 20px 38px;
+		background: linear-gradient(135deg, #245b45, #173e30);
+		color: white;
+	}
+
+	.page-header > * {
+		max-width: 620px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.back {
+		display: block;
+		margin-bottom: 36px;
+		color: white;
+		font-size: 14px;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.eyebrow {
+		margin-bottom: 8px;
+		font-size: 11px;
+		font-weight: 800;
+		letter-spacing: 1.5px;
+		color: #e4c96e;
+	}
+
+	h1 {
+		margin-top: 0;
+		margin-bottom: 10px;
+		font-size: clamp(40px, 9vw, 58px);
+		line-height: 1;
+	}
+
+	.intro {
+		margin-top: 0;
+		margin-bottom: 0;
+		font-size: 16px;
+		line-height: 1.55;
+		opacity: 0.9;
+	}
+
+	.entries {
+		max-width: 620px;
+		margin: 0 auto;
+		padding: 24px 16px 10px;
+	}
+
+	.entry {
+		overflow: hidden;
+		background: white;
+		border-radius: 18px;
+		box-shadow: 0 3px 14px rgba(30, 50, 35, 0.1);
+	}
+
+	.entry-cover {
+		position: relative;
+		display: grid;
+		place-items: center;
+		min-height: 210px;
+		background:
+			radial-gradient(circle at 24% 30%, rgba(228, 201, 110, 0.75) 0 8%, transparent 8.5%),
+			linear-gradient(145deg, #93aa7c, #315d45 62%, #183e30);
+	}
+
+	.camera {
+		font-size: 62px;
+		filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.2));
+	}
+
+	.video {
+		position: absolute;
+		right: 18px;
+		bottom: 16px;
+		display: grid;
+		place-items: center;
+		width: 42px;
+		height: 42px;
+		padding-left: 2px;
+		border-radius: 50%;
+		background: white;
+		color: #245b45;
+		font-size: 17px;
+		box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+	}
+
+	.entry-content {
+		padding: 22px 20px 24px;
+	}
+
+	.date {
+		margin: 0 0 7px;
+		font-size: 11px;
+		font-weight: 800;
+		letter-spacing: 1.2px;
+		color: #8a7439;
+	}
+
+	h2 {
+		margin: 0;
+		font-size: 26px;
+		line-height: 1.2;
+	}
+
+	.description {
+		margin: 11px 0 20px;
+		font-size: 15px;
+		line-height: 1.55;
+		color: #667268;
+	}
+
+	.album-button {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		padding: 14px 17px;
+		border-radius: 11px;
+		background: #294936;
+		color: white;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.album-button:hover,
+	.album-button:focus-visible {
+		background: #1d3828;
+	}
+
+	footer {
+		max-width: 620px;
+		margin: 0 auto;
+		padding: 26px 20px 36px;
+		text-align: center;
+		font-size: 12px;
+		line-height: 1.5;
+		color: #788078;
+	}
+
+	footer p {
+		margin: 2px 0;
+	}
+</style>
