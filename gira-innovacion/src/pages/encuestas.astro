@@ -3,6 +3,16 @@ import Layout from '../layouts/Layout.astro';
 
 const encuestas = [
 	{
+		nombre: 'Encuesta de prueba · Fundación Origen',
+		lugar: 'Pirque',
+		apertura: '2026-01-01T00:00:00-03:00',
+		cierre: '2026-12-31T23:59:00-03:00',
+		aperturaTexto: 'Abierta ahora',
+		cierreTexto: 'Solo para comprobar',
+		enlace: 'https://docs.google.com/forms/d/e/1FAIpQLScbPh5rt5ExbmeEpKbwKBXIY5uM9cIBIZzTyy8dxL3K7VC28A/viewform?usp=header',
+		prueba: true,
+	},
+	{
 		nombre: 'Fundación Origen',
 		lugar: 'Pirque',
 		apertura: '2026-09-07T18:00:00-03:00',
@@ -87,8 +97,11 @@ const encuestas = [
 					data-open={encuesta.apertura}
 					data-close={encuesta.cierre}
 					data-url={encuesta.enlace}
+					data-test={encuesta.prueba ? 'true' : 'false'}
 				>
-					<div class="number" aria-hidden="true">{String(indice + 1).padStart(2, '0')}</div>
+					<div class="number" aria-hidden="true">
+						{encuesta.prueba ? 'TEST' : String(indice).padStart(2, '0')}
+					</div>
 
 					<div class="survey-content">
 						<div class="survey-heading">
@@ -129,10 +142,22 @@ const encuestas = [
 			const apertura = new Date(tarjeta.dataset.open ?? '').getTime();
 			const cierre = new Date(tarjeta.dataset.close ?? '').getTime();
 			const enlace = tarjeta.dataset.url;
+			const esPrueba = tarjeta.dataset.test === 'true';
 			const estado = tarjeta.querySelector<HTMLElement>('[data-status]');
 			const boton = tarjeta.querySelector<HTMLAnchorElement>('[data-button]');
 
 			if (!estado || !boton || !enlace) return;
+
+			if (esPrueba) {
+				estado.textContent = 'Disponible · Prueba';
+				estado.dataset.state = 'open';
+				boton.textContent = 'Probar encuesta ↗';
+				boton.href = enlace;
+				boton.target = '_blank';
+				boton.rel = 'noopener noreferrer';
+				boton.setAttribute('aria-disabled', 'false');
+				return;
+			}
 
 			if (ahora < apertura) {
 				estado.textContent = 'Próximamente';
