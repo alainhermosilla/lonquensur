@@ -1,0 +1,395 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const encuestas = [
+	{
+		nombre: 'Fundación Origen',
+		lugar: 'Pirque',
+		apertura: '2026-09-07T18:00:00-03:00',
+		cierre: '2026-09-11T23:59:00-03:00',
+		aperturaTexto: 'Lun 7 sep · 18:00',
+		cierreTexto: 'Vie 11 sep · 23:59',
+		enlace: 'https://docs.google.com/forms/d/e/1FAIpQLScbPh5rt5ExbmeEpKbwKBXIY5uM9cIBIZzTyy8dxL3K7VC28A/viewform?usp=header',
+	},
+	{
+		nombre: 'CeTA',
+		lugar: 'Pudahuel',
+		apertura: '2026-09-08T12:30:00-03:00',
+		cierre: '2026-09-11T23:59:00-03:00',
+		aperturaTexto: 'Mar 8 sep · 12:30',
+		cierreTexto: 'Vie 11 sep · 23:59',
+		enlace: 'https://forms.gle/ppipBekgvHB1GcNp8',
+	},
+	{
+		nombre: 'Agrícola Cinco Valles',
+		lugar: 'Melipilla',
+		apertura: '2026-09-08T18:00:00-03:00',
+		cierre: '2026-09-11T23:59:00-03:00',
+		aperturaTexto: 'Mar 8 sep · 18:00',
+		cierreTexto: 'Vie 11 sep · 23:59',
+		enlace: 'https://forms.gle/JQTeBfkFNGMHwKhH7',
+	},
+	{
+		nombre: 'COOPEUMO',
+		lugar: 'Peumo',
+		apertura: '2026-09-09T13:00:00-03:00',
+		cierre: '2026-09-11T23:59:00-03:00',
+		aperturaTexto: 'Mié 9 sep · 13:00',
+		cierreTexto: 'Vie 11 sep · 23:59',
+		enlace: 'https://forms.gle/XMvwuhTeZMtc2tKt9',
+	},
+	{
+		nombre: 'Cooperativa Tres Piedras',
+		lugar: 'Pelluhue',
+		apertura: '2026-09-10T13:00:00-03:00',
+		cierre: '2026-09-11T23:59:00-03:00',
+		aperturaTexto: 'Jue 10 sep · 13:00',
+		cierreTexto: 'Vie 11 sep · 23:59',
+		enlace: 'https://forms.gle/ZwUaBnXkq1DqawxEA',
+	},
+	{
+		nombre: 'Cooperativa Vitivinícola Loncomilla',
+		lugar: 'San Javier',
+		apertura: '2026-09-10T18:00:00-03:00',
+		cierre: '2026-09-11T23:59:00-03:00',
+		aperturaTexto: 'Jue 10 sep · 18:00',
+		cierreTexto: 'Vie 11 sep · 23:59',
+		enlace: 'https://forms.gle/QhQUSRXt3LBvu42M6',
+	},
+	{
+		nombre: 'Cooperativa Mujeres de Pelarco',
+		lugar: 'Pelarco',
+		apertura: '2026-09-11T13:00:00-03:00',
+		cierre: '2026-09-12T18:00:00-03:00',
+		aperturaTexto: 'Vie 11 sep · 13:00',
+		cierreTexto: 'Sáb 12 sep · 18:00',
+		enlace: 'https://forms.gle/hZBQN69ntFt6ZWBQ7',
+	},
+];
+---
+
+<Layout>
+	<main>
+		<header class="page-header">
+			<a class="back" href="/">← Volver al inicio</a>
+			<p class="eyebrow">TU OPINIÓN NOS AYUDA</p>
+			<h1>Encuestas</h1>
+			<p class="intro">
+				Responde la encuesta de cada visita durante su período habilitado.
+			</p>
+		</header>
+
+		<section class="survey-list" aria-label="Encuestas de las visitas">
+			{encuestas.map((encuesta, indice) => (
+				<article
+					class="survey-card"
+					data-survey
+					data-open={encuesta.apertura}
+					data-close={encuesta.cierre}
+					data-url={encuesta.enlace}
+				>
+					<div class="number" aria-hidden="true">{String(indice + 1).padStart(2, '0')}</div>
+
+					<div class="survey-content">
+						<div class="survey-heading">
+							<div>
+								<h2>{encuesta.nombre}</h2>
+								<p class="place">📍 {encuesta.lugar}</p>
+							</div>
+							<span class="status" data-status>Próximamente</span>
+						</div>
+
+						<div class="schedule">
+							<p><strong>Abre</strong><span>{encuesta.aperturaTexto}</span></p>
+							<p><strong>Cierra</strong><span>{encuesta.cierreTexto}</span></p>
+						</div>
+
+						<a class="survey-button" data-button aria-disabled="true">
+							Disponible desde {encuesta.aperturaTexto}
+						</a>
+					</div>
+				</article>
+			))}
+		</section>
+
+		<p class="timezone">Horarios expresados en hora de Chile.</p>
+
+		<footer>
+			<p>Gira Tecnológica de Innovación 2026</p>
+			<p>AgroCoopInnova · Lonquensur</p>
+		</footer>
+	</main>
+</Layout>
+
+<script>
+	function actualizarEncuestas() {
+		const ahora = Date.now();
+
+		document.querySelectorAll<HTMLElement>('[data-survey]').forEach((tarjeta) => {
+			const apertura = new Date(tarjeta.dataset.open ?? '').getTime();
+			const cierre = new Date(tarjeta.dataset.close ?? '').getTime();
+			const enlace = tarjeta.dataset.url;
+			const estado = tarjeta.querySelector<HTMLElement>('[data-status]');
+			const boton = tarjeta.querySelector<HTMLAnchorElement>('[data-button]');
+
+			if (!estado || !boton || !enlace) return;
+
+			if (ahora < apertura) {
+				estado.textContent = 'Próximamente';
+				estado.dataset.state = 'upcoming';
+				boton.removeAttribute('href');
+				boton.removeAttribute('target');
+				boton.setAttribute('aria-disabled', 'true');
+				return;
+			}
+
+			if (ahora > cierre) {
+				estado.textContent = 'Finalizada';
+				estado.dataset.state = 'closed';
+				boton.textContent = 'Encuesta finalizada';
+				boton.removeAttribute('href');
+				boton.removeAttribute('target');
+				boton.setAttribute('aria-disabled', 'true');
+				return;
+			}
+
+			estado.textContent = 'Disponible';
+			estado.dataset.state = 'open';
+			boton.textContent = 'Responder encuesta ↗';
+			boton.href = enlace;
+			boton.target = '_blank';
+			boton.rel = 'noopener noreferrer';
+			boton.setAttribute('aria-disabled', 'false');
+		});
+	}
+
+	actualizarEncuestas();
+	window.setInterval(actualizarEncuestas, 30_000);
+</script>
+
+<style>
+	:global(*) {
+		box-sizing: border-box;
+	}
+
+	:global(body) {
+		margin: 0;
+		font-family: Arial, Helvetica, sans-serif;
+		background: #f5f3ed;
+		color: #24352a;
+	}
+
+	main {
+		min-height: 100vh;
+	}
+
+	.page-header {
+		padding: 22px 20px 38px;
+		background: linear-gradient(135deg, #245b45, #173e30);
+		color: white;
+	}
+
+	.page-header > * {
+		max-width: 620px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.back {
+		display: block;
+		margin-bottom: 36px;
+		color: white;
+		font-size: 14px;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.eyebrow {
+		margin-bottom: 8px;
+		font-size: 11px;
+		font-weight: 800;
+		letter-spacing: 1.5px;
+		color: #e4c96e;
+	}
+
+	h1 {
+		margin-top: 0;
+		margin-bottom: 10px;
+		font-size: clamp(40px, 9vw, 58px);
+		line-height: 1;
+	}
+
+	.intro {
+		margin-top: 0;
+		margin-bottom: 0;
+		font-size: 16px;
+		line-height: 1.55;
+		opacity: 0.9;
+	}
+
+	.survey-list {
+		max-width: 620px;
+		margin: 0 auto;
+		padding: 24px 16px 8px;
+	}
+
+	.survey-card {
+		display: flex;
+		gap: 14px;
+		margin-bottom: 14px;
+		padding: 18px 16px;
+		border-radius: 16px;
+		background: white;
+		box-shadow: 0 2px 10px rgba(30, 50, 35, 0.09);
+	}
+
+	.number {
+		flex: 0 0 36px;
+		font-size: 13px;
+		font-weight: 800;
+		letter-spacing: 1px;
+		color: #9a8549;
+	}
+
+	.survey-content {
+		min-width: 0;
+		flex: 1;
+	}
+
+	.survey-heading {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 10px;
+	}
+
+	h2 {
+		margin: 0;
+		font-size: 20px;
+		line-height: 1.2;
+	}
+
+	.place {
+		margin: 6px 0 0;
+		font-size: 13px;
+		color: #667268;
+	}
+
+	.status {
+		flex: 0 0 auto;
+		padding: 6px 9px;
+		border-radius: 999px;
+		background: #eee9da;
+		font-size: 11px;
+		font-weight: 800;
+		color: #6b603f;
+	}
+
+	.status[data-state='open'] {
+		background: #dcecdf;
+		color: #245b45;
+	}
+
+	.status[data-state='closed'] {
+		background: #ececec;
+		color: #6d736e;
+	}
+
+	.schedule {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+		margin: 16px 0;
+	}
+
+	.schedule p {
+		margin: 0;
+		padding: 10px;
+		border-radius: 10px;
+		background: #f5f3ed;
+	}
+
+	.schedule strong,
+	.schedule span {
+		display: block;
+	}
+
+	.schedule strong {
+		margin-bottom: 4px;
+		font-size: 10px;
+		letter-spacing: 0.8px;
+		text-transform: uppercase;
+		color: #788078;
+	}
+
+	.schedule span {
+		font-size: 12px;
+		font-weight: 700;
+	}
+
+	.survey-button {
+		display: block;
+		width: 100%;
+		padding: 13px 14px;
+		border-radius: 10px;
+		background: #294936;
+		color: white;
+		font-size: 14px;
+		font-weight: 700;
+		text-align: center;
+		text-decoration: none;
+	}
+
+	.survey-button[aria-disabled='true'] {
+		cursor: not-allowed;
+		background: #e7e5df;
+		color: #747a75;
+	}
+
+	.timezone {
+		max-width: 620px;
+		margin: 10px auto 0;
+		padding: 0 20px;
+		font-size: 12px;
+		text-align: center;
+		color: #788078;
+	}
+
+	footer {
+		max-width: 620px;
+		margin: 0 auto;
+		padding: 24px 20px 36px;
+		text-align: center;
+		font-size: 12px;
+		line-height: 1.5;
+		color: #788078;
+	}
+
+	footer p {
+		margin: 2px 0;
+	}
+
+	@media (max-width: 460px) {
+		.survey-card {
+			gap: 10px;
+			padding: 16px 13px;
+		}
+
+		.number {
+			flex-basis: 28px;
+		}
+
+		.survey-heading {
+			display: block;
+		}
+
+		.status {
+			display: inline-block;
+			margin-top: 10px;
+		}
+
+		.schedule {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
