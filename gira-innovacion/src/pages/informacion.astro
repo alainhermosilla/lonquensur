@@ -1,0 +1,207 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const recomendaciones = [
+	{
+		icono: '🌱',
+		titulo: 'Ven con curiosidad y mente abierta',
+		parrafos: [
+			'Esta gira está pensada como una experiencia de aprendizaje e intercambio, no solamente como una serie de visitas.',
+			'Conoceremos organizaciones con diferentes tamaños, historias, productos, tecnologías y formas de trabajar. No esperamos que todas las experiencias puedan replicarse exactamente en tu cooperativa. Lo importante será observar, preguntar, conversar y descubrir qué elementos podrían adaptarse a tu propia realidad.',
+			'Al finalizar cada experiencia tendremos una breve encuesta para recoger qué observaron, qué les llamó la atención y qué ideas consideran interesantes para compartir con sus cooperativas.',
+		],
+		destacado: '¿Qué de lo que estoy viendo podría adaptar, mejorar o utilizar en mi cooperativa?',
+	},
+	{
+		icono: '📶',
+		titulo: 'Lleva un dispositivo con conexión a internet',
+		parrafos: [
+			'Puede ser un celular, tablet o computador portátil con un plan de datos móviles activo, que permita conectarse a internet incluso al aire libre o fuera de una red Wi-Fi.',
+			'Lo utilizaremos para acceder a información de las organizaciones, responder encuestas, participar en actividades, revisar material digital y mantenernos comunicados.',
+		],
+		nota: 'No es necesario llevar más de un equipo: un teléfono celular con acceso a internet es suficiente.',
+	},
+	{
+		icono: '🔋',
+		titulo: 'Mantén tu celular cargado',
+		parrafos: [
+			'Comienza cada jornada con tu dispositivo cargado al 100%. Lo utilizaremos durante distintas actividades y visitas.',
+			'Lleva siempre tu cargador y, si tienes, una batería externa o power bank, especialmente considerando que tendremos jornadas completas fuera del alojamiento.',
+		],
+	},
+	{
+		icono: '🥾',
+		titulo: 'Usa zapatos cómodos y apropiados para terreno',
+		parrafos: [
+			'Visitaremos predios agrícolas, instalaciones productivas, packing y otros espacios de trabajo.',
+			'Recomendamos utilizar zapatos cerrados, cómodos, con buena suela y apropiados para caminar en terreno, considerando que podemos encontrarnos con barro, humedad o superficies irregulares.',
+		],
+	},
+	{
+		icono: '🧥',
+		titulo: 'Vístete por capas',
+		parrafos: [
+			'La gira se realizará durante septiembre y recorreremos las regiones Metropolitana, O’Higgins y Maule.',
+			'Las mañanas pueden ser frías y las temperaturas pueden cambiar durante el día. Recomendamos llevar polera o camisa, polar o chaleco y chaqueta, de manera que puedas adaptar tu vestimenta a las condiciones de cada jornada.',
+		],
+	},
+	{
+		icono: '🌧️',
+		titulo: 'Prepárate para posibles lluvias',
+		parrafos: [
+			'Lleva una chaqueta impermeable o cortaviento. También puede ser útil llevar un paraguas pequeño.',
+			'Algunas de las actividades se realizarán en terreno, por lo que debemos estar preparados para cambios en las condiciones meteorológicas.',
+		],
+	},
+	{
+		icono: '💧',
+		titulo: 'Lleva una botella de agua',
+		parrafos: [
+			'Mantente hidratado durante los recorridos y viajes.',
+			'Recomendamos utilizar una botella reutilizable que puedas rellenar cuando sea necesario y llevar contigo durante las distintas visitas.',
+		],
+	},
+	{
+		icono: '🎒',
+		titulo: 'Lleva una mochila pequeña',
+		parrafos: [
+			'Una mochila pequeña será mucho más cómoda durante las visitas que un bolso de gran tamaño.',
+			'Puedes utilizarla para llevar celular, cargador, batería externa, botella de agua, chaqueta, medicamentos personales, documentos y otros elementos esenciales.',
+		],
+	},
+	{
+		icono: '📝',
+		titulo: 'Registra las ideas que te llamen la atención',
+		parrafos: [
+			'Puedes utilizar una libreta o las notas de tu celular. No necesitas escribir todo lo que escuches.',
+			'También puedes tomar fotografías cuando esté permitido para recordar posteriormente aquello que te haya parecido interesante.',
+		],
+		destacado: 'Esto podría servir en mi cooperativa.',
+	},
+	{
+		icono: '⏰',
+		titulo: 'Respeta los horarios y puntos de encuentro',
+		parrafos: [
+			'Durante la gira tendremos diferentes traslados entre regiones y comunas.',
+			'Intenta estar en cada punto de encuentro unos minutos antes de la hora indicada. Un pequeño atraso puede afectar los horarios de las visitas y las actividades de todo el grupo.',
+			'La puntualidad será especialmente importante para aprovechar al máximo cada jornada.',
+		],
+	},
+	{
+		icono: '🤝',
+		titulo: 'Conversa, pregunta y genera contactos',
+		parrafos: [
+			'Aprovecha las visitas para conversar directamente con las organizaciones anfitrionas y realizar todas las preguntas que consideres necesarias.',
+			'También aprovecha los viajes, almuerzos y tiempos compartidos para conocer a los representantes de las demás cooperativas, intercambiar experiencias y generar nuevos contactos.',
+			'Parte importante de la innovación puede surgir precisamente de estas conversaciones y del intercambio entre participantes.',
+		],
+	},
+];
+
+const contactos = [
+	['Alain Hermosilla Ringger', 'Coordinador principal', '+56 9 9846 4849'],
+	['Ignacio Fernández Uribe', 'Coordinador principal', '+56 9 8827 8525'],
+	['Ximena Uribe Álvarez', 'Coordinadora administrativa', '+56 9 9888 9356'],
+];
+---
+
+<Layout>
+	<main>
+		<header class="page-header">
+			<a href="/" class="back">← Volver</a>
+			<div class="brand"><span class="brand-line"></span><span>LONQUENSUR</span></div>
+			<div class="header-content">
+				<p class="eyebrow">AGROCOOPINNOVA 2026</p>
+				<h1>Información para la gira</h1>
+				<p>Recomendaciones prácticas para aprovechar la experiencia, aprender y compartir.</p>
+			</div>
+		</header>
+
+		<section class="info">
+			<div class="section-intro">
+				<p class="section-label">ANTES DE PARTIR</p>
+				<h2>12 recomendaciones para disfrutar la Gira</h2>
+				<p>Prepara lo necesario y ven con disposición a observar, preguntar y conectar con otras experiencias.</p>
+			</div>
+
+			<div class="cards">
+				{recomendaciones.map((recomendacion, index) => (
+					<article class="card">
+						<div class="number">{String(index + 1).padStart(2, '0')}</div>
+						<div class="card-content">
+							<h2><span>{recomendacion.icono}</span>{recomendacion.titulo}</h2>
+							{recomendacion.parrafos.map((parrafo) => <p>{parrafo}</p>)}
+							{recomendacion.destacado && <blockquote>{recomendacion.destacado}</blockquote>}
+							{recomendacion.nota && <p class="note">📌 {recomendacion.nota}</p>}
+						</div>
+					</article>
+				))}
+			</div>
+
+			<section class="contacts">
+				<div class="contacts-heading">
+					<p class="section-label">12 · CONTACTOS</p>
+					<h2>☎️ Guarda los contactos del equipo de la gira</h2>
+					<p>Ante cualquier problema, atraso, duda o dificultad durante un traslado, comunícate con el equipo.</p>
+				</div>
+				<div class="contact-list">
+					{contactos.map(([nombre, funcion, telefono]) => (
+						<div class="contact">
+							<strong>{nombre}</strong><span>{funcion}</span><a href={`tel:${telefono.replaceAll(' ', '')}`}>{telefono}</a>
+						</div>
+					))}
+				</div>
+				<p class="contact-note">📌 Ante cualquier inconveniente relacionado con traslados, horarios, alojamiento, actividades o coordinación general, comunícate con alguno de los integrantes del equipo.</p>
+			</section>
+
+			<section class="remember">
+				<p>🌿 RECUERDA</p>
+				<h2>Pregunta, conversa, observa, comparte y disfruta la experiencia.</h2>
+				<p>La mejor idea puede aparecer durante una visita, un viaje, un almuerzo o una conversación con otro participante.</p>
+				<p>Al finalizar la Gira de Innovación AGROCOOPINNOVA 2026, vuelve a tu territorio con nuevos contactos, aprendizajes e ideas que puedas compartir, adaptar y desarrollar junto a tu cooperativa.</p>
+			</section>
+		</section>
+
+		<footer><p>Gira Tecnológica de Innovación 2026</p><p>AgroCoopInnova · Lonquensur</p></footer>
+	</main>
+</Layout>
+
+<style>
+	:global(*) { box-sizing: border-box; }
+	:global(body) { margin: 0; background: #e9ece8; color: #19352a; font-family: Arial, Helvetica, sans-serif; }
+	.page-header { padding: 24px 20px 48px; background: linear-gradient(135deg, #245b45, #173e30); color: white; }
+	.back { display: inline-block; margin-bottom: 30px; color: white; text-decoration: none; font-size: 14px; font-weight: 700; opacity: .9; }
+	.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 34px; font-size: 12px; font-weight: 700; letter-spacing: 2px; }
+	.brand-line { width: 28px; height: 2px; background: #c79a43; }
+	.header-content, .section-intro, .contacts-heading { max-width: 720px; margin: 0 auto; text-align: center; }
+	.eyebrow, .section-label { margin: 0 0 8px; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase; }
+	.eyebrow { color: #d8bd7a; }
+	.header-content h1 { margin: 0 0 12px; font-size: clamp(36px, 8vw, 54px); line-height: 1; }
+	.header-content p { margin: 0; font-size: 15px; line-height: 1.55; opacity: .9; }
+	.info { max-width: 980px; margin: 0 auto; padding: 38px 18px 50px; }
+	.section-intro { margin-bottom: 30px; }
+	.section-label { color: #3e7b5d; }
+	.section-intro h2, .contacts h2, .remember h2 { margin: 0 0 12px; font-size: clamp(24px, 5vw, 34px); line-height: 1.15; }
+	.section-intro > p:last-child, .contacts-heading > p { margin: 0; color: #5f6962; font-size: 14px; line-height: 1.55; }
+	.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; }
+	.card { display: flex; gap: 15px; padding: 22px; background: white; border-radius: 18px; box-shadow: 0 6px 22px rgba(24, 50, 40, .1); }
+	.number { flex: 0 0 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: #e5eedf; color: #245b45; font-size: 12px; font-weight: 800; }
+	.card-content h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 19px; line-height: 1.2; }
+	.card-content p { margin: 0 0 11px; color: #405148; font-size: 14px; line-height: 1.55; }
+	.card-content p:last-child { margin-bottom: 0; }
+	blockquote { margin: 14px 0; padding: 12px 14px; border-left: 3px solid #c79a43; background: #fbf7e9; color: #584721; font-size: 14px; font-weight: 700; line-height: 1.45; }
+	.note, .contact-note { color: #315844 !important; font-weight: 700; }
+	.contacts { margin-top: 38px; padding: 30px 22px; border-radius: 22px; background: #dce8db; }
+	.contact-list { display: grid; gap: 10px; max-width: 720px; margin: 22px auto 16px; }
+	.contact { display: grid; grid-template-columns: 1.2fr 1fr auto; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 12px; background: white; font-size: 14px; }
+	.contact span { color: #5f6962; }
+	.contact a { color: #245b45; font-weight: 800; text-decoration: none; white-space: nowrap; }
+	.contact-note { max-width: 720px; margin: 0 auto; font-size: 14px; line-height: 1.55; }
+	.remember { max-width: 720px; margin: 38px auto 0; padding: 32px 24px; border-radius: 22px; background: #294936; color: white; text-align: center; }
+	.remember > p:first-child { margin: 0 0 10px; color: #e4c96e; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; }
+	.remember h2 { font-size: clamp(24px, 5vw, 34px); }
+	.remember p { margin: 12px 0 0; color: #e5ebe6; font-size: 15px; line-height: 1.55; }
+	footer { padding: 28px 20px 36px; text-align: center; color: #788078; font-size: 12px; line-height: 1.5; }
+	footer p { margin: 3px 0; }
+	@media (max-width: 640px) { .contact { grid-template-columns: 1fr; gap: 5px; } }
+</style>
