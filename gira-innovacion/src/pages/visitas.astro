@@ -171,7 +171,7 @@ const visitas = [
 			<div class="cards">
 				{
 					visitas.map((visita) => (
-						<article class="card">
+						<article class="card" data-visita={visita.numero}>
 							<div class="card-top">
 								<span class="badge">
 									Visita {visita.numero} · AGROCOOPINNOVA 2026
@@ -224,6 +224,32 @@ const visitas = [
 		</footer>
 	</main>
 </Layout>
+
+<script>
+	const visitaSeleccionada = new URLSearchParams(window.location.search).get('visita');
+
+	if (visitaSeleccionada) {
+		const tarjetas = document.querySelectorAll<HTMLElement>('[data-visita]');
+		const tarjetaActiva = document.querySelector<HTMLElement>(
+			`[data-visita="${visitaSeleccionada}"]`,
+		);
+
+		if (tarjetaActiva) {
+			tarjetas.forEach((tarjeta) => {
+				tarjeta.hidden = tarjeta !== tarjetaActiva;
+			});
+
+			document.querySelector('.cards')?.classList.add('cards--single');
+			const encabezado = document.querySelector('.section-intro h2');
+			const descripcion = document.querySelector('.section-intro > p:last-child');
+			if (encabezado) encabezado.textContent = 'La visita que conoceremos mañana';
+			if (descripcion) {
+				descripcion.textContent =
+					'Conoce esta experiencia antes de iniciar la próxima jornada.';
+			}
+		}
+	}
+</script>
 
 <style>
 	:global(*) {
@@ -338,6 +364,11 @@ const visitas = [
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 		gap: 22px;
+	}
+
+	.cards--single {
+		max-width: 560px;
+		margin: 0 auto;
 	}
 
 	.card {

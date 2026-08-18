@@ -67,11 +67,13 @@ import Layout from '../layouts/Layout.astro';
 		<section class="today">
 			<p class="today-label">PRÓXIMA JORNADA</p>
 
-			<h2>Lunes 7 de septiembre</h2>
+			<h2 id="next-visit-title">Lunes 7 de septiembre</h2>
 
-			<p class="today-place">📍 Fundación Origen · Pirque</p>
+			<p id="next-visit-place" class="today-place">📍 Fundación Origen · Pirque</p>
 
-			<a href="#" class="today-button">Ver jornada</a>
+			<a id="next-visit-link" href="/visitas/?visita=01" class="today-button">
+				Ver jornada
+			</a>
 		</section>
 
 		<footer>
@@ -80,6 +82,36 @@ import Layout from '../layouts/Layout.astro';
 		</footer>
 	</main>
 </Layout>
+
+<script>
+	const visitas = [
+		{ numero: '01', nombre: 'Fundación Origen', lugar: 'Pirque' },
+		{ numero: '02', nombre: 'Centro Tecnológico para la Innovación Alimentaria, CeTA', lugar: 'Laguna Carén' },
+		{ numero: '03', nombre: 'Agrícola Cinco Valles', lugar: 'Melipilla' },
+		{ numero: '04', nombre: 'COOPEUMO', lugar: 'Peumo' },
+		{ numero: '05', nombre: 'Cooperativa Loncomilla', lugar: 'San Javier' },
+		{ numero: '06', nombre: 'Cooperativa Tres Piedras', lugar: 'Pelluhue' },
+		{ numero: '07', nombre: 'COOPCAM · Mujeres de Pelarco', lugar: 'Pelarco' },
+	];
+
+	const inicioGira = new Date(2026, 8, 7);
+	const hoy = new Date();
+	hoy.setHours(0, 0, 0, 0);
+
+	const diasDesdeInicio = Math.floor(
+		(hoy.getTime() - inicioGira.getTime()) / (1000 * 60 * 60 * 24),
+	);
+	const indice = Math.max(0, Math.min(visitas.length - 1, diasDesdeInicio + 1));
+	const visita = visitas[indice];
+
+	const titulo = document.querySelector('#next-visit-title');
+	const lugar = document.querySelector('#next-visit-place');
+	const enlace = document.querySelector('#next-visit-link');
+
+	if (titulo) titulo.textContent = `Visita ${visita.numero}: ${visita.nombre}`;
+	if (lugar) lugar.textContent = `📍 ${visita.lugar}`;
+	if (enlace) enlace.setAttribute('href', `/visitas/?visita=${visita.numero}`);
+</script>
 
 <style>
 	:global(*) {
