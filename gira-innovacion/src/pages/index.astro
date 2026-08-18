@@ -81,6 +81,17 @@ import Layout from '../layouts/Layout.astro';
 			<p>AgroCoopInnova · Lonquensur</p>
 			<p>Sitio construido con Astro</p>
 		</footer>
+
+		<a
+			class="whatsapp-button"
+			href="https://chat.whatsapp.com/CycIeRMxwNH6EIN5hZklcG?s=cl&p=i&ilr=2"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label="Unirse al grupo de WhatsApp de la gira"
+		>
+			<span class="whatsapp-icon" aria-hidden="true">💬</span>
+			<span>Grupo WhatsApp</span>
+		</a>
 	</main>
 </Layout>
 
@@ -279,6 +290,50 @@ import Layout from '../layouts/Layout.astro';
 
 	footer p {
 		margin: 3px 0;
+	}
+
+	.whatsapp-button {
+		position: fixed;
+		right: 18px;
+		bottom: calc(18px + env(safe-area-inset-bottom));
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		padding: 11px 15px 11px 11px;
+		border: 2px solid white;
+		border-radius: 999px;
+		background: #25d366;
+		color: #123b20;
+		font-size: 14px;
+		font-weight: 800;
+		text-decoration: none;
+		box-shadow: 0 6px 20px rgba(20, 65, 36, 0.28);
+	}
+
+	.whatsapp-button:hover,
+	.whatsapp-button:focus-visible {
+		background: #20bd5a;
+		transform: translateY(-2px);
+	}
+
+	.whatsapp-icon {
+		display: grid;
+		place-items: center;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		background: white;
+		font-size: 18px;
+	}
+
+	@media (max-width: 420px) {
+		.whatsapp-button {
+			right: 12px;
+			bottom: calc(12px + env(safe-area-inset-bottom));
+			padding-right: 12px;
+			font-size: 13px;
+		}
 	}
 
 	@media (min-width: 700px) {
