@@ -73,11 +73,11 @@ import Layout from '../layouts/Layout.astro';
 		<section class="today">
 			<p class="today-label">PRÓXIMA JORNADA</p>
 
-			<h2 id="next-visit-title">Lunes 7 de septiembre</h2>
+			<h2 id="next-visit-title">Domingo 6 de septiembre: Inicio de la experiencia</h2>
 
-			<p id="next-visit-place" class="today-place">📍 Fundación Origen · Pirque</p>
+			<p id="next-visit-place" class="today-place">📍 Comuna de Santiago · Llegada de participantes</p>
 
-			<a id="next-visit-link" href="/visitas/?visita=01" class="today-button">
+			<a id="next-visit-link" href="/programa/?dia=06" class="today-button">
 				Ver jornada
 			</a>
 		</section>
@@ -111,23 +111,45 @@ import Layout from '../layouts/Layout.astro';
 		{ numero: '07', nombre: 'COOPCAM · Mujeres de Pelarco', lugar: 'Comuna Pelarco' },
 	];
 
-	const inicioGira = new Date(2026, 8, 7);
-	const hoy = new Date();
-	hoy.setHours(0, 0, 0, 0);
-
-	const diasDesdeInicio = Math.floor(
-		(hoy.getTime() - inicioGira.getTime()) / (1000 * 60 * 60 * 24),
+	const ahora = new Date();
+	const partesChile = new Intl.DateTimeFormat('en-CA', {
+		timeZone: 'America/Santiago',
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
+		hourCycle: 'h23',
+	}).formatToParts(ahora);
+	const parte = Object.fromEntries(
+		partesChile.map(({ type, value }) => [type, value]),
 	);
-	const indice = Math.max(0, Math.min(visitas.length - 1, diasDesdeInicio + 1));
-	const visita = visitas[indice];
+	const momentoChile = Number(
+		`${parte.year}${parte.month}${parte.day}${parte.hour}${parte.minute}`,
+	);
+	const finJornadaLlegada = 202609062000;
 
 	const titulo = document.querySelector('#next-visit-title');
 	const lugar = document.querySelector('#next-visit-place');
 	const enlace = document.querySelector('#next-visit-link');
 
-	if (titulo) titulo.textContent = `Visita ${visita.numero}: ${visita.nombre}`;
-	if (lugar) lugar.textContent = `📍 ${visita.lugar}`;
-	if (enlace) enlace.setAttribute('href', `/visitas/?visita=${visita.numero}`);
+	if (momentoChile >= finJornadaLlegada) {
+		const inicioGira = new Date(2026, 8, 7);
+		const hoy = new Date(
+			Number(parte.year),
+			Number(parte.month) - 1,
+			Number(parte.day),
+		);
+		const diasDesdeInicio = Math.floor(
+			(hoy.getTime() - inicioGira.getTime()) / (1000 * 60 * 60 * 24),
+		);
+		const indice = Math.max(0, Math.min(visitas.length - 1, diasDesdeInicio + 1));
+		const visita = visitas[indice];
+
+		if (titulo) titulo.textContent = `Visita ${visita.numero}: ${visita.nombre}`;
+		if (lugar) lugar.textContent = `📍 ${visita.lugar}`;
+		if (enlace) enlace.setAttribute('href', `/visitas/?visita=${visita.numero}`);
+	}
 </script>
 
 <style>

@@ -44,7 +44,7 @@ import Layout from '../layouts/Layout.astro';
 
 			<!-- DOMINGO 6 DE SEPTIEMBRE DE 2026 -->
 
-			<article class="day arrival-day">
+			<article class="day arrival-day" data-day="06">
 				<div class="date arrival-date">
 					<span class="day-number">06</span>
 					<span class="month">SEP</span>
@@ -86,7 +86,7 @@ import Layout from '../layouts/Layout.astro';
 
 			<!-- LUNES 7 DE SEPTIEMBRE DE 2026 -->
 
-			<article class="day">
+			<article class="day" data-day="07">
 				<div class="date">
 					<span class="day-number">07</span>
 					<span class="month">SEP</span>
@@ -140,7 +140,7 @@ import Layout from '../layouts/Layout.astro';
 
 			<!-- MARTES 8 DE SEPTIEMBRE DE 2026 -->
 
-			<article class="day">
+			<article class="day" data-day="08">
 				<div class="date">
 					<span class="day-number">08</span>
 					<span class="month">SEP</span>
@@ -195,7 +195,7 @@ import Layout from '../layouts/Layout.astro';
 
 			<!-- MIÉRCOLES 9 DE SEPTIEMBRE DE 2026 -->
 
-			<article class="day">
+			<article class="day" data-day="09">
 				<div class="date">
 					<span class="day-number">09</span>
 					<span class="month">SEP</span>
@@ -253,7 +253,7 @@ import Layout from '../layouts/Layout.astro';
 
 			<!-- JUEVES 10 DE SEPTIEMBRE DE 2026 -->
 
-			<article class="day">
+			<article class="day" data-day="10">
 				<div class="date">
 					<span class="day-number">10</span>
 					<span class="month">SEP</span>
@@ -321,7 +321,7 @@ import Layout from '../layouts/Layout.astro';
 
 			<!-- VIERNES 11 DE SEPTIEMBRE DE 2026 -->
 
-			<article class="day">
+			<article class="day" data-day="11">
 				<div class="date">
 					<span class="day-number">11</span>
 					<span class="month">SEP</span>
@@ -398,6 +398,21 @@ import Layout from '../layouts/Layout.astro';
 	</main>
 </Layout>
 
+<script>
+	const diaSeleccionado = new URLSearchParams(window.location.search).get('dia');
+
+	if (diaSeleccionado) {
+		document.querySelectorAll<HTMLElement>('[data-day]').forEach((jornada) => {
+			jornada.hidden = jornada.dataset.day !== diaSeleccionado;
+		});
+
+		const introduccion = document.querySelector<HTMLElement>('.section-intro');
+		const cierre = document.querySelector<HTMLElement>('.closing');
+		if (introduccion) introduccion.hidden = true;
+		if (cierre) cierre.hidden = true;
+	}
+</script>
+
 <style>
 	:global(*) {
 		box-sizing: border-box;
@@ -408,6 +423,12 @@ import Layout from '../layouts/Layout.astro';
 		font-family: Arial, Helvetica, sans-serif;
 		background: #f5f3ed;
 		color: #24352a;
+	}
+
+	.day[hidden],
+	.section-intro[hidden],
+	.closing[hidden] {
+		display: none;
 	}
 
 	main {
