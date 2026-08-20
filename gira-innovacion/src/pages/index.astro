@@ -23,6 +23,14 @@ import Layout from '../layouts/Layout.astro';
 		</section>
 
 		<section class="menu" aria-label="Menú principal">
+			<a href="/avisos/" class="menu-card menu-card--notices">
+				<span class="icon icon--notices">📢</span>
+				<span>
+					<strong>Avisos relevantes</strong>
+					<small>Información importante y novedades de la gira</small>
+				</span>
+			</a>
+
 			<a href="/programa/" class="menu-card">
 				<span class="icon">📅</span>
 				<span>
@@ -77,9 +85,9 @@ import Layout from '../layouts/Layout.astro';
 		</section>
 
 		<footer>
-			<p>Gira Tecnológica de Innovación 2026</p>
-			<p>AgroCoopInnova · Lonquensur</p>
-			<p>Sitio construido con Astro</p>
+			<p>Gira de Innovación AgrocoopInnova 2026</p>
+			<p>LonquenSur - IEAC</p>
+			<p>Sitio construido con ASTRO</p>
 		</footer>
 
 		<a
@@ -90,7 +98,6 @@ import Layout from '../layouts/Layout.astro';
 			aria-label="Unirse al grupo de WhatsApp de la gira"
 		>
 			<span class="whatsapp-icon" aria-hidden="true">💬</span>
-			<span>Grupo WhatsApp</span>
 		</a>
 	</main>
 </Layout>
@@ -215,6 +222,17 @@ import Layout from '../layouts/Layout.astro';
 		transform: scale(0.99);
 	}
 
+	.menu-card--notices {
+		background: #fff0c7;
+		border: 2px solid #d89517;
+		color: #4b3205;
+		box-shadow: 0 4px 14px rgba(157, 101, 0, 0.18);
+	}
+
+	.menu-card--notices small {
+		color: #705318;
+	}
+
 	.icon {
 		flex: 0 0 46px;
 		width: 46px;
@@ -224,6 +242,10 @@ import Layout from '../layouts/Layout.astro';
 		border-radius: 12px;
 		background: #edf2eb;
 		font-size: 24px;
+	}
+
+	.icon--notices {
+		background: #d89517;
 	}
 
 	.menu-card strong,
@@ -297,10 +319,11 @@ import Layout from '../layouts/Layout.astro';
 		right: 18px;
 		bottom: calc(18px + env(safe-area-inset-bottom));
 		z-index: 10;
-		display: flex;
-		align-items: center;
-		gap: 9px;
-		padding: 11px 15px 11px 11px;
+		display: grid;
+		place-items: center;
+		width: 52px;
+		height: 52px;
+		padding: 0;
 		border: 2px solid white;
 		border-radius: 999px;
 		background: #25d366;
@@ -320,8 +343,8 @@ import Layout from '../layouts/Layout.astro';
 	.whatsapp-icon {
 		display: grid;
 		place-items: center;
-		width: 32px;
-		height: 32px;
+		width: 34px;
+		height: 34px;
 		border-radius: 50%;
 		background: white;
 		font-size: 18px;
@@ -331,8 +354,6 @@ import Layout from '../layouts/Layout.astro';
 		.whatsapp-button {
 			right: 12px;
 			bottom: calc(12px + env(safe-area-inset-bottom));
-			padding-right: 12px;
-			font-size: 13px;
 		}
 	}
 

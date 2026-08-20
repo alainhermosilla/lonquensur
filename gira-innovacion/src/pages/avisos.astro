@@ -1,0 +1,176 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+	<main>
+		<header class="page-header">
+			<a href="/" class="back">← Volver al inicio</a>
+
+			<div class="brand">
+				<span class="brand-line"></span>
+				<span>LONQUENSUR</span>
+			</div>
+
+			<p class="eyebrow">AGROCOOPINNOVA 2026</p>
+			<h1>Avisos relevantes</h1>
+			<p class="intro">Revisa aquí la información importante y las novedades de la gira.</p>
+		</header>
+
+		<section class="notices" aria-label="Avisos relevantes">
+			<div class="empty-state">
+				<span class="empty-icon" aria-hidden="true">📢</span>
+				<h2>No hay avisos publicados</h2>
+				<p>Cuando tengamos información importante, la encontrarás en esta sección.</p>
+			</div>
+		</section>
+
+		<footer>
+			<p>Gira de Innovación AgrocoopInnova 2026</p>
+			<p>LonquenSur - IEAC</p>
+			<p>Sitio construido con ASTRO</p>
+		</footer>
+	</main>
+</Layout>
+
+<style>
+	:global(*) {
+		box-sizing: border-box;
+	}
+
+	:global(body) {
+		margin: 0;
+		font-family: Arial, Helvetica, sans-serif;
+		background: #f5f3ed;
+		color: #24352a;
+	}
+
+	main {
+		min-height: 100vh;
+	}
+
+	.page-header {
+		padding: 24px 20px 48px;
+		background: linear-gradient(135deg, #9a6100, #6f4300);
+		color: white;
+	}
+
+	.back {
+		display: inline-block;
+		margin-bottom: 30px;
+		color: white;
+		font-size: 14px;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		max-width: 620px;
+		margin: 0 auto 34px;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 2px;
+	}
+
+	.brand-line {
+		width: 28px;
+		height: 2px;
+		background: #ffe092;
+	}
+
+	.eyebrow,
+	h1,
+	.intro {
+		max-width: 620px;
+		margin-right: auto;
+		margin-left: auto;
+	}
+
+	.eyebrow {
+		margin-bottom: 8px;
+		font-size: 11px;
+		font-weight: 800;
+		letter-spacing: 1.6px;
+		color: #ffe092;
+	}
+
+	h1 {
+		margin-top: 0;
+		margin-bottom: 12px;
+		font-size: clamp(36px, 8vw, 52px);
+		line-height: 1.05;
+	}
+
+	.intro {
+		margin-top: 0;
+		margin-bottom: 0;
+		font-size: 16px;
+		line-height: 1.5;
+		opacity: 0.92;
+	}
+
+	.notices {
+		max-width: 620px;
+		margin: 0 auto;
+		padding: 28px 16px 12px;
+	}
+
+	.empty-state {
+		padding: 42px 24px;
+		border: 2px dashed #d8bd7d;
+		border-radius: 16px;
+		background: white;
+		text-align: center;
+	}
+
+	.empty-icon {
+		display: grid;
+		place-items: center;
+		width: 58px;
+		height: 58px;
+		margin: 0 auto 16px;
+		border-radius: 50%;
+		background: #fff0c7;
+		font-size: 28px;
+	}
+
+	.empty-state h2 {
+		margin: 0 0 8px;
+		font-size: 22px;
+	}
+
+	.empty-state p {
+		max-width: 420px;
+		margin: 0 auto;
+		color: #667268;
+		font-size: 15px;
+		line-height: 1.5;
+	}
+
+	footer {
+		max-width: 620px;
+		margin: 0 auto;
+		padding: 28px 20px 36px;
+		color: #788078;
+		font-size: 12px;
+		line-height: 1.5;
+		text-align: center;
+	}
+
+	footer p {
+		margin: 3px 0;
+	}
+
+	@media (min-width: 700px) {
+		.page-header {
+			padding: 30px 32px 58px;
+		}
+
+		.notices {
+			padding-top: 34px;
+		}
+	}
+</style>
