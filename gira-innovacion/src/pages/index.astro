@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import MenuIcon from '../components/MenuIcon.astro';
 ---
 
 <Layout>
@@ -22,7 +23,7 @@ import Layout from '../layouts/Layout.astro';
 
 		<section class="menu" aria-label="Menú principal">
 			<a href="/avisos/" class="menu-card menu-card--notices">
-				<span class="icon icon--notices">📢</span>
+				<span class="icon icon--notices"><MenuIcon name="notices" /></span>
 				<span>
 					<strong>Avisos relevantes</strong>
 					<small>Información importante y novedades de la gira</small>
@@ -30,7 +31,7 @@ import Layout from '../layouts/Layout.astro';
 			</a>
 
 			<a href="/programa/" class="menu-card">
-				<span class="icon">📅</span>
+				<span class="icon"><MenuIcon name="calendar" /></span>
 				<span>
 					<strong>Programa</strong>
 					<small>¿Qué hacemos cada día?</small>
@@ -38,7 +39,7 @@ import Layout from '../layouts/Layout.astro';
 			</a>
 
 			<a href="/visitas/" class="menu-card">
-				<span class="icon">📍</span>
+				<span class="icon"><MenuIcon name="location" /></span>
 				<span>
 					<strong>Visitas</strong>
 					<small>Conoce los lugares que visitaremos</small>
@@ -46,7 +47,7 @@ import Layout from '../layouts/Layout.astro';
 			</a>
 
 			<a href="/informacion/" class="menu-card">
-				<span class="icon">📚</span>
+				<span class="icon"><MenuIcon name="document" /></span>
 				<span>
 					<strong>Información relevante</strong>
 					<small>Material para la gira</small>
@@ -54,7 +55,7 @@ import Layout from '../layouts/Layout.astro';
 			</a>
 
 			<a href="/encuestas/" class="menu-card">
-				<span class="icon">📝</span>
+				<span class="icon"><MenuIcon name="survey" /></span>
 				<span>
 					<strong>Encuestas</strong>
 					<small>Cuéntanos qué te pareció cada visita</small>
@@ -62,7 +63,7 @@ import Layout from '../layouts/Layout.astro';
 			</a>
 
 			<a href="/bitacora/" class="menu-card">
-				<span class="icon">📖</span>
+				<span class="icon"><MenuIcon name="notebook" /></span>
 				<span>
 					<strong>Bitácora</strong>
 					<small>Mira lo que vamos viviendo</small>
@@ -243,6 +244,17 @@ import Layout from '../layouts/Layout.astro';
 		box-shadow: 0 2px 8px rgba(30, 50, 35, 0.08);
 	}
 
+	.menu-card::after {
+		content: '';
+		flex: 0 0 auto;
+		width: 10px;
+		height: 10px;
+		margin-left: auto;
+		border-top: 2px solid currentColor;
+		border-right: 2px solid currentColor;
+		transform: rotate(45deg);
+	}
+
 	.menu-card:active {
 		transform: scale(0.99);
 	}
@@ -266,7 +278,7 @@ import Layout from '../layouts/Layout.astro';
 		place-items: center;
 		border-radius: 12px;
 		background: #edf2eb;
-		font-size: 24px;
+		color: #173e30;
 	}
 
 	.icon--notices {
