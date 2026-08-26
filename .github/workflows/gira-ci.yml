@@ -1,0 +1,31 @@
+name: Verificar sitio de la Gira
+
+on:
+  pull_request:
+    paths:
+      - 'gira-innovacion/**'
+      - '.github/workflows/gira-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gira-innovacion
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: gira-innovacion/package-lock.json
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Construir sitio
+        run: npm run build
