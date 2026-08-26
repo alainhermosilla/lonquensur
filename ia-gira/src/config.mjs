@@ -15,5 +15,7 @@ export const config = Object.freeze({
 	topK: integer(process.env.TOP_K, 5),
 	minScore: Number(process.env.MIN_SCORE ?? 0.16),
 	maxQuestionLength: integer(process.env.MAX_QUESTION_LENGTH, 500),
+	modelContext: integer(process.env.MODEL_NUM_CTX, 4096),
+	modelMaxOutput: integer(process.env.MODEL_NUM_PREDICT, 220),
 	rateLimitPerMinute: integer(process.env.RATE_LIMIT_PER_MINUTE, 20),
 });
