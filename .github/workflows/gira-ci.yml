@@ -40,6 +40,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Construir corpus de evaluación
+        working-directory: gira-innovacion
+        run: npm ci && npm run build
       - name: Probar recuperación y restricciones de red
         working-directory: ia-gira
         run: npm test
+      - name: Ejecutar batería de evaluación
+        working-directory: ia-gira
+        run: npm run eval
