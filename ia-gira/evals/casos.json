@@ -6,6 +6,18 @@
     "debeAbstenerse": false
   },
   {
+    "id": "faq-duracion",
+    "pregunta": "¿Cuántos días dura la Gira?",
+    "esperaFuente": "faq:duracion-gira",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-duracion-variante",
+    "pregunta": "¿Cuánto dura la gira?",
+    "esperaFuente": "faq:duracion-gira",
+    "debeAbstenerse": false
+  },
+  {
     "id": "visita-ceta",
     "pregunta": "¿Qué podemos aprender en CeTA sobre innovación alimentaria?",
     "esperaFuente": "visita:ceta",
