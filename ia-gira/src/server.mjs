@@ -4,6 +4,7 @@ import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
 import { createRetriever } from './retrieval.mjs';
+import { expandTemporalQuery } from './temporal.mjs';
 
 const corpus = await loadKnowledge(config.knowledgePath);
 const retrieve = createRetriever(corpus.fragmentos);
@@ -78,7 +79,8 @@ const server = createServer(async (request, response) => {
 			return send(response, 400, { error: 'Pregunta inválida' }, origin);
 		}
 
-		const contexts = retrieve(pregunta, { topK: config.topK });
+		const consultaRecuperacion = expandTemporalQuery(pregunta);
+		const contexts = retrieve(consultaRecuperacion, { topK: config.topK });
 		if (!contexts.length || contexts[0].score < config.minScore) {
 			return send(response, 200, { respuesta: NO_INFORMATION, fuentes: [] }, origin);
 		}
