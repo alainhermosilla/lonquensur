@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import MenuIcon from '../components/MenuIcon.astro';
+import { visitas } from '../data/visitas';
 ---
 
 <Layout>
@@ -101,16 +102,7 @@ import MenuIcon from '../components/MenuIcon.astro';
 	</main>
 </Layout>
 
-<script>
-	const visitas = [
-		{ numero: '01', nombre: 'Fundación Origen', lugar: 'Comuna Pirque' },
-		{ numero: '02', nombre: 'Centro Tecnológico para la Innovación Alimentaria, CeTA', lugar: 'Comuna Pudahuel' },
-		{ numero: '03', nombre: 'Agrícola Cinco Valles', lugar: 'Comuna Melipilla' },
-		{ numero: '04', nombre: 'COOPEUMO', lugar: 'Comuna Peumo' },
-		{ numero: '05', nombre: 'Cooperativa Loncomilla', lugar: 'Comuna San Javier' },
-		{ numero: '06', nombre: 'Cooperativa Tres Piedras', lugar: 'Comuna Pelluhue' },
-		{ numero: '07', nombre: 'COOPCAM · Mujeres de Pelarco', lugar: 'Comuna Pelarco' },
-	];
+<script define:vars={{ visitas }}>
 
 	const ahora = new Date();
 	const partesChile = new Intl.DateTimeFormat('en-CA', {
