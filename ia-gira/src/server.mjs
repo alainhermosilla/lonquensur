@@ -10,6 +10,25 @@ import { expandTemporalQuery } from './temporal.mjs';
 const corpus = await loadKnowledge(config.knowledgePath);
 const retrieve = createRetriever(corpus.fragmentos);
 const buckets = new Map();
+const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+function normalizeText(value) {
+	return String(value).normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+}
+
+function contextsForExplicitDate(question) {
+	const normalized = normalizeText(question);
+	const dates = new Set(corpus.fragmentos.map((fragmento) => fragmento.fecha).filter(Boolean));
+	for (const date of dates) {
+		const [, month, day] = date.split('-').map(Number);
+		const expression = new RegExp(`\\b0?${day}\\s+de\\s+${monthNames[month - 1]}\\b`);
+		if (!expression.test(normalized)) continue;
+		return corpus.fragmentos
+			.filter((fragmento) => fragmento.fecha === date)
+			.map((fragmento) => ({ ...fragmento, score: 2 }));
+	}
+	return null;
+}
 
 function chileNow() {
 	return new Intl.DateTimeFormat('sv-SE', {
@@ -85,7 +104,7 @@ const server = createServer(async (request, response) => {
 		}
 
 		const consultaRecuperacion = expandTemporalQuery(pregunta);
-		let contexts = retrieve(consultaRecuperacion, { topK: config.topK });
+		let contexts = contextsForExplicitDate(pregunta) ?? retrieve(consultaRecuperacion, { topK: config.topK });
 		if (!/\b(encuesta|encuestas|formulario|formularios)\b/i.test(pregunta)) {
 			contexts = contexts.filter((context) => context.tipo !== 'encuesta');
 		}
