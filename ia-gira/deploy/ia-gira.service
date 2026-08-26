@@ -1,0 +1,43 @@
+[Unit]
+Description=Asistente interno de la Gira AgrocoopInnova
+After=network.target ollama.service
+Wants=ollama.service
+
+[Service]
+Type=simple
+User=ia-gira
+Group=ia-gira
+WorkingDirectory=/opt/ia-gira/app
+EnvironmentFile=/etc/ia-gira/ia-gira.env
+ExecStart=/opt/ia-gira/bin/node src/server.mjs
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=15
+
+# Endurecimiento: solo archivos de la aplicación, corpus y directorios temporales.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RemoveIPC=true
+UMask=0077
+
+# La API y el modelo se comunican exclusivamente por loopback.
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+IPAddressDeny=any
+IPAddressAllow=localhost
+
+# Límites defensivos.
+MemoryMax=768M
+TasksMax=128
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,36 @@
+[Unit]
+Description=Vista previa web del asistente de la Gira
+After=network.target ia-gira.service
+Requires=ia-gira.service
+
+[Service]
+Type=simple
+User=ia-gira
+Group=ia-gira
+WorkingDirectory=/opt/ia-gira
+Environment=PREVIEW_HOST=192.168.1.145
+Environment=PREVIEW_PORT=8088
+Environment=SITE_ROOT=/opt/ia-gira/site
+ExecStart=/opt/ia-gira/bin/node /opt/ia-gira/preview-server.mjs
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RemoveIPC=true
+UMask=0077
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryMax=128M
+TasksMax=64
+LimitNOFILE=1024
+
+[Install]
+WantedBy=multi-user.target

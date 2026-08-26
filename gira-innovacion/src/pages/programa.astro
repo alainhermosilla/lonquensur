@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { programa } from '../data/programa';
 ---
 
 <Layout>
@@ -42,344 +43,41 @@ import Layout from '../layouts/Layout.astro';
 				</a>
 			</div>
 
-			<!-- DOMINGO 6 DE SEPTIEMBRE DE 2026 -->
-
-			<article class="day arrival-day" data-day="06">
-				<div class="date arrival-date">
-					<span class="day-number">06</span>
-					<span class="month">SEP</span>
-				</div>
-
-				<div class="day-content">
-					<p class="day-label">DOMINGO 6 DE SEPTIEMBRE DE 2026</p>
-
-					<div class="session">
-						<p class="session-label">Llegada de participantes</p>
-
-						<h2>Inicio de la experiencia</h2>
-						<p class="location">
-							📍 Comuna de Santiago · Región Metropolitana
-						</p>
-
-						<div class="activity">
-							<strong>Recepción y encuentro</strong>
-							<p>
-								Llegada de los representantes de las 15 cooperativas
-								participantes a Santiago durante la tarde,
-								aproximadamente después de las 18:00 horas,
-								y recepción en el punto de encuentro definido
-								para el inicio de la gira.
-							</p>
+			{
+				programa.map((dia) => (
+					<article
+						class:list={['day', { 'arrival-day': dia.id === '06' }]}
+						data-day={dia.id}
+					>
+						<div class:list={['date', { 'arrival-date': dia.id === '06' }]}>
+							<span class="day-number">{dia.id}</span>
+							<span class="month">SEP</span>
 						</div>
 
-						<div class="activity">
-							<strong>Alojamiento y coordinación</strong>
-							<p>
-								Traslado al lugar de alojamiento y coordinación
-								general de los participantes para el inicio de las
-								actividades del día siguiente.
-							</p>
+						<div class="day-content">
+							<p class="day-label">{dia.fechaTexto}</p>
+
+							{dia.jornadas.map((jornada, indice) => (
+								<>
+									{indice > 0 && jornada.visitaId && <div class="visit-divider"></div>}
+									<div class:list={['session', { 'return-session': jornada.id === '2026-09-11-tarde' }]}>
+										<p class="session-label">{jornada.etiqueta}</p>
+										<h2>{jornada.titulo}</h2>
+										<p class="location">📍 {jornada.lugar}</p>
+
+										{jornada.actividades.map((actividad) => (
+											<div class="activity">
+												<strong>{actividad.titulo}</strong>
+												<p>{actividad.descripcion}</p>
+											</div>
+										))}
+									</div>
+								</>
+							))}
 						</div>
-					</div>
-				</div>
-			</article>
-
-			<!-- LUNES 7 DE SEPTIEMBRE DE 2026 -->
-
-			<article class="day" data-day="07">
-				<div class="date">
-					<span class="day-number">07</span>
-					<span class="month">SEP</span>
-				</div>
-
-				<div class="day-content">
-					<p class="day-label">LUNES 7 DE SEPTIEMBRE DE 2026</p>
-
-					<div class="session">
-						<p class="session-label">Jornada Mañana</p>
-
-						<h2>Fundación Origen</h2>
-						<p class="location">
-							📍 Comuna de Pirque · Región Metropolitana
-						</p>
-
-						<div class="activity">
-							<strong>Inicio de la gira</strong>
-							<p>
-								Presentación de las cooperativas participantes,
-								introducción al concepto de innovación y dinámica
-								participativa para compartir conocimientos,
-								experiencias y expectativas.
-							</p>
-						</div>
-					</div>
-
-					<div class="visit-divider"></div>
-
-					<div class="session">
-						<p class="session-label">Jornada Tarde</p>
-
-						<h2>Visita de campo</h2>
-						<p class="location">
-							📍 Fundación Origen · Comuna de Pirque
-						</p>
-
-						<div class="activity">
-							<strong>Agroecología y agricultura sustentable</strong>
-							<p>
-								Recorrido por el Mercado Campesino Origen y el
-								banco de semillas tradicionales, conociendo en
-								terreno la mirada de la Fundación sobre
-								agroecología, producción sustentable y
-								conservación de semillas.
-							</p>
-						</div>
-					</div>
-				</div>
-			</article>
-
-			<!-- MARTES 8 DE SEPTIEMBRE DE 2026 -->
-
-			<article class="day" data-day="08">
-				<div class="date">
-					<span class="day-number">08</span>
-					<span class="month">SEP</span>
-				</div>
-
-				<div class="day-content">
-					<p class="day-label">MARTES 8 DE SEPTIEMBRE DE 2026</p>
-
-					<div class="session">
-						<p class="session-label">Jornada Mañana</p>
-
-						<h2>
-							Centro Tecnológico para la Innovación Alimentaria
-							(CETA)
-						</h2>
-						<p class="location">
-							📍 Comuna de Pudahuel · Región Metropolitana
-						</p>
-
-						<div class="activity">
-							<strong>Innovación alimentaria</strong>
-							<p>
-								Conocer el ecosistema de innovación alimentaria,
-								la infraestructura y los procesos que permiten
-								desarrollar nuevos productos, diversificar
-								producciones y agregar valor.
-							</p>
-						</div>
-					</div>
-
-					<div class="visit-divider"></div>
-
-					<div class="session">
-						<p class="session-label">Jornada Tarde</p>
-
-						<h2>Agrícola Cinco Valles</h2>
-						<p class="location">
-							📍 Comuna de Melipilla · Región Metropolitana
-						</p>
-
-						<div class="activity">
-							<strong>Modelo de servicios compartidos</strong>
-							<p>
-								Conocer su organización, principales dificultades
-								y modelo de servicios técnicos compartidos,
-								incluyendo SAT INDAP y asesoría en riego.
-							</p>
-						</div>
-					</div>
-				</div>
-			</article>
-
-			<!-- MIÉRCOLES 9 DE SEPTIEMBRE DE 2026 -->
-
-			<article class="day" data-day="09">
-				<div class="date">
-					<span class="day-number">09</span>
-					<span class="month">SEP</span>
-				</div>
-
-				<div class="day-content">
-					<p class="day-label">MIÉRCOLES 9 DE SEPTIEMBRE DE 2026</p>
-
-					<div class="session">
-						<p class="session-label">Jornada de la mañana</p>
-
-						<h2>COOPEUMO</h2>
-						<p class="location">
-							📍 Comuna de Peumo · Región de O'Higgins
-						</p>
-
-						<div class="activity">
-							<strong>Modelo cooperativo campesino</strong>
-							<p>
-								Jornada de capacitación y conversación para conocer
-								los principales logros, dificultades y desafíos
-								actuales de la cooperativa.
-							</p>
-						</div>
-
-						<div class="activity">
-							<strong>Visita a instalaciones</strong>
-							<p>
-								Recorrido y conversatorio sobre su experiencia en
-								servicios integrales para sus socios, incluyendo
-								insumos, financiamiento, asistencia técnica y
-								comercialización.
-							</p>
-						</div>
-					</div>
-
-					<div class="session">
-						<p class="session-label">Jornada de la tarde</p>
-
-						<h2>Viaje a Talca</h2>
-						<p class="location">
-							📍 Ciudad de Talca · Región del Maule
-						</p>
-
-						<div class="activity">
-							<strong>Traslado a Talca</strong>
-							<p>
-								Viaje desde la Región de O'Higgins hacia la ciudad
-								de Talca para continuar las actividades de la gira.
-							</p>
-						</div>
-					</div>
-				</div>
-			</article>
-
-			<!-- JUEVES 10 DE SEPTIEMBRE DE 2026 -->
-
-			<article class="day" data-day="10">
-				<div class="date">
-					<span class="day-number">10</span>
-					<span class="month">SEP</span>
-				</div>
-
-				<div class="day-content">
-					<p class="day-label">JUEVES 10 DE SEPTIEMBRE DE 2026</p>
-
-					<div class="session">
-						<p class="session-label">Jornada Mañana</p>
-
-						<h2>Cooperativa Campesina Tres Piedras</h2>
-						<p class="location">
-							📍 Comuna de Pelluhue · Región del Maule
-						</p>
-
-						<div class="activity">
-							<strong>Innovación y alianzas</strong>
-							<p>
-								Conocer los desafíos de una cooperativa en proceso
-								de desarrollo, las soluciones implementadas y el
-								acceso a innovación tecnológica mediante alianzas
-								estratégicas.
-							</p>
-						</div>
-
-						<div class="activity">
-							<strong>Visita a terreno</strong>
-							<p>
-								Visita a predios y packing para conocer directamente
-								su experiencia productiva.
-							</p>
-						</div>
-					</div>
-
-					<div class="visit-divider"></div>
-
-					<div class="session">
-						<p class="session-label">Jornada Tarde</p>
-
-						<h2>Cooperativa Vitivinícola Loncomilla</h2>
-						<p class="location">
-							📍 Comuna de San Javier · Región del Maule
-						</p>
-
-						<div class="activity">
-							<strong>Experiencia cooperativa</strong>
-							<p>
-								Conocer la historia, problemas y logros de una
-								cooperativa con más de seis décadas de trayectoria.
-							</p>
-						</div>
-
-						<div class="activity">
-							<strong>Innovación y mercados</strong>
-							<p>
-								Visita a planta y viñedos, junto con la presentación
-								del proyecto Invicto y el proceso de certificación
-								Fairtrade.
-							</p>
-						</div>
-					</div>
-				</div>
-			</article>
-
-			<!-- VIERNES 11 DE SEPTIEMBRE DE 2026 -->
-
-			<article class="day" data-day="11">
-				<div class="date">
-					<span class="day-number">11</span>
-					<span class="month">SEP</span>
-				</div>
-
-				<div class="day-content">
-					<p class="day-label">VIERNES 11 DE SEPTIEMBRE DE 2026</p>
-
-					<div class="session">
-						<p class="session-label">Jornada Mañana</p>
-
-						<h2>
-							Cooperativa Campesina Mujeres de Pelarco (COOPCAM)
-						</h2>
-						<p class="location">
-							📍 Comuna de Pelarco · Región del Maule
-						</p>
-
-						<div class="activity">
-							<strong>Cooperativismo y emprendimiento femenino</strong>
-							<p>
-								Conversación con las integrantes de la Cooperativa
-								Campesina Mujeres de Pelarco para conocer sus
-								aciertos, dificultades y aprendizajes durante sus
-								años de funcionamiento.
-							</p>
-						</div>
-
-						<div class="activity">
-							<strong>Visita a instalaciones</strong>
-							<p>
-								Conocer la experiencia productiva de la cooperativa,
-								sus instalaciones y sala de venta.
-							</p>
-						</div>
-					</div>
-
-					<div class="visit-divider"></div>
-
-					<div class="session return-session">
-						<p class="session-label">Jornada Tarde</p>
-
-						<h2>Vuelta de los participantes a sus hogares</h2>
-						<p class="location">
-							📍 Desde Pelarco · Región del Maule
-						</p>
-
-						<div class="activity">
-							<strong>Retorno</strong>
-							<p>
-								Finalizadas las actividades de la gira, se realizará
-								la coordinación y retorno de los participantes a
-								sus respectivos lugares de origen.
-							</p>
-						</div>
-					</div>
-				</div>
-			</article>
+					</article>
+				))
+			}
 		</section>
 
 		<section class="closing">

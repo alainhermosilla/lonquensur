@@ -1,0 +1,14 @@
+{
+  "name": "ia-gira",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "test": "node --test",
+    "eval": "node evals/run.mjs"
+  }
+}

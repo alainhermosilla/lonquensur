@@ -15,8 +15,13 @@ echo "==> Instalando dependencias..."
 npm ci
 
 echo
-echo "==> Generando sitio..."
-npm run build
+echo "==> Verificando API pública de la Gira..."
+IA_API_URL="${PUBLIC_IA_API_URL:-https://ia-gira.lonquensur.cl}"
+curl -fsS "$IA_API_URL/health" >/dev/null
+
+echo
+echo "==> Generando sitio con el asistente habilitado..."
+PUBLIC_IA_API_URL="$IA_API_URL" npm run build
 
 echo
 echo "==> Build correcto."
