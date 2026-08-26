@@ -57,7 +57,8 @@ sudo install -o root -g ia-gira -m 0640 "$env_file" /etc/ia-gira/ia-gira.env
 sudo install -o root -g root -m 0644 "$WORKTREE/ia-gira/deploy/ia-gira.service" /etc/systemd/system/ia-gira.service
 
 sudo systemctl daemon-reload
-sudo systemctl enable --now ia-gira
+sudo systemctl enable ia-gira
+sudo systemctl restart ia-gira
 
 for attempt in $(seq 1 20); do
   if curl -fsS http://127.0.0.1:8787/health; then
