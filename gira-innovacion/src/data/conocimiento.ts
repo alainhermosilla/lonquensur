@@ -13,6 +13,7 @@ export interface FragmentoConocimiento {
 	fecha?: string;
 	visitaId?: string;
 	categorias?: string[];
+	respuestaDirecta?: string;
 	visibilidad: 'publica';
 }
 
@@ -66,6 +67,7 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 			texto: `${faq.pregunta}\n${faq.respuesta}`,
 			fuente: 'fuente-interna:faqs',
 			categorias: faq.categorias,
+			respuestaDirecta: faq.respuesta,
 			visibilidad: 'publica' as const,
 		}));
 
