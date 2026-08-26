@@ -86,7 +86,7 @@ const server = createServer(async (request, response) => {
 
 		const consultaRecuperacion = expandTemporalQuery(pregunta);
 		let contexts = retrieve(consultaRecuperacion, { topK: config.topK });
-		if (!/\\b(encuesta|encuestas|formulario|formularios)\\b/i.test(pregunta)) {
+		if (!/\b(encuesta|encuestas|formulario|formularios)\b/i.test(pregunta)) {
 			contexts = contexts.filter((context) => context.tipo !== 'encuesta');
 		}
 		if (!contexts.length || contexts[0].score < config.minScore) {
