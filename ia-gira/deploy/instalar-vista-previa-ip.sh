@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BRANCH="${BRANCH:-origin/codex/fuente-unica-gira}"
+BRANCH="${BRANCH:-origin/main}"
 SERVER_IP="${SERVER_IP:-192.168.1.145}"
 PREVIEW_PORT="${PREVIEW_PORT:-8088}"
 ROOT="$(git rev-parse --show-toplevel)"

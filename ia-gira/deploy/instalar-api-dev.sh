@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BRANCH="${BRANCH:-origin/codex/fuente-unica-gira}"
+BRANCH="${BRANCH:-origin/main}"
 ROOT="$(git rev-parse --show-toplevel)"
 NODE_BINARY="$(command -v node)"
 TEMP_DIR="$(mktemp -d)"
