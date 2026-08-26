@@ -50,7 +50,10 @@ import { visitas } from '../data/visitas';
 			<a href="/asistente/" class="menu-card menu-card--assistant">
 				<span class="icon icon--assistant" aria-hidden="true">✦</span>
 				<span>
-					<strong>Asistente de la Gira</strong>
+					<span class="assistant-title">
+						<strong>Asistente de la Gira</strong>
+						<span class="new-badge">Nuevo</span>
+					</span>
 					<small>Consulta la información oficial del sitio</small>
 				</span>
 			</a>
@@ -268,6 +271,44 @@ import { visitas } from '../data/visitas';
 
 	.menu-card--notices small {
 		color: #705318;
+	}
+
+	.menu-card--assistant {
+		background: linear-gradient(135deg, #eee9ff, #e3f0ff);
+		border: 2px solid #7158c7;
+		color: #30245f;
+		box-shadow: 0 4px 16px rgba(79, 61, 151, 0.2);
+	}
+
+	.menu-card--assistant small {
+		color: #554b7d;
+	}
+
+	.icon--assistant {
+		background: #7158c7;
+		color: white;
+		font-size: 25px;
+		box-shadow: 0 3px 10px rgba(79, 61, 151, 0.25);
+	}
+
+	.assistant-title {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.new-badge {
+		display: inline-block;
+		padding: 4px 7px;
+		border-radius: 999px;
+		background: #7158c7;
+		color: white;
+		font-size: 10px;
+		font-weight: 800;
+		letter-spacing: .7px;
+		line-height: 1;
+		text-transform: uppercase;
 	}
 
 	.icon {
