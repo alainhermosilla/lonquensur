@@ -98,6 +98,8 @@ const server = createServer(async (request, response) => {
 				modelName: config.modelName,
 				messages: buildMessages(pregunta, contexts, chileNow()),
 				signal: controller.signal,
+				numCtx: config.modelContext,
+				numPredict: config.modelMaxOutput,
 			});
 			return send(response, 200, {
 				respuesta,
