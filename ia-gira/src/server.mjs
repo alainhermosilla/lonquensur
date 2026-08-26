@@ -4,6 +4,7 @@ import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
 import { createRetriever } from './retrieval.mjs';
+import { classifyQuestion } from './guardrails.mjs';
 import { expandTemporalQuery } from './temporal.mjs';
 
 const corpus = await loadKnowledge(config.knowledgePath);
@@ -77,6 +78,10 @@ const server = createServer(async (request, response) => {
 		const { pregunta } = await readJson(request);
 		if (typeof pregunta !== 'string' || !pregunta.trim() || pregunta.length > config.maxQuestionLength) {
 			return send(response, 400, { error: 'Pregunta inválida' }, origin);
+		}
+
+		if (!classifyQuestion(pregunta).allowed) {
+			return send(response, 200, { respuesta: NO_INFORMATION, fuentes: [] }, origin);
 		}
 
 		const consultaRecuperacion = expandTemporalQuery(pregunta);
