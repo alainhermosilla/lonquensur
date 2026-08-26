@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'gira-innovacion/**'
+      - 'ia-gira/**'
       - '.github/workflows/gira-ci.yml'
   workflow_dispatch:
 
@@ -29,3 +30,16 @@ jobs:
         run: npm ci
       - name: Construir sitio
         run: npm run build
+
+  probar-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Probar recuperación y restricciones de red
+        working-directory: ia-gira
+        run: npm test
