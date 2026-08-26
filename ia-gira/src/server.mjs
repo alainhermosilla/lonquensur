@@ -90,6 +90,13 @@ const server = createServer(async (request, response) => {
 			return send(response, 200, { respuesta: NO_INFORMATION, fuentes: [] }, origin);
 		}
 
+		if (contexts[0].tipo === 'faq' && contexts[0].respuestaDirecta) {
+			return send(response, 200, {
+				respuesta: contexts[0].respuestaDirecta,
+				fuentes: [{ id: contexts[0].id, titulo: contexts[0].titulo, fuente: contexts[0].fuente, score: contexts[0].score }],
+			}, origin);
+		}
+
 		const controller = new AbortController();
 		const timeout = setTimeout(() => controller.abort(), 30_000);
 		try {
