@@ -37,6 +37,16 @@ function contextsForVisitRecommendations(question) {
 		.map((fragmento) => ({ ...fragmento, score: 2 }));
 }
 
+function formatVisitRecommendations(contexts) {
+	const items = contexts.map((context, index) => {
+		const detail = context.texto
+			.split('\n')
+			.find((line) => line.trim() && line.trim() !== context.titulo);
+		return `${index + 1}. ${context.titulo}${detail ? `: ${detail}` : ''}`;
+	});
+	return `Para aprovechar cada visita, toma en cuenta estos aspectos:\n\n${items.join('\n')}`;
+}
+
 function chileNow() {
 	return new Intl.DateTimeFormat('sv-SE', {
 		timeZone: 'America/Santiago', dateStyle: 'short', timeStyle: 'medium',
@@ -119,6 +129,13 @@ const server = createServer(async (request, response) => {
 		}
 		if (!contexts.length || contexts[0].score < config.minScore) {
 			return send(response, 200, { respuesta: NO_INFORMATION, fuentes: [] }, origin);
+		}
+
+		if (asksAboutVisitRecommendations(pregunta)) {
+			return send(response, 200, {
+				respuesta: formatVisitRecommendations(contexts),
+				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),
+			}, origin);
 		}
 
 		if (contexts[0].tipo === 'faq' && contexts[0].respuestaDirecta) {
