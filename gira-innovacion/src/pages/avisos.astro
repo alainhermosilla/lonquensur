@@ -7,11 +7,6 @@ import Layout from '../layouts/Layout.astro';
 		<header class="page-header">
 			<a href="/" class="back">← Volver al inicio</a>
 
-			<div class="brand">
-				<span class="brand-line"></span>
-				<a href="https://lonquensur.cl" target="_blank" rel="noopener noreferrer">LONQUENSUR</a>
-			</div>
-
 			<p class="eyebrow">Gira de innovación AgrocoopInnova 2026</p>
 			<h1>Avisos relevantes</h1>
 			<p class="intro">Revisa aquí la información importante y las novedades de la gira.</p>
@@ -27,7 +22,7 @@ import Layout from '../layouts/Layout.astro';
 
 		<footer>
 			<p>Gira de innovación AgrocoopInnova 2026</p>
-			<p>LonquenSur - IEAC</p>
+			<p><a class="footer-link" href="https://lonquensur.cl" target="_blank" rel="noopener noreferrer">LonquenSur</a> - IEAC</p>
 			<p>Sitio construido con ASTRO</p>
 		</footer>
 	</main>
@@ -50,7 +45,7 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	.page-header {
-		padding: 24px 20px 48px;
+		padding: 20px 20px 38px;
 		background: linear-gradient(135deg, #9a6100, #6f4300);
 		color: white;
 	}
@@ -171,7 +166,7 @@ import Layout from '../layouts/Layout.astro';
 
 	@media (min-width: 700px) {
 		.page-header {
-			padding: 30px 32px 58px;
+			padding: 24px 32px 46px;
 		}
 
 		.notices {

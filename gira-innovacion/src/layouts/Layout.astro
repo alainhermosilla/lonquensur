@@ -31,6 +31,12 @@ const mostrarAsistenteFlotante = !Astro.url.pathname.startsWith('/asistente');
 		height: 100%;
 	}
 
+	:global(.footer-link) {
+		color: inherit;
+		font-weight: 700;
+		text-underline-offset: 3px;
+	}
+
 	.floating-assistant {
 		position: fixed;
 		right: 18px;
