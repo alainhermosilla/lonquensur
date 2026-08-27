@@ -3,7 +3,7 @@ import { config } from './config.mjs';
 import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
-import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhenVisitingOrganization, createRetriever } from './retrieval.mjs';
+import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
 import { expandTemporalQuery } from './temporal.mjs';
 
@@ -55,7 +55,8 @@ function contextsForVisitSchedule(question) {
 	if (!asksWhenVisitingOrganization(question)) return null;
 	const normalized = normalizeText(question);
 	const visit = corpus.fragmentos.find(
-		(fragmento) => fragmento.tipo === 'visita' && normalized.includes(normalizeText(fragmento.titulo)),
+		(fragmento) => fragmento.tipo === 'visita'
+			&& (normalized.includes(normalizeText(fragmento.titulo)) || matchesVisitIdentifier(question, fragmento.visitaId)),
 	);
 	if (!visit?.visitaId) return null;
 	return corpus.fragmentos

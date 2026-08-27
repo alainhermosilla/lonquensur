@@ -51,6 +51,14 @@ export function asksWhenVisitingOrganization(question) {
 		&& /\b(ir(?:emos|an|a)?|vamos|visitar(?:emos|an|a)?)\b/.test(normalized);
 }
 
+export function matchesVisitIdentifier(question, visitId) {
+	const generic = new Set(['agricola', 'cooperativa', 'fundacion']);
+	const queryTokens = new Set(tokenize(question));
+	const identifierTokens = tokenize(String(visitId).replaceAll('-', ' '))
+		.filter((token) => !generic.has(token));
+	return identifierTokens.length > 0 && identifierTokens.every((token) => queryTokens.has(token));
+}
+
 export function createRetriever(fragmentos) {
 	const documents = fragmentos.map((fragmento) => ({
 		fragmento,
