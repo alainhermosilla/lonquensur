@@ -23,6 +23,15 @@ export function asksAboutVisitRecommendations(question) {
 		|| /\bconsiderar\b/.test(normalized);
 }
 
+export function asksAboutVisitedOrganizations(question) {
+	const normalized = String(question)
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '')
+		.toLowerCase();
+	return /\borganizaciones?\b/.test(normalized)
+		&& /\b(visitar(?:emos|an|a|as)?|visitas?|conocer(?:emos|an)?)\b/.test(normalized);
+}
+
 export function createRetriever(fragmentos) {
 	const documents = fragmentos.map((fragmento) => ({
 		fragmento,

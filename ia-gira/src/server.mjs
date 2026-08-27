@@ -3,7 +3,7 @@ import { config } from './config.mjs';
 import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
-import { asksAboutVisitRecommendations, createRetriever } from './retrieval.mjs';
+import { asksAboutVisitedOrganizations, asksAboutVisitRecommendations, createRetriever } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
 import { expandTemporalQuery } from './temporal.mjs';
 
@@ -37,6 +37,13 @@ function contextsForVisitRecommendations(question) {
 		.map((fragmento) => ({ ...fragmento, score: 2 }));
 }
 
+function contextsForVisitedOrganizations(question) {
+	if (!asksAboutVisitedOrganizations(question)) return null;
+	return corpus.fragmentos
+		.filter((fragmento) => fragmento.tipo === 'visita')
+		.map((fragmento) => ({ ...fragmento, score: 2 }));
+}
+
 function formatVisitRecommendations(contexts) {
 	const items = contexts.map((context, index) => {
 		const detail = context.texto
@@ -45,6 +52,15 @@ function formatVisitRecommendations(contexts) {
 		return `${index + 1}. ${context.titulo}${detail ? `: ${detail}` : ''}`;
 	});
 	return `Para aprovechar cada visita, toma en cuenta estos aspectos:\n\n${items.join('\n')}`;
+}
+
+function formatVisitedOrganizations(contexts) {
+	const items = contexts.map((context, index) => {
+		const lines = context.texto.split('\n').map((line) => line.trim()).filter(Boolean);
+		const location = lines.find((line) => /\b(comuna|region)\b/i.test(line));
+		return `${index + 1}. ${context.titulo}${location ? ` — ${location}` : ''}`;
+	});
+	return `Las organizaciones que visitaremos son:\n\n${items.join('\n')}`;
 }
 
 function chileNow() {
@@ -122,6 +138,7 @@ const server = createServer(async (request, response) => {
 
 		const consultaRecuperacion = expandTemporalQuery(pregunta);
 		let contexts = contextsForExplicitDate(pregunta)
+			?? contextsForVisitedOrganizations(pregunta)
 			?? contextsForVisitRecommendations(pregunta)
 			?? retrieve(consultaRecuperacion, { topK: config.topK });
 		if (!/\b(encuesta|encuestas|formulario|formularios)\b/i.test(pregunta)) {
@@ -129,6 +146,13 @@ const server = createServer(async (request, response) => {
 		}
 		if (!contexts.length || contexts[0].score < config.minScore) {
 			return send(response, 200, { respuesta: NO_INFORMATION, fuentes: [] }, origin);
+		}
+
+		if (asksAboutVisitedOrganizations(pregunta)) {
+			return send(response, 200, {
+				respuesta: formatVisitedOrganizations(contexts),
+				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),
+			}, origin);
 		}
 
 		if (asksAboutVisitRecommendations(pregunta)) {
