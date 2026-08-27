@@ -3,7 +3,7 @@ import { config } from './config.mjs';
 import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
-import { asksAboutVisitedOrganizations, asksAboutVisitRecommendations, createRetriever } from './retrieval.mjs';
+import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, createRetriever } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
 import { expandTemporalQuery } from './temporal.mjs';
 
@@ -44,6 +44,13 @@ function contextsForVisitedOrganizations(question) {
 		.map((fragmento) => ({ ...fragmento, score: 2 }));
 }
 
+function contextsForVisitedCommunes(question) {
+	if (!asksAboutVisitedCommunes(question)) return null;
+	return corpus.fragmentos
+		.filter((fragmento) => fragmento.tipo === 'visita')
+		.map((fragmento) => ({ ...fragmento, score: 2 }));
+}
+
 function formatVisitRecommendations(contexts) {
 	const items = contexts.map((context, index) => {
 		const detail = context.texto
@@ -61,6 +68,18 @@ function formatVisitedOrganizations(contexts) {
 		return `${index + 1}. ${context.titulo}${location ? ` — ${location}` : ''}`;
 	});
 	return `Las organizaciones que visitaremos son:\n\n${items.join('\n')}`;
+}
+
+function formatVisitedCommunes(contexts) {
+	const items = contexts.map((context, index) => {
+		const location = context.texto
+			.split('\n')
+			.map((line) => line.trim())
+			.find((line) => /^comuna\b/i.test(line));
+		const commune = location?.match(/^Comuna\s+(.+?)(?:\s+·|$)/i)?.[1] ?? location ?? 'Comuna no indicada';
+		return `${index + 1}. ${commune} — ${context.titulo}`;
+	});
+	return `Las comunas que se visitan en la Gira son:\n\n${items.join('\n')}`;
 }
 
 function chileNow() {
@@ -138,6 +157,7 @@ const server = createServer(async (request, response) => {
 
 		const consultaRecuperacion = expandTemporalQuery(pregunta);
 		let contexts = contextsForExplicitDate(pregunta)
+			?? contextsForVisitedCommunes(pregunta)
 			?? contextsForVisitedOrganizations(pregunta)
 			?? contextsForVisitRecommendations(pregunta)
 			?? retrieve(consultaRecuperacion, { topK: config.topK });
@@ -146,6 +166,13 @@ const server = createServer(async (request, response) => {
 		}
 		if (!contexts.length || contexts[0].score < config.minScore) {
 			return send(response, 200, { respuesta: NO_INFORMATION, fuentes: [] }, origin);
+		}
+
+		if (asksAboutVisitedCommunes(pregunta)) {
+			return send(response, 200, {
+				respuesta: formatVisitedCommunes(contexts),
+				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),
+			}, origin);
 		}
 
 		if (asksAboutVisitedOrganizations(pregunta)) {
