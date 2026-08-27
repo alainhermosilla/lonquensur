@@ -22,6 +22,7 @@ test('una consulta ajena no produce resultados', () => {
 
 test('reconoce una consulta sobre los aspectos de cada visita', () => {
 	assert.equal(asksAboutVisitRecommendations('¿Qué aspectos debo tomar en cuenta para cada una de las visitas?'), true);
+	assert.equal(asksAboutVisitRecommendations('¿Qué debo tener en cuenta para las visitas de la gira?'), true);
 	assert.equal(asksAboutVisitRecommendations('¿Debo llevar cargador durante las visitas?'), false);
 });
 

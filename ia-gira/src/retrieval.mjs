@@ -17,7 +17,10 @@ export function asksAboutVisitRecommendations(question) {
 		.replace(/\p{Diacritic}/gu, '')
 		.toLowerCase();
 	if (!/\bvisitas?\b/.test(normalized)) return false;
-	return /\b(cada|todas?)\b/.test(normalized) || /\baspectos?\b/.test(normalized);
+	return /\b(cada|todas?)\b/.test(normalized)
+		|| /\baspectos?\b/.test(normalized)
+		|| /\b(tener|tomar)\s+en\s+cuenta\b/.test(normalized)
+		|| /\bconsiderar\b/.test(normalized);
 }
 
 export function createRetriever(fragmentos) {
