@@ -47,17 +47,6 @@ import { visitas } from '../data/visitas';
 				</span>
 			</a>
 
-			<a href="/asistente/" class="menu-card menu-card--assistant">
-				<span class="icon icon--assistant" aria-hidden="true">✦</span>
-				<span>
-					<span class="assistant-title">
-						<strong>Asistente de la Gira</strong>
-						<span class="new-badge">Nuevo</span>
-					</span>
-					<small>Consulta la información oficial del sitio</small>
-				</span>
-			</a>
-
 			<a href="/informacion/" class="menu-card">
 				<span class="icon"><MenuIcon name="document" /></span>
 				<span>
@@ -273,44 +262,6 @@ import { visitas } from '../data/visitas';
 		color: #705318;
 	}
 
-	.menu-card--assistant {
-		background: linear-gradient(135deg, #eee9ff, #e3f0ff);
-		border: 2px solid #7158c7;
-		color: #30245f;
-		box-shadow: 0 4px 16px rgba(79, 61, 151, 0.2);
-	}
-
-	.menu-card--assistant small {
-		color: #554b7d;
-	}
-
-	.icon--assistant {
-		background: #7158c7;
-		color: white;
-		font-size: 25px;
-		box-shadow: 0 3px 10px rgba(79, 61, 151, 0.25);
-	}
-
-	.assistant-title {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 8px;
-	}
-
-	.new-badge {
-		display: inline-block;
-		padding: 4px 7px;
-		border-radius: 999px;
-		background: #7158c7;
-		color: white;
-		font-size: 10px;
-		font-weight: 800;
-		letter-spacing: .7px;
-		line-height: 1;
-		text-transform: uppercase;
-	}
-
 	.icon {
 		flex: 0 0 46px;
 		width: 46px;
@@ -394,7 +345,7 @@ import { visitas } from '../data/visitas';
 
 	.whatsapp-button {
 		position: fixed;
-		right: 18px;
+		right: 84px;
 		bottom: calc(18px + env(safe-area-inset-bottom));
 		z-index: 10;
 		display: grid;
@@ -430,7 +381,7 @@ import { visitas } from '../data/visitas';
 
 	@media (max-width: 420px) {
 		.whatsapp-button {
-			right: 12px;
+			right: 76px;
 			bottom: calc(12px + env(safe-area-inset-bottom));
 		}
 	}

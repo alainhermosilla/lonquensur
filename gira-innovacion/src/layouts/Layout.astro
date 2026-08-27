@@ -1,5 +1,6 @@
 ---
 import '../data/validar';
+const mostrarAsistenteFlotante = !Astro.url.pathname.startsWith('/asistente');
 ---
 <!doctype html>
 <html lang="en">
@@ -13,6 +14,12 @@ import '../data/validar';
 	</head>
 	<body>
 		<slot />
+		{mostrarAsistenteFlotante && (
+			<a class="floating-assistant" href="/asistente/" aria-label="Abrir el asistente de la Gira">
+				<span class="floating-assistant-label" aria-hidden="true">Pregúntale a la IA</span>
+				<span class="floating-assistant-mark" aria-hidden="true">IA</span>
+			</a>
+		)}
 	</body>
 </html>
 
@@ -22,5 +29,78 @@ import '../data/validar';
 		margin: 0;
 		width: 100%;
 		height: 100%;
+	}
+
+	.floating-assistant {
+		position: fixed;
+		right: 18px;
+		bottom: calc(18px + env(safe-area-inset-bottom));
+		z-index: 50;
+		display: grid;
+		place-items: center;
+		width: 56px;
+		height: 56px;
+		border: 2px solid white;
+		border-radius: 999px;
+		background: linear-gradient(135deg, #7158c7, #4d3a9b);
+		color: white;
+		text-decoration: none;
+		box-shadow: 0 8px 24px rgba(63, 45, 135, 0.34);
+		transition: transform 160ms ease, box-shadow 160ms ease;
+	}
+
+	.floating-assistant:hover,
+	.floating-assistant:focus-visible {
+		transform: translateY(-3px);
+		box-shadow: 0 11px 28px rgba(63, 45, 135, 0.42);
+	}
+
+	.floating-assistant:focus-visible {
+		outline: 3px solid #e4c96e;
+		outline-offset: 3px;
+	}
+
+	.floating-assistant-mark {
+		display: grid;
+		place-items: center;
+		width: 38px;
+		height: 38px;
+		border-radius: 50%;
+		background: white;
+		color: #4d3a9b;
+		font: 800 15px/1 Arial, Helvetica, sans-serif;
+		letter-spacing: -0.5px;
+	}
+
+	.floating-assistant-label {
+		position: absolute;
+		right: 66px;
+		width: max-content;
+		padding: 8px 11px;
+		border-radius: 9px;
+		background: #30245f;
+		color: white;
+		font: 700 12px/1 Arial, Helvetica, sans-serif;
+		opacity: 0;
+		pointer-events: none;
+		transform: translateX(5px);
+		transition: opacity 160ms ease, transform 160ms ease;
+	}
+
+	.floating-assistant:hover .floating-assistant-label,
+	.floating-assistant:focus-visible .floating-assistant-label {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	@media (max-width: 420px) {
+		.floating-assistant {
+			right: 12px;
+			bottom: calc(12px + env(safe-area-inset-bottom));
+		}
+
+		.floating-assistant-label {
+			display: none;
+		}
 	}
 </style>
