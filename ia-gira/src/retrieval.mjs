@@ -41,6 +41,16 @@ export function asksAboutVisitedCommunes(question) {
 		&& /\b(visitar(?:emos|an|a|as)?|visitas?|gira)\b/.test(normalized);
 }
 
+export function asksWhenVisitingOrganization(question) {
+	const normalized = String(question)
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '')
+		.toLowerCase();
+	if (/\b(encuesta|formulario)\b/.test(normalized)) return false;
+	return /\b(cuando|que\s+dia|en\s+que\s+fecha)\b/.test(normalized)
+		&& /\b(ir(?:emos|an|a)?|vamos|visitar(?:emos|an|a)?)\b/.test(normalized);
+}
+
 export function createRetriever(fragmentos) {
 	const documents = fragmentos.map((fragmento) => ({
 		fragmento,

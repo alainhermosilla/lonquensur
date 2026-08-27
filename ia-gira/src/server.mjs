@@ -3,7 +3,7 @@ import { config } from './config.mjs';
 import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
-import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, createRetriever } from './retrieval.mjs';
+import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhenVisitingOrganization, createRetriever } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
 import { expandTemporalQuery } from './temporal.mjs';
 
@@ -51,6 +51,18 @@ function contextsForVisitedCommunes(question) {
 		.map((fragmento) => ({ ...fragmento, score: 2 }));
 }
 
+function contextsForVisitSchedule(question) {
+	if (!asksWhenVisitingOrganization(question)) return null;
+	const normalized = normalizeText(question);
+	const visit = corpus.fragmentos.find(
+		(fragmento) => fragmento.tipo === 'visita' && normalized.includes(normalizeText(fragmento.titulo)),
+	);
+	if (!visit?.visitaId) return null;
+	return corpus.fragmentos
+		.filter((fragmento) => fragmento.tipo === 'programa' && fragmento.visitaId === visit.visitaId)
+		.map((fragmento) => ({ ...fragmento, score: 2 }));
+}
+
 function formatVisitRecommendations(contexts) {
 	const items = contexts.map((context, index) => {
 		const detail = context.texto
@@ -80,6 +92,19 @@ function formatVisitedCommunes(contexts) {
 		return `${index + 1}. ${commune} — ${context.titulo}`;
 	});
 	return `Las comunas que se visitan en la Gira son:\n\n${items.join('\n')}`;
+}
+
+function formatVisitSchedule(contexts) {
+	const context = contexts[0];
+	const lines = context.texto.split('\n').map((line) => line.trim()).filter(Boolean);
+	const period = lines[0]?.toLowerCase() ?? 'jornada indicada';
+	const organization = lines[1] ?? context.titulo;
+	const location = lines[2] ?? '';
+	const [year, month, day] = context.fecha.split('-').map(Number);
+	const date = new Intl.DateTimeFormat('es-CL', {
+		weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
+	}).format(new Date(Date.UTC(year, month - 1, day)));
+	return `La visita a ${organization} será el ${date}, durante la ${period}${location ? `, en ${location}` : ''}.`;
 }
 
 function chileNow() {
@@ -156,7 +181,9 @@ const server = createServer(async (request, response) => {
 		}
 
 		const consultaRecuperacion = expandTemporalQuery(pregunta);
+		const visitScheduleContexts = contextsForVisitSchedule(pregunta);
 		let contexts = contextsForExplicitDate(pregunta)
+			?? visitScheduleContexts
 			?? contextsForVisitedCommunes(pregunta)
 			?? contextsForVisitedOrganizations(pregunta)
 			?? contextsForVisitRecommendations(pregunta)
@@ -166,6 +193,13 @@ const server = createServer(async (request, response) => {
 		}
 		if (!contexts.length || contexts[0].score < config.minScore) {
 			return send(response, 200, { respuesta: NO_INFORMATION, fuentes: [] }, origin);
+		}
+
+		if (visitScheduleContexts) {
+			return send(response, 200, {
+				respuesta: formatVisitSchedule(contexts),
+				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),
+			}, origin);
 		}
 
 		if (asksAboutVisitedCommunes(pregunta)) {

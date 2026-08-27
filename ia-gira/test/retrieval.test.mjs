@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { assertLoopback } from '../src/model.mjs';
-import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, createRetriever } from '../src/retrieval.mjs';
+import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhenVisitingOrganization, createRetriever } from '../src/retrieval.mjs';
 
 const fragments = [
 	{ id: 'programa:09', titulo: 'COOPEUMO', texto: 'Miércoles 9 de septiembre en Peumo.', fuente: '/programa/', visibilidad: 'publica' },
@@ -34,6 +34,11 @@ test('reconoce una consulta sobre las organizaciones que se visitarán', () => {
 test('reconoce una consulta sobre las comunas que se visitarán', () => {
 	assert.equal(asksAboutVisitedCommunes('¿Qué comunas se visitan en la gira?'), true);
 	assert.equal(asksAboutVisitedCommunes('¿Qué regiones recorrerá la Gira?'), false);
+});
+
+test('reconoce cuándo se visitará una organización', () => {
+	assert.equal(asksWhenVisitingOrganization('¿Cuándo iremos a COOPEUMO?'), true);
+	assert.equal(asksWhenVisitingOrganization('¿Cuándo abre la encuesta de COOPEUMO?'), false);
 });
 
 test('solo permite un modelo HTTP local', () => {
