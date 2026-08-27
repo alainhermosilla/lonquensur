@@ -14,7 +14,8 @@ export function tokenize(text) {
 export function createRetriever(fragmentos) {
 	const documents = fragmentos.map((fragmento) => ({
 		fragmento,
-		tokens: tokenize(`${fragmento.titulo} ${fragmento.texto}`),
+		tokens: tokenize(`${fragmento.titulo} ${fragmento.texto} ${(fragmento.categorias ?? []).join(' ')}`),
+		categoryTokens: new Set(tokenize((fragmento.categorias ?? []).join(' '))),
 	}));
 	const documentFrequency = new Map();
 
@@ -41,7 +42,9 @@ export function createRetriever(fragmentos) {
 					score += (1 + Math.log(tf)) * idf;
 				}
 				const normalized = score / Math.sqrt(Math.max(1, document.tokens.length) * querySet.size);
-				return { ...document.fragmento, score: Number(normalized.toFixed(4)) };
+				const categoryMatches = [...querySet].filter((token) => document.categoryTokens.has(token)).length;
+				const categoryBoost = categoryMatches * 0.25;
+				return { ...document.fragmento, score: Number((normalized + categoryBoost).toFixed(4)) };
 			})
 			.filter((result) => result.score > 0)
 			.sort((a, b) => b.score - a.score)

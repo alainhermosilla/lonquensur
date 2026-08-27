@@ -1,12 +1,12 @@
 import { encuestas } from './encuestas';
 import { faqs } from './faqs';
-import { recomendaciones } from './informacion';
+import { contactos, recomendaciones } from './informacion';
 import { jornadas } from './programa';
 import { visitas } from './visitas';
 
 export interface FragmentoConocimiento {
 	id: string;
-	tipo: 'programa' | 'visita' | 'recomendacion' | 'encuesta' | 'faq';
+	tipo: 'programa' | 'visita' | 'recomendacion' | 'contacto' | 'encuesta' | 'faq';
 	titulo: string;
 	texto: string;
 	fuente: string;
@@ -48,6 +48,20 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 		visibilidad: 'publica' as const,
 	}));
 
+	const equipo = contactos.map(([nombre, funcion, telefono], indice) => ({
+		id: `contacto:${String(indice + 1).padStart(2, '0')}`,
+		tipo: 'contacto' as const,
+		titulo: `${nombre} — ${funcion}`,
+		texto: [
+			'Contacto del equipo de la Gira de Innovación AgrocoopInnova 2026',
+			`Nombre: ${nombre}`,
+			`Función: ${funcion}`,
+			`Teléfono: ${telefono}`,
+		].join('\n'),
+		fuente: '/informacion/',
+		categorias: ['contactos', 'equipo', 'telefono', 'coordinacion'],
+		visibilidad: 'publica' as const,
+	}));
 	const formularios = encuestas.map((encuesta) => ({
 		id: `encuesta:${encuesta.id}`,
 		tipo: 'encuesta' as const,
@@ -71,5 +85,5 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 			visibilidad: 'publica' as const,
 		}));
 
-	return [...programa, ...organizaciones, ...consejos, ...formularios, ...preguntas];
+	return [...programa, ...organizaciones, ...consejos, ...equipo, ...formularios, ...preguntas];
 }
