@@ -59,6 +59,15 @@ export function matchesVisitIdentifier(question, visitId) {
 	return identifierTokens.length > 0 && identifierTokens.every((token) => queryTokens.has(token));
 }
 
+export function asksWhatToBringToVisits(question) {
+	const normalized = String(question)
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '')
+		.toLowerCase();
+	return /\b(que\s+debo|que\s+conviene|que\s+hay\s+que)\s+llevar\b/.test(normalized)
+		&& /\bvisitas?\b/.test(normalized);
+}
+
 export function createRetriever(fragmentos) {
 	const documents = fragmentos.map((fragmento) => ({
 		fragmento,

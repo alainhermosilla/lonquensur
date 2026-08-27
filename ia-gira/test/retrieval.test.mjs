@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { assertLoopback } from '../src/model.mjs';
-import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from '../src/retrieval.mjs';
+import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from '../src/retrieval.mjs';
 
 const fragments = [
 	{ id: 'programa:09', titulo: 'COOPEUMO', texto: 'Miércoles 9 de septiembre en Peumo.', fuente: '/programa/', visibilidad: 'publica' },
@@ -41,6 +41,11 @@ test('reconoce cuándo se visitará una organización', () => {
 	assert.equal(asksWhenVisitingOrganization('¿Cuándo abre la encuesta de COOPEUMO?'), false);
 	assert.equal(matchesVisitIdentifier('¿Cuándo iremos a Tres Piedras?', 'tres-piedras'), true);
 	assert.equal(matchesVisitIdentifier('¿Cuándo iremos a Cinco Valles?', 'agricola-cinco-valles'), true);
+});
+
+test('reconoce qué se debe llevar a las visitas', () => {
+	assert.equal(asksWhatToBringToVisits('¿Qué debo llevar a las visitas?'), true);
+	assert.equal(asksWhatToBringToVisits('¿Debo llevar cargador durante las visitas?'), false);
 });
 
 test('solo permite un modelo HTTP local', () => {
