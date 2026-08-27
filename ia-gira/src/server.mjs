@@ -3,7 +3,7 @@ import { config } from './config.mjs';
 import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
-import { createRetriever } from './retrieval.mjs';
+import { asksAboutVisitRecommendations, createRetriever } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
 import { expandTemporalQuery } from './temporal.mjs';
 
@@ -28,6 +28,13 @@ function contextsForExplicitDate(question) {
 			.map((fragmento) => ({ ...fragmento, score: 2 }));
 	}
 	return null;
+}
+
+function contextsForVisitRecommendations(question) {
+	if (!asksAboutVisitRecommendations(question)) return null;
+	return corpus.fragmentos
+		.filter((fragmento) => fragmento.tipo === 'recomendacion')
+		.map((fragmento) => ({ ...fragmento, score: 2 }));
 }
 
 function chileNow() {
@@ -104,7 +111,9 @@ const server = createServer(async (request, response) => {
 		}
 
 		const consultaRecuperacion = expandTemporalQuery(pregunta);
-		let contexts = contextsForExplicitDate(pregunta) ?? retrieve(consultaRecuperacion, { topK: config.topK });
+		let contexts = contextsForExplicitDate(pregunta)
+			?? contextsForVisitRecommendations(pregunta)
+			?? retrieve(consultaRecuperacion, { topK: config.topK });
 		if (!/\b(encuesta|encuestas|formulario|formularios)\b/i.test(pregunta)) {
 			contexts = contexts.filter((context) => context.tipo !== 'encuesta');
 		}

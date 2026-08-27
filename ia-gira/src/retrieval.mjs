@@ -11,6 +11,15 @@ export function tokenize(text) {
 		.filter((token) => token.length > 1 && !STOPWORDS.has(token));
 }
 
+export function asksAboutVisitRecommendations(question) {
+	const normalized = String(question)
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '')
+		.toLowerCase();
+	if (!/\bvisitas?\b/.test(normalized)) return false;
+	return /\b(cada|todas?)\b/.test(normalized) || /\baspectos?\b/.test(normalized);
+}
+
 export function createRetriever(fragmentos) {
 	const documents = fragmentos.map((fragmento) => ({
 		fragmento,

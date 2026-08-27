@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { assertLoopback } from '../src/model.mjs';
-import { createRetriever } from '../src/retrieval.mjs';
+import { asksAboutVisitRecommendations, createRetriever } from '../src/retrieval.mjs';
 
 const fragments = [
 	{ id: 'programa:09', titulo: 'COOPEUMO', texto: 'Miércoles 9 de septiembre en Peumo.', fuente: '/programa/', visibilidad: 'publica' },
@@ -18,6 +18,11 @@ test('recupera únicamente el fragmento pertinente', () => {
 test('una consulta ajena no produce resultados', () => {
 	const retrieve = createRetriever(fragments);
 	assert.deepEqual(retrieve('resultado del campeonato mundial'), []);
+});
+
+test('reconoce una consulta sobre los aspectos de cada visita', () => {
+	assert.equal(asksAboutVisitRecommendations('¿Qué aspectos debo tomar en cuenta para cada una de las visitas?'), true);
+	assert.equal(asksAboutVisitRecommendations('¿Debo llevar cargador durante las visitas?'), false);
 });
 
 test('solo permite un modelo HTTP local', () => {
