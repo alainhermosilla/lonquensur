@@ -42,6 +42,12 @@
     "debeAbstenerse": false
   },
   {
+    "id": "sitio-oficial-fundacion-origen",
+    "pregunta": "¿Dónde puedo obtener más información sobre la Fundación Origen?",
+    "esperaFuente": "faq:mas-info-fundacion-origen",
+    "debeAbstenerse": false
+  },
+  {
     "id": "visita-ceta",
     "pregunta": "¿Qué podemos aprender en CeTA sobre innovación alimentaria?",
     "esperaFuente": "visita:ceta",

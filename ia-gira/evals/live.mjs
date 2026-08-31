@@ -16,6 +16,7 @@ const cases = [
 	['¿Qué hacemos el lunes?', 'programa:2026-09-07-manana'],
 	['¿Qué visitamos el jueves?', 'programa:2026-09-10-manana'],
 	['¿Cuáles son las coopperativas que participan de la gira?', 'faq:cooperativas-participantes'],
+	['¿Dónde puedo obtener más información sobre la Fundación Origen?', 'faq:mas-info-fundacion-origen'],
 ];
 
 const failures = [];

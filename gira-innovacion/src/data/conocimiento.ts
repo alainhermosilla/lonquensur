@@ -35,11 +35,32 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 		id: `visita:${visita.id}`,
 		tipo: 'visita' as const,
 		titulo: visita.nombre,
-		texto: [visita.nombre, visita.lugar, visita.descripcion, `Temas: ${visita.temas.join(', ')}`, visita.interes, visita.pregunta].join('\n'),
+		texto: [visita.nombre, visita.lugar, visita.descripcion, `Temas: ${visita.temas.join(', ')}`, visita.interes, visita.pregunta, visita.web ? `Sitio oficial: ${visita.web}` : ''].filter(Boolean).join('\n'),
 		fuente: `/visitas/?visita=${visita.numero}`,
 		visitaId: visita.id,
 		visibilidad: 'publica' as const,
 	}));
+	const sitiosOficiales = visitas
+		.filter((visita) => visita.web)
+		.map((visita) => {
+			const respuesta = `Puedes obtener más información sobre ${visita.nombre} en su sitio oficial: ${visita.web}`;
+			return {
+				id: `faq:mas-info-${visita.id}`,
+				tipo: 'faq' as const,
+				titulo: `¿Dónde puedo obtener más información sobre ${visita.nombre}?`,
+				texto: respuesta,
+				fuente: `/visitas/?visita=${visita.numero}`,
+				categorias: ['sitio oficial', 'web', 'más información', visita.nombre],
+				consultas: [
+					`¿Dónde puedo obtener más información sobre ${visita.nombre}?`,
+					`¿Cuál es la página web de ${visita.nombre}?`,
+					`¿Cuál es el sitio oficial de ${visita.nombre}?`,
+					`Quiero saber más sobre ${visita.nombre}`,
+				],
+				respuestaDirecta: respuesta,
+				visibilidad: 'publica' as const,
+			};
+		});
 
 	const consejos = recomendaciones.map((recomendacion, indice) => ({
 		id: `recomendacion:${String(indice + 1).padStart(2, '0')}`,
@@ -125,5 +146,5 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 			visibilidad: 'publica' as const,
 		}));
 
-	return [...programa, ...organizaciones, ...consejos, ...equipo, ...formularios, faqCooperativas, ...cooperativas, ...preguntas];
+	return [...programa, ...organizaciones, ...sitiosOficiales, ...consejos, ...equipo, ...formularios, faqCooperativas, ...cooperativas, ...preguntas];
 }
