@@ -7,7 +7,7 @@ function assertLoopback(baseUrl) {
 	return url;
 }
 
-export async function askLocalModel({ baseUrl, modelName, messages, signal, numCtx = 4096, numPredict = 220 }) {
+export async function askLocalModel({ baseUrl, modelName, messages, signal, numCtx = 4096, numPredict = 220, keepAlive = '30m' }) {
 	if (!modelName) throw new Error('MODEL_NAME no está configurado');
 	const base = assertLoopback(baseUrl);
 	const endpoint = new URL('/api/chat', base);
@@ -20,7 +20,7 @@ export async function askLocalModel({ baseUrl, modelName, messages, signal, numC
 			messages,
 			stream: false,
 			think: false,
-			keep_alive: '5m',
+			keep_alive: keepAlive,
 			options: { temperature: 0.1, num_ctx: numCtx, num_predict: numPredict },
 		}),
 		signal,
@@ -30,6 +30,20 @@ export async function askLocalModel({ baseUrl, modelName, messages, signal, numC
 	const answer = payload?.message?.content?.trim();
 	if (!answer) throw new Error('El modelo local no entregó una respuesta');
 	return answer;
+}
+
+export async function warmLocalModel({ baseUrl, modelName, keepAlive = '30m', signal }) {
+	if (!modelName) return false;
+	const base = assertLoopback(baseUrl);
+	const endpoint = new URL('/api/generate', base);
+	const response = await fetch(endpoint, {
+		method: 'POST',
+		headers: { 'content-type': 'application/json' },
+		body: JSON.stringify({ model: modelName, prompt: '', stream: false, keep_alive: keepAlive }),
+		signal,
+	});
+	if (!response.ok) throw new Error(`No fue posible precargar el modelo (${response.status})`);
+	return true;
 }
 
 export { assertLoopback };

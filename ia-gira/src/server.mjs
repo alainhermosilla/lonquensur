@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { config } from './config.mjs';
 import { loadKnowledge } from './knowledge.mjs';
-import { askLocalModel } from './model.mjs';
+import { askLocalModel, warmLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
 import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
@@ -142,6 +142,8 @@ function send(response, status, payload, origin) {
 		'content-type': 'application/json; charset=utf-8',
 		'cache-control': 'no-store',
 		'content-security-policy': "default-src 'none'",
+		'x-content-type-options': 'nosniff',
+		'referrer-policy': 'no-referrer',
 		'vary': 'Origin',
 		...(origin === config.allowedOrigin ? { 'access-control-allow-origin': origin } : {}),
 	});
@@ -249,6 +251,7 @@ const server = createServer(async (request, response) => {
 				signal: controller.signal,
 				numCtx: config.modelContext,
 				numPredict: config.modelMaxOutput,
+				keepAlive: config.modelKeepAlive,
 			});
 			return send(response, 200, {
 				respuesta,
@@ -265,4 +268,17 @@ const server = createServer(async (request, response) => {
 
 server.listen(config.port, config.host, () => {
 	console.log(`IA Gira escuchando en http://${config.host}:${config.port}`);
+	if (config.warmModelOnStart && config.modelName) {
+		const controller = new AbortController();
+		const timeout = setTimeout(() => controller.abort(), 120_000);
+		warmLocalModel({
+			baseUrl: config.modelBaseUrl,
+			modelName: config.modelName,
+			keepAlive: config.modelKeepAlive,
+			signal: controller.signal,
+		})
+			.then(() => console.log(`Modelo ${config.modelName} precargado`))
+			.catch((error) => console.error('No fue posible precargar el modelo:', error.message))
+			.finally(() => clearTimeout(timeout));
+	}
 });
