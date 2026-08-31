@@ -73,6 +73,24 @@
     "debeAbstenerse": false
   },
   {
+    "id": "faq-emergencia-accidente",
+    "pregunta": "¿Qué debo hacer si tengo un accidente durante la gira?",
+    "esperaFuente": "faq:emergencia-salud",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-emergencia-malestar",
+    "pregunta": "Me siento mal, ¿a quién debo avisar?",
+    "esperaFuente": "faq:emergencia-salud",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-emergencia-tercero",
+    "pregunta": "Un compañero se lesionó y necesita asistencia médica",
+    "esperaFuente": "faq:emergencia-salud",
+    "debeAbstenerse": false
+  },
+  {
     "id": "encuesta-coopeumo",
     "pregunta": "¿A qué hora abre la encuesta de COOPEUMO?",
     "esperaFuente": "encuesta:coopeumo",

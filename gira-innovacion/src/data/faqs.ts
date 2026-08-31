@@ -19,4 +19,12 @@ export const faqs: Faq[] = [
 	{ id: 'encuestas', pregunta: '¿Cuándo se pueden responder las encuestas?', respuesta: 'Cada encuesta tiene su propio período de apertura y cierre, publicado en la sección Encuestas del sitio. Los horarios se expresan en hora de Chile.', categorias: ['encuestas'], visibilidad: 'publica', estado: 'confirmado' },
 	{ id: 'horarios-exactos', pregunta: '¿Dónde puedo consultar los horarios exactos y puntos de encuentro?', respuesta: 'Los horarios exactos y puntos de encuentro aún no están publicados en la información oficial disponible. Ante una necesidad operativa, corresponde comunicarse con el equipo coordinador de la Gira.', categorias: ['programa', 'pendientes'], visibilidad: 'publica', estado: 'confirmado' },
 	{ id: 'alojamiento', pregunta: '¿Cuál es el alojamiento de la Gira?', respuesta: 'El nombre y la dirección de los alojamientos aún no están publicados en la información oficial disponible.', categorias: ['alojamiento', 'pendientes'], visibilidad: 'publica', estado: 'confirmado' },
+	{
+		id: 'emergencia-salud',
+		pregunta: '¿Qué debo hacer si tengo un accidente, un malestar o un problema de salud durante la Gira de Innovación 2026?',
+		respuesta: 'Debes contactar inmediatamente a las personas encargadas de la Gira de Innovación 2026:\n\n- Alain Hermosilla Ringger: +56 9 9846 4849\n- Ignacio Fernández Uribe: +56 9 8827 8525\n- Ximena Uribe Álvarez: +56 9 9888 9356\n\nEllos te dirán qué hacer.',
+		categorias: ['salud', 'accidente', 'malestar', 'emergencia', 'urgencia', 'enfermedad', 'lesion', 'asistencia-medica', 'contactos'],
+		visibilidad: 'publica',
+		estado: 'confirmado',
+	},
 ];

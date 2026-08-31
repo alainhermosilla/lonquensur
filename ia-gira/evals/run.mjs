@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadKnowledge } from '../src/knowledge.mjs';
-import { createRetriever } from '../src/retrieval.mjs';
+import { asksAboutHealthEmergency, createRetriever } from '../src/retrieval.mjs';
 import { expandTemporalQuery } from '../src/temporal.mjs';
 import { classifyQuestion } from '../src/guardrails.mjs';
 
@@ -17,7 +17,13 @@ for (const testCase of cases) {
 	const now = testCase.ahora ? new Date(testCase.ahora) : new Date('2026-09-01T12:00:00-04:00');
 	const allowed = classifyQuestion(testCase.pregunta).allowed;
 	const query = expandTemporalQuery(testCase.pregunta, now);
-	const results = allowed ? retrieve(query, { topK: 5 }) : [];
+	const results = !allowed
+		? []
+		: asksAboutHealthEmergency(testCase.pregunta)
+			? corpus.fragmentos
+				.filter((fragmento) => fragmento.id === 'faq:emergencia-salud')
+				.map((fragmento) => ({ ...fragmento, score: 2 }))
+			: retrieve(query, { topK: 5 });
 	const abstains = !allowed || !results.length || results[0].score < minScore;
 
 	if (testCase.debeAbstenerse && !abstains) {

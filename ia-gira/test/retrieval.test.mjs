@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { assertLoopback } from '../src/model.mjs';
-import { asksAboutClothing, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from '../src/retrieval.mjs';
+import { asksAboutClothing, asksAboutHealthEmergency, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from '../src/retrieval.mjs';
 
 const fragments = [
 	{ id: 'programa:09', titulo: 'COOPEUMO', texto: 'Miércoles 9 de septiembre en Peumo.', fuente: '/programa/', visibilidad: 'publica' },
@@ -53,6 +53,25 @@ test('reconoce consultas variadas sobre vestimenta', () => {
 	assert.equal(asksAboutClothing('¿Cómo debería vestirme para la gira?'), true);
 	assert.equal(asksAboutClothing('¿Qué calzado y chaqueta conviene llevar?'), true);
 	assert.equal(asksAboutClothing('¿Debo llevar cargador durante las visitas?'), false);
+});
+
+test('reconoce consultas variadas sobre accidentes y problemas de salud', () => {
+	const variants = [
+		'¿Qué debo hacer si tengo un accidente durante la gira?',
+		'Me siento mal',
+		'¿A quién aviso si me enfermo?',
+		'Necesito asistencia médica',
+		'¿Qué hago si un compañero se lesiona?',
+		'Tengo fiebre y mareos',
+		'Me caí y me golpeé',
+		'Tengo mucho dolor',
+		'¿Qué hago si necesito medicamentos?',
+		'Tuve una reacción alérgica',
+		'Hay una persona herida',
+		'¿Cuáles son los contactos para una emergencia?',
+	];
+	for (const question of variants) assert.equal(asksAboutHealthEmergency(question), true, question);
+	assert.equal(asksAboutHealthEmergency('¿Qué ropa debo llevar?'), false);
 });
 
 test('solo permite un modelo HTTP local', () => {
