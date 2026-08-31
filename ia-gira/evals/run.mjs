@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadKnowledge } from '../src/knowledge.mjs';
-import { asksAboutHealthEmergency, asksAboutTourPurpose, createRetriever } from '../src/retrieval.mjs';
+import { asksAboutClothing, asksAboutHealthEmergency, asksAboutTourPurpose, asksWhatToBringToVisits, createRetriever, matchDirectFaq, programDateForWeekdayQuestion } from '../src/retrieval.mjs';
 import { expandTemporalQuery } from '../src/temporal.mjs';
 import { classifyQuestion } from '../src/guardrails.mjs';
 
@@ -17,8 +17,16 @@ for (const testCase of cases) {
 	const now = testCase.ahora ? new Date(testCase.ahora) : new Date('2026-09-01T12:00:00-04:00');
 	const allowed = classifyQuestion(testCase.pregunta).allowed;
 	const query = expandTemporalQuery(testCase.pregunta, now);
-	const results = !allowed
+	const directFaq = allowed ? matchDirectFaq(testCase.pregunta, corpus.fragmentos) : null;
+	const weekdayDate = allowed ? programDateForWeekdayQuestion(testCase.pregunta) : null;
+	const clothing = allowed && asksAboutClothing(testCase.pregunta);
+	const whatToBring = allowed && asksWhatToBringToVisits(testCase.pregunta);
+	let results = !allowed
 		? []
+		: weekdayDate
+			? corpus.fragmentos
+				.filter((fragmento) => fragmento.fecha === weekdayDate)
+				.map((fragmento) => ({ ...fragmento, score: 2 }))
 		: asksAboutHealthEmergency(testCase.pregunta)
 			? corpus.fragmentos
 				.filter((fragmento) => fragmento.id === 'faq:emergencia-salud')
@@ -27,7 +35,16 @@ for (const testCase of cases) {
 				? corpus.fragmentos
 					.filter((fragmento) => fragmento.id === 'faq:objetivo-gira')
 					.map((fragmento) => ({ ...fragmento, score: 2 }))
+			: directFaq
+				? [{ ...directFaq, score: 2 }]
+			: clothing
+				? corpus.fragmentos.filter((fragmento) => fragmento.id === 'faq:vestimenta').map((fragmento) => ({ ...fragmento, score: 2 }))
+			: whatToBring
+				? corpus.fragmentos.filter((fragmento) => fragmento.id === 'faq:agua-mochila').map((fragmento) => ({ ...fragmento, score: 2 }))
 			: retrieve(query, { topK: 5 });
+	if (allowed && !weekdayDate && !directFaq && !clothing && !whatToBring && !asksAboutHealthEmergency(testCase.pregunta) && !asksAboutTourPurpose(testCase.pregunta)) {
+		results = results.filter((result) => result.tipo !== 'faq' && result.matchedDistinctTokens >= 1);
+	}
 	const abstains = !allowed || !results.length || results[0].score < minScore;
 
 	if (testCase.debeAbstenerse && !abstains) {
@@ -41,7 +58,25 @@ for (const testCase of cases) {
 	}
 }
 
-console.log(`Evaluados ${cases.length} casos; fallos: ${failures.length}`);
+let aliasCases = 0;
+for (const fragment of corpus.fragmentos.filter((item) => item.tipo === 'faq')) {
+	for (const consulta of fragment.consultas ?? []) {
+		const forms = new Set([
+			consulta,
+			consulta.toLowerCase().replace(/[¿?.,]/g, ''),
+			`Hola, necesito saber: ${consulta} por favor`,
+		]);
+		for (const form of forms) {
+			aliasCases += 1;
+			const match = matchDirectFaq(form, corpus.fragmentos);
+			if (match?.id !== fragment.id) {
+				failures.push(`alias ${fragment.id}: "${form}" recuperó ${match?.id ?? 'ningún FAQ'}`);
+			}
+		}
+	}
+}
+
+console.log(`Evaluados ${cases.length} casos generales y ${aliasCases} variantes FAQ; fallos: ${failures.length}`);
 if (failures.length) {
 	console.error(failures.join('\n'));
 	process.exitCode = 1;

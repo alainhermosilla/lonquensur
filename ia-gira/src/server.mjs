@@ -3,7 +3,7 @@ import { config } from './config.mjs';
 import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel, warmLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
-import { asksAboutClothing, asksAboutHealthEmergency, asksAboutTourPurpose, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from './retrieval.mjs';
+import { asksAboutClothing, asksAboutHealthEmergency, asksAboutTourPurpose, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchDirectFaq, matchesVisitIdentifier, programDateForWeekdayQuestion } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
 import { expandTemporalQuery } from './temporal.mjs';
 
@@ -28,6 +28,14 @@ function contextsForExplicitDate(question) {
 			.map((fragmento) => ({ ...fragmento, score: 2 }));
 	}
 	return null;
+}
+
+function contextsForWeekdayProgram(question) {
+	const date = programDateForWeekdayQuestion(question);
+	if (!date) return null;
+	return corpus.fragmentos
+		.filter((fragmento) => fragmento.fecha === date)
+		.map((fragmento) => ({ ...fragmento, score: 2 }));
 }
 
 function contextsForVisitRecommendations(question) {
@@ -90,6 +98,11 @@ function contextsForTourPurpose(question) {
 	return corpus.fragmentos
 		.filter((fragmento) => fragmento.id === 'faq:objetivo-gira')
 		.map((fragmento) => ({ ...fragmento, score: 2 }));
+}
+
+function contextsForDirectFaq(question) {
+	const match = matchDirectFaq(question, corpus.fragmentos);
+	return match ? [{ ...match, score: 2 }] : null;
 }
 
 function formatVisitRecommendations(contexts) {
@@ -224,17 +237,35 @@ const server = createServer(async (request, response) => {
 
 		const consultaRecuperacion = expandTemporalQuery(pregunta);
 		const explicitDateContexts = contextsForExplicitDate(pregunta);
+		const weekdayProgramContexts = contextsForWeekdayProgram(pregunta);
 		const visitScheduleContexts = contextsForVisitSchedule(pregunta);
+		const healthEmergencyContexts = contextsForHealthEmergency(pregunta);
+		const tourPurposeContexts = contextsForTourPurpose(pregunta);
+		const directFaqContexts = contextsForDirectFaq(pregunta);
+		const clothingContexts = contextsForClothing(pregunta);
+		const whatToBringContexts = contextsForWhatToBring(pregunta);
 		let contexts = explicitDateContexts
+			?? weekdayProgramContexts
 			?? visitScheduleContexts
-			?? contextsForHealthEmergency(pregunta)
-			?? contextsForTourPurpose(pregunta)
-			?? contextsForClothing(pregunta)
-			?? contextsForWhatToBring(pregunta)
+			?? healthEmergencyContexts
+			?? tourPurposeContexts
+			?? directFaqContexts
+			?? clothingContexts
+			?? whatToBringContexts
 			?? contextsForVisitedCommunes(pregunta)
 			?? contextsForVisitedOrganizations(pregunta)
 			?? contextsForVisitRecommendations(pregunta)
 			?? retrieve(consultaRecuperacion, { topK: config.topK });
+		const usedApproximateFallback = !(
+			explicitDateContexts || weekdayProgramContexts || visitScheduleContexts
+			|| healthEmergencyContexts || tourPurposeContexts || directFaqContexts
+			|| clothingContexts || whatToBringContexts
+			|| asksAboutVisitedCommunes(pregunta) || asksAboutVisitedOrganizations(pregunta)
+			|| asksAboutVisitRecommendations(pregunta)
+		);
+		if (usedApproximateFallback) {
+			contexts = contexts.filter((context) => context.tipo !== 'faq' && context.matchedDistinctTokens >= 1);
+		}
 		if (!/\b(encuesta|encuestas|formulario|formularios)\b/i.test(pregunta)) {
 			contexts = contexts.filter((context) => context.tipo !== 'encuesta');
 		}
@@ -249,7 +280,7 @@ const server = createServer(async (request, response) => {
 			}, origin);
 		}
 
-		if (explicitDateContexts) {
+		if (explicitDateContexts || weekdayProgramContexts) {
 			return send(response, 200, {
 				respuesta: formatProgramForDate(contexts),
 				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),
@@ -277,7 +308,12 @@ const server = createServer(async (request, response) => {
 			}, origin);
 		}
 
-		if (contexts[0].tipo === 'faq' && contexts[0].respuestaDirecta) {
+		const directFaqWasConfidentlyMatched = healthEmergencyContexts
+			|| tourPurposeContexts
+			|| directFaqContexts
+			|| clothingContexts
+			|| whatToBringContexts;
+		if (directFaqWasConfidentlyMatched && contexts[0].tipo === 'faq' && contexts[0].respuestaDirecta) {
 			return send(response, 200, {
 				respuesta: contexts[0].respuestaDirecta,
 				fuentes: [{ id: contexts[0].id, titulo: contexts[0].titulo, fuente: contexts[0].fuente, score: contexts[0].score }],

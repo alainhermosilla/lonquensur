@@ -1,4 +1,4 @@
-const STOPWORDS = new Set(['a','al','algo','como','con','cual','cuando','de','del','donde','el','en','es','esta','este','hay','la','las','lo','los','me','mi','para','por','que','se','si','su','un','una','y']);
+const STOPWORDS = new Set(['a','al','algo','como','con','cual','cuando','de','del','dime','donde','el','en','es','esta','este','favor','hay','hola','la','las','lo','los','me','mi','necesito','para','podrias','por','puedes','que','saber','se','si','su','un','una','y']);
 
 export function tokenize(text) {
 	return String(text)
@@ -89,12 +89,63 @@ export function asksAboutTourPurpose(question) {
 		.normalize('NFD')
 		.replace(/\p{Diacritic}/gu, '')
 		.toLowerCase();
+	if (/\b(encuesta|visita|rompehielo)\b/.test(normalized)) return false;
 	if (/\b(objetivo|proposito|finalidad)\b/.test(normalized)) return true;
 	return /\b(para\s+que\s+(?:es|sirve|se\s+(?:hace|realiza))|que\s+busca|que\s+pretende)\b/.test(normalized)
 		&& /\bgira\b/.test(normalized);
 }
 
+function normalizeForMatch(value) {
+	return String(value)
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '')
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, ' ')
+		.trim();
+}
+
+export function matchDirectFaq(question, fragments, { minScore = 0.72 } = {}) {
+	const normalizedQuestion = normalizeForMatch(question);
+	const queryTokens = new Set(tokenize(question));
+	if (!normalizedQuestion || !queryTokens.size) return null;
+
+	let best = null;
+	for (const fragment of fragments) {
+		if (fragment.tipo !== 'faq' || !fragment.respuestaDirecta) continue;
+		for (const candidate of fragment.consultas ?? [fragment.titulo]) {
+			const normalizedCandidate = normalizeForMatch(candidate);
+			if (normalizedQuestion === normalizedCandidate) return { ...fragment, score: 3 };
+			const candidateTokens = new Set(tokenize(candidate));
+			if (!candidateTokens.size) continue;
+			const shared = [...queryTokens].filter((token) => candidateTokens.has(token)).length;
+			if (!shared) continue;
+			const queryCoverage = shared / queryTokens.size;
+			const candidateCoverage = shared / candidateTokens.size;
+			const substringBoost = normalizedQuestion.includes(normalizedCandidate)
+				|| normalizedCandidate.includes(normalizedQuestion) ? 0.12 : 0;
+			const score = (queryCoverage * 0.65) + (candidateCoverage * 0.35) + substringBoost;
+			if (shared < 2 && queryTokens.size > 1 && candidateTokens.size > 1) continue;
+			if (!best || score > best.score) best = { ...fragment, score: Number(score.toFixed(4)) };
+		}
+	}
+	return best && best.score >= minScore ? best : null;
+}
+
+export function programDateForWeekdayQuestion(question) {
+	const normalized = normalizeForMatch(question);
+	if (!/\b(que hacemos|programa|actividades|itinerario|donde (?:vamos|iremos|estaremos)|que (?:visitamos|veremos))\b/.test(normalized)) return null;
+	const dates = {
+		domingo: '2026-09-06', lunes: '2026-09-07', martes: '2026-09-08',
+		miercoles: '2026-09-09', jueves: '2026-09-10', viernes: '2026-09-11',
+	};
+	for (const [weekday, date] of Object.entries(dates)) {
+		if (new RegExp(`\\b${weekday}\\b`).test(normalized)) return date;
+	}
+	return null;
+}
+
 export function createRetriever(fragmentos) {
+	const genericTokens = new Set(['gira', 'agrocoopinnova', '2026', 'durante']);
 	const documents = fragmentos.map((fragmento) => ({
 		fragmento,
 		tokens: tokenize(`${fragmento.titulo} ${fragmento.texto} ${(fragmento.categorias ?? []).join(' ')}`),
@@ -127,7 +178,9 @@ export function createRetriever(fragmentos) {
 				const normalized = score / Math.sqrt(Math.max(1, document.tokens.length) * querySet.size);
 				const categoryMatches = [...querySet].filter((token) => document.categoryTokens.has(token)).length;
 				const categoryBoost = categoryMatches * 0.25;
-				return { ...document.fragmento, score: Number((normalized + categoryBoost).toFixed(4)) };
+				const matchedDistinctTokens = [...querySet]
+					.filter((token) => !genericTokens.has(token) && frequencies.has(token)).length;
+				return { ...document.fragmento, score: Number((normalized + categoryBoost).toFixed(4)), matchedDistinctTokens };
 			})
 			.filter((result) => result.score > 0)
 			.sort((a, b) => b.score - a.score)

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { assertLoopback } from '../src/model.mjs';
-import { asksAboutClothing, asksAboutHealthEmergency, asksAboutTourPurpose, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from '../src/retrieval.mjs';
+import { asksAboutClothing, asksAboutHealthEmergency, asksAboutTourPurpose, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchDirectFaq, matchesVisitIdentifier, programDateForWeekdayQuestion } from '../src/retrieval.mjs';
 
 const fragments = [
 	{ id: 'programa:09', titulo: 'COOPEUMO', texto: 'Miércoles 9 de septiembre en Peumo.', fuente: '/programa/', visibilidad: 'publica' },
@@ -85,6 +85,24 @@ test('reconoce consultas sobre el objetivo de la gira', () => {
 	];
 	for (const question of variants) assert.equal(asksAboutTourPurpose(question), true, question);
 	assert.equal(asksAboutTourPurpose('¿Qué debo llevar a la gira?'), false);
+	assert.equal(asksAboutTourPurpose('¿Cuál es el objetivo de la encuesta final?'), false);
+});
+
+test('asigna variantes al FAQ directo correcto y rechaza coincidencias débiles', () => {
+	const faqFragments = [
+		{ id: 'faq:financia', tipo: 'faq', titulo: '¿Quién financia la gira?', consultas: ['¿Quién financia la gira?', '¿La gira es financiada por FIA?'], respuestaDirecta: 'FIA.', texto: '', fuente: '', visibilidad: 'publica' },
+		{ id: 'faq:whatsapp', tipo: 'faq', titulo: '¿Para qué sirve WhatsApp?', consultas: ['¿Por dónde se informarán los avisos?', '¿Para qué sirve el WhatsApp de la gira?'], respuestaDirecta: 'WhatsApp.', texto: '', fuente: '', visibilidad: 'publica' },
+	];
+	assert.equal(matchDirectFaq('¿LA GIRA ES FINANCIADA POR FIA?', faqFragments)?.id, 'faq:financia');
+	assert.equal(matchDirectFaq('¿Por dónde se informarán los avisos?', faqFragments)?.id, 'faq:whatsapp');
+	assert.equal(matchDirectFaq('¿Qué regiones visita la gira?', faqFragments), null);
+});
+
+test('resuelve consultas del programa por día de la semana', () => {
+	assert.equal(programDateForWeekdayQuestion('¿Qué hacemos el lunes?'), '2026-09-07');
+	assert.equal(programDateForWeekdayQuestion('¿Cuál es el programa del miércoles?'), '2026-09-09');
+	assert.equal(programDateForWeekdayQuestion('¿Qué visitamos el jueves?'), '2026-09-10');
+	assert.equal(programDateForWeekdayQuestion('¿Qué ropa llevo el lunes?'), null);
 });
 
 test('solo permite un modelo HTTP local', () => {

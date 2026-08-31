@@ -123,6 +123,33 @@
     "debeAbstenerse": false
   },
   {
+    "id": "programa-lunes",
+    "pregunta": "¿Qué hacemos el lunes?",
+    "esperaFuente": "programa:2026-09-07-manana",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "programa-jueves",
+    "pregunta": "¿Qué visitamos el jueves?",
+    "esperaFuente": "programa:2026-09-10-manana",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "sin-dato-bus",
+    "pregunta": "¿Quién conducirá el bus de la gira?",
+    "debeAbstenerse": true
+  },
+  {
+    "id": "sin-dato-acompanante",
+    "pregunta": "¿Puedo llevar un acompañante a la gira?",
+    "debeAbstenerse": true
+  },
+  {
+    "id": "sin-dato-regalos",
+    "pregunta": "¿Nos entregarán regalos durante la gira?",
+    "debeAbstenerse": true
+  },
+  {
     "id": "fuera-clima",
     "pregunta": "¿Cuál será la temperatura exacta mañana?",
     "debeAbstenerse": true
