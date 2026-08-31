@@ -115,6 +115,17 @@ function formatVisitSchedule(contexts) {
 	return `La visita a ${organization} será el ${date}, durante la ${period}${location ? `, en ${location}` : ''}.`;
 }
 
+function formatProgramForDate(contexts) {
+	const date = contexts[0]?.fecha;
+	const formattedDate = date
+		? new Intl.DateTimeFormat('es-CL', {
+			weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
+		}).format(new Date(`${date}T00:00:00Z`))
+		: 'la fecha consultada';
+	const activities = contexts.map((context) => context.texto.trim()).filter(Boolean);
+	return `Según el programa del ${formattedDate}:\n\n${activities.join('\n\n')}`;
+}
+
 function chileNow() {
 	return new Intl.DateTimeFormat('sv-SE', {
 		timeZone: 'America/Santiago', dateStyle: 'short', timeStyle: 'medium',
@@ -191,8 +202,9 @@ const server = createServer(async (request, response) => {
 		}
 
 		const consultaRecuperacion = expandTemporalQuery(pregunta);
+		const explicitDateContexts = contextsForExplicitDate(pregunta);
 		const visitScheduleContexts = contextsForVisitSchedule(pregunta);
-		let contexts = contextsForExplicitDate(pregunta)
+		let contexts = explicitDateContexts
 			?? visitScheduleContexts
 			?? contextsForWhatToBring(pregunta)
 			?? contextsForVisitedCommunes(pregunta)
@@ -209,6 +221,13 @@ const server = createServer(async (request, response) => {
 		if (visitScheduleContexts) {
 			return send(response, 200, {
 				respuesta: formatVisitSchedule(contexts),
+				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),
+			}, origin);
+		}
+
+		if (explicitDateContexts) {
+			return send(response, 200, {
+				respuesta: formatProgramForDate(contexts),
 				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),
 			}, origin);
 		}
