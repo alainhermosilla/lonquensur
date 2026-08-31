@@ -18,6 +18,18 @@
     "debeAbstenerse": false
   },
   {
+    "id": "faq-participantes",
+    "pregunta": "¿Quiénes participan de la gira?",
+    "esperaFuente": "faq:participantes-gira",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-participantes-informal",
+    "pregunta": "participantes del gira",
+    "esperaFuente": "faq:participantes-gira",
+    "debeAbstenerse": false
+  },
+  {
     "id": "visita-ceta",
     "pregunta": "¿Qué podemos aprender en CeTA sobre innovación alimentaria?",
     "esperaFuente": "visita:ceta",
