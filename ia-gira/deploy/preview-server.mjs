@@ -36,16 +36,19 @@ function headers(contentType) {
 
 function proxyApi(clientRequest, clientResponse, pathname) {
   const upstreamPath = pathname.replace(/^\/api/, '') || '/';
+  const upstreamHeaders = {
+    'content-type': clientRequest.headers['content-type'] || 'application/json',
+    origin: allowedOrigin,
+  };
+  if (clientRequest.headers['content-length']) {
+    upstreamHeaders['content-length'] = clientRequest.headers['content-length'];
+  }
   const upstream = httpRequest({
     hostname: apiHost,
     port: apiPort,
     method: clientRequest.method,
     path: upstreamPath,
-    headers: {
-      'content-type': clientRequest.headers['content-type'] || 'application/json',
-      'content-length': clientRequest.headers['content-length'],
-      origin: allowedOrigin,
-    },
+    headers: upstreamHeaders,
     timeout: 35_000,
   }, (response) => {
     const responseHeaders = { ...response.headers };
