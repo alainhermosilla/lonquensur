@@ -71,6 +71,16 @@ test('reconoce consultas variadas sobre accidentes y problemas de salud', () => 
 		'Tuve una reacción alérgica',
 		'Hay una persona herida',
 		'¿Cuáles son los contactos para una emergencia?',
+		'Un participante está vomitando',
+		'Tengo diarrea',
+		'Una persona se desmayó',
+		'Creo que tengo una fractura',
+		'Hay un sangrado',
+		'Me hice una quemadura',
+		'Tengo una picadura',
+		'Puede ser una intoxicación',
+		'Una persona tiene convulsiones',
+		'¿Dónde está el botiquín?',
 	];
 	for (const question of variants) assert.equal(asksAboutHealthEmergency(question), true, question);
 	assert.equal(asksAboutHealthEmergency('¿Qué ropa debo llevar?'), false);

@@ -81,7 +81,7 @@ export function asksAboutHealthEmergency(question) {
 		.normalize('NFD')
 		.replace(/\p{Diacritic}/gu, '')
 		.toLowerCase();
-	return /\b(accident[a-z]*|malestar|salud|enferm[a-z]*|emergencia|urgencia|medic[a-z]*|lesion[a-z]*|herid[a-z]*|golp[a-z]*|cai|caid[a-z]*|dolor[a-z]*|duel[a-z]*|fiebre|mare[a-z]*|alerg[a-z]*|hospital|clinica|ambulancia|primeros\s+auxilios|siento\s+mal)\b/.test(normalized);
+	return /\b(accident[a-z]*|malestar|salud|enferm[a-z]*|emergencia|urgencia|medic[a-z]*|lesion[a-z]*|herid[a-z]*|golp[a-z]*|cai|caid[a-z]*|dolor[a-z]*|duel[a-z]*|fiebre|mare[a-z]*|alerg[a-z]*|hospital|clinica|ambulancia|primeros\s+auxilios|siento\s+mal|vomit[a-z]*|diarrea|desmay[a-z]*|fractur[a-z]*|sangr[a-z]*|quemadur[a-z]*|picadur[a-z]*|intoxic[a-z]*|convulsion[a-z]*|botiquin)\b/.test(normalized);
 }
 
 export function asksAboutTourPurpose(question) {
@@ -112,12 +112,19 @@ export function matchDirectFaq(question, fragments, { minScore = 0.72 } = {}) {
 	if (!normalizedQuestion || !queryTokens.size) return null;
 	const asksForOfficialSite = /\b(mas info(?:rmacion)?|sitio(?: oficial)?|pagina(?: web)?|web|saber mas|conocer mas)\b/.test(normalizedQuestion);
 	const asksForDescription = /\b(que es|que hace|hablame de|a que se dedica|quienes son)\b/.test(normalizedQuestion);
+	const asksForLocation = /\b(donde esta|donde queda|en que comuna|en que region|ubicacion)\b/.test(normalizedQuestion);
+	const asksForVisitDate = /\b(cuando|que dia|en que fecha)\b/.test(normalizedQuestion)
+		&& /\b(visita|visitamos|visitaremos|vamos|iremos)\b/.test(normalizedQuestion);
+	const asksForVisitActivities = /\b(que hacemos|que haremos|que aprenderemos|que conoceremos)\b/.test(normalizedQuestion);
 
 	let best = null;
 	for (const fragment of fragments) {
 		if (fragment.tipo !== 'faq' || !fragment.respuestaDirecta) continue;
 		if (fragment.id.startsWith('faq:mas-info-') && !asksForOfficialSite) continue;
 		if (fragment.id.startsWith('faq:que-es-') && !asksForDescription) continue;
+		if (fragment.id.startsWith('faq:donde-esta-') && !asksForLocation) continue;
+		if (fragment.id.startsWith('faq:cuando-visita-') && !asksForVisitDate) continue;
+		if (fragment.id.startsWith('faq:actividades-visita-') && !asksForVisitActivities) continue;
 		for (const candidate of fragment.consultas ?? [fragment.titulo]) {
 			const normalizedCandidate = normalizeForMatch(candidate);
 			if (normalizedQuestion === normalizedCandidate) return { ...fragment, score: 3 };
@@ -152,7 +159,11 @@ export function programDateForWeekdayQuestion(question) {
 
 export function createRetriever(fragmentos) {
 	const genericTokens = new Set(['gira', 'agrocoopinnova', '2026', 'durante']);
-	const documents = fragmentos.map((fragmento) => ({
+	// Las respuestas directas se resuelven con matchDirectFaq. Excluirlas del
+	// buscador aproximado evita que alteren la relevancia del programa y visitas.
+	const documents = fragmentos
+		.filter((fragmento) => !(fragmento.tipo === 'faq' && fragmento.respuestaDirecta))
+		.map((fragmento) => ({
 		fragmento,
 		tokens: tokenize(`${fragmento.titulo} ${fragmento.texto} ${(fragmento.categorias ?? []).join(' ')}`),
 		categoryTokens: new Set(tokenize((fragmento.categorias ?? []).join(' '))),

@@ -43,7 +43,7 @@ for (const testCase of cases) {
 				? corpus.fragmentos.filter((fragmento) => fragmento.id === 'faq:agua-mochila').map((fragmento) => ({ ...fragmento, score: 2 }))
 			: retrieve(query, { topK: 5 });
 	if (allowed && !weekdayDate && !directFaq && !clothing && !whatToBring && !asksAboutHealthEmergency(testCase.pregunta) && !asksAboutTourPurpose(testCase.pregunta)) {
-		results = results.filter((result) => result.tipo !== 'faq' && result.matchedDistinctTokens >= 1);
+		results = results.filter((result) => result.tipo !== 'faq' && result.matchedDistinctTokens >= 2);
 	}
 	const abstains = !allowed || !results.length || results[0].score < minScore;
 

@@ -264,7 +264,7 @@ const server = createServer(async (request, response) => {
 			|| asksAboutVisitRecommendations(pregunta)
 		);
 		if (usedApproximateFallback) {
-			contexts = contexts.filter((context) => context.tipo !== 'faq' && context.matchedDistinctTokens >= 1);
+			contexts = contexts.filter((context) => context.tipo !== 'faq' && context.matchedDistinctTokens >= 2);
 		}
 		if (!/\b(encuesta|encuestas|formulario|formularios)\b/i.test(pregunta)) {
 			contexts = contexts.filter((context) => context.tipo !== 'encuesta');
