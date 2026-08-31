@@ -85,6 +85,12 @@
     "debeAbstenerse": false
   },
   {
+    "id": "faq-emergencia-duele-estomago",
+    "pregunta": "Me duele el estómago, ¿qué hago?",
+    "esperaFuente": "faq:emergencia-salud",
+    "debeAbstenerse": false
+  },
+  {
     "id": "faq-emergencia-tercero",
     "pregunta": "Un compañero se lesionó y necesita asistencia médica",
     "esperaFuente": "faq:emergencia-salud",

@@ -81,7 +81,7 @@ export function asksAboutHealthEmergency(question) {
 		.normalize('NFD')
 		.replace(/\p{Diacritic}/gu, '')
 		.toLowerCase();
-	return /\b(accident[a-z]*|malestar|salud|enferm[a-z]*|emergencia|urgencia|medic[a-z]*|lesion[a-z]*|herid[a-z]*|golp[a-z]*|cai|caid[a-z]*|dolor[a-z]*|fiebre|mare[a-z]*|alerg[a-z]*|hospital|clinica|ambulancia|primeros\s+auxilios|siento\s+mal)\b/.test(normalized);
+	return /\b(accident[a-z]*|malestar|salud|enferm[a-z]*|emergencia|urgencia|medic[a-z]*|lesion[a-z]*|herid[a-z]*|golp[a-z]*|cai|caid[a-z]*|dolor[a-z]*|duel[a-z]*|fiebre|mare[a-z]*|alerg[a-z]*|hospital|clinica|ambulancia|primeros\s+auxilios|siento\s+mal)\b/.test(normalized);
 }
 
 export function createRetriever(fragmentos) {

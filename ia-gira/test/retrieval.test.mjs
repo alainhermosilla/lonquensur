@@ -65,6 +65,8 @@ test('reconoce consultas variadas sobre accidentes y problemas de salud', () => 
 		'Tengo fiebre y mareos',
 		'Me caí y me golpeé',
 		'Tengo mucho dolor',
+		'Me duele el estómago, ¿qué hago?',
+		'A un compañero le duele la cabeza',
 		'¿Qué hago si necesito medicamentos?',
 		'Tuve una reacción alérgica',
 		'Hay una persona herida',
