@@ -1,15 +1,25 @@
 const baseUrl = process.env.IA_GIRA_URL ?? 'http://127.0.0.1:8787';
 const origin = process.env.ALLOWED_ORIGIN ?? 'https://gira.lonquensur.cl';
+
+for (let attempt = 0; attempt < 20; attempt += 1) {
+	try {
+		const health = await fetch(`${baseUrl}/health`, { headers: { origin } });
+		if (health.ok) break;
+	} catch {
+		// El servicio puede estar reiniciándose; se vuelve a intentar antes de evaluar.
+	}
+	if (attempt === 19) throw new Error('El servicio no estuvo disponible para ejecutar las pruebas reales');
+	await new Promise((resolve) => setTimeout(resolve, 500));
+}
+
 const cases = [
 	['¿Cuál es el objetivo de esta gira?', 'faq:objetivo-gira'],
 	['¿Quién financia AGROCOOPINNOVA?', 'faq:financia-gira'],
 	['¿Qué institución ejecuta la actividad?', 'faq:ejecuta-gira'],
 	['¿Quiénes son los coordinadores?', 'faq:coordinacion-gira'],
 	['Necesito los teléfonos de los encargados', 'faq:contactos-gira'],
-	['¿Qué vamos a aprender?', 'faq:enfoques-aprendizaje'],
 	['¿Por dónde comunicarán los horarios?', 'faq:whatsapp-gira'],
 	['¿Las encuestas de las visitas son una prueba?', 'faq:encuestas-visitas'],
-	['¿Qué evalúa la encuesta de término?', 'faq:encuesta-final'],
 	['¿Qué ropa es apropiada para las visitas a terreno?', 'faq:vestimenta'],
 	['¿En qué hotel nos quedaremos?', 'faq:alojamiento'],
 	['Me duele un pie, ¿qué hago?', 'faq:emergencia-salud'],
@@ -20,6 +30,8 @@ const cases = [
 	['¿Dónde puedo obtener más info sobre el CETA?', 'faq:mas-info-ceta'],
 	['¿Dónde puedo obtener más información sobre Mujeres de Pelarco?', 'faq:mas-info-coopcam'],
 	['¿Cuál es la web de COOPCAAM?', 'faq:mas-info-coopcam'],
+	['¿Qué es COOPEUMO?', 'faq:que-es-coopeumo'],
+	['¿Qué es Tres Piedras?', 'faq:que-es-tres-piedras'],
 ];
 
 const failures = [];

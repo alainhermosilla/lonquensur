@@ -66,6 +66,18 @@
     "debeAbstenerse": false
   },
   {
+    "id": "descripcion-coopeumo-no-web",
+    "pregunta": "¿Qué es COOPEUMO?",
+    "esperaFuente": "faq:que-es-coopeumo",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "descripcion-tres-piedras-no-web",
+    "pregunta": "¿Qué es Tres Piedras?",
+    "esperaFuente": "faq:que-es-tres-piedras",
+    "debeAbstenerse": false
+  },
+  {
     "id": "visita-ceta",
     "pregunta": "¿Qué podemos aprender en CeTA sobre innovación alimentaria?",
     "esperaFuente": "visita:ceta",

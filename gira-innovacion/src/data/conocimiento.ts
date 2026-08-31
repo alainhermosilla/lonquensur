@@ -49,6 +49,25 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 		visitaId: visita.id,
 		visibilidad: 'publica' as const,
 	}));
+	const descripcionesOrganizaciones = visitas.map((visita) => {
+		const respuesta = `${visita.nombre} es una de las organizaciones que visitará la Gira de Innovación AGROCOOPINNOVA 2026. ${visita.descripcion} Está ubicada en ${visita.lugar}.`;
+		const consultasPorAlias = (aliasesPorVisita[visita.id] ?? [visita.nombre]).flatMap((alias) => [
+			`¿Qué es ${alias}?`,
+			`¿Qué hace ${alias}?`,
+			`Háblame de ${alias}`,
+		]);
+		return {
+			id: `faq:que-es-${visita.id}`,
+			tipo: 'faq' as const,
+			titulo: `¿Qué es ${visita.nombre}?`,
+			texto: respuesta,
+			fuente: `/visitas/?visita=${visita.numero}`,
+			categorias: ['organización', 'visita', 'descripción', ...(aliasesPorVisita[visita.id] ?? [])],
+			consultas: consultasPorAlias,
+			respuestaDirecta: respuesta,
+			visibilidad: 'publica' as const,
+		};
+	});
 	const sitiosOficiales = visitas
 		.filter((visita) => visita.web)
 		.map((visita) => {
@@ -161,5 +180,5 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 			visibilidad: 'publica' as const,
 		}));
 
-	return [...programa, ...organizaciones, ...sitiosOficiales, ...consejos, ...equipo, ...formularios, faqCooperativas, ...cooperativas, ...preguntas];
+	return [...programa, ...organizaciones, ...descripcionesOrganizaciones, ...sitiosOficiales, ...consejos, ...equipo, ...formularios, faqCooperativas, ...cooperativas, ...preguntas];
 }

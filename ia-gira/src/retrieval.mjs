@@ -110,10 +110,14 @@ export function matchDirectFaq(question, fragments, { minScore = 0.72 } = {}) {
 	const normalizedQuestion = normalizeForMatch(question);
 	const queryTokens = new Set(tokenize(question));
 	if (!normalizedQuestion || !queryTokens.size) return null;
+	const asksForOfficialSite = /\b(mas info(?:rmacion)?|sitio(?: oficial)?|pagina(?: web)?|web|saber mas|conocer mas)\b/.test(normalizedQuestion);
+	const asksForDescription = /\b(que es|que hace|hablame de|a que se dedica|quienes son)\b/.test(normalizedQuestion);
 
 	let best = null;
 	for (const fragment of fragments) {
 		if (fragment.tipo !== 'faq' || !fragment.respuestaDirecta) continue;
+		if (fragment.id.startsWith('faq:mas-info-') && !asksForOfficialSite) continue;
+		if (fragment.id.startsWith('faq:que-es-') && !asksForDescription) continue;
 		for (const candidate of fragment.consultas ?? [fragment.titulo]) {
 			const normalizedCandidate = normalizeForMatch(candidate);
 			if (normalizedQuestion === normalizedCandidate) return { ...fragment, score: 3 };
