@@ -3,7 +3,7 @@ import { config } from './config.mjs';
 import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel, warmLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
-import { asksAboutClothing, asksAboutHealthEmergency, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from './retrieval.mjs';
+import { asksAboutClothing, asksAboutHealthEmergency, asksAboutTourPurpose, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
 import { expandTemporalQuery } from './temporal.mjs';
 
@@ -82,6 +82,13 @@ function contextsForHealthEmergency(question) {
 	if (!asksAboutHealthEmergency(question)) return null;
 	return corpus.fragmentos
 		.filter((fragmento) => fragmento.id === 'faq:emergencia-salud')
+		.map((fragmento) => ({ ...fragmento, score: 2 }));
+}
+
+function contextsForTourPurpose(question) {
+	if (!asksAboutTourPurpose(question)) return null;
+	return corpus.fragmentos
+		.filter((fragmento) => fragmento.id === 'faq:objetivo-gira')
 		.map((fragmento) => ({ ...fragmento, score: 2 }));
 }
 
@@ -221,6 +228,7 @@ const server = createServer(async (request, response) => {
 		let contexts = explicitDateContexts
 			?? visitScheduleContexts
 			?? contextsForHealthEmergency(pregunta)
+			?? contextsForTourPurpose(pregunta)
 			?? contextsForClothing(pregunta)
 			?? contextsForWhatToBring(pregunta)
 			?? contextsForVisitedCommunes(pregunta)

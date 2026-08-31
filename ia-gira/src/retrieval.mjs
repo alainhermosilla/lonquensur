@@ -84,6 +84,16 @@ export function asksAboutHealthEmergency(question) {
 	return /\b(accident[a-z]*|malestar|salud|enferm[a-z]*|emergencia|urgencia|medic[a-z]*|lesion[a-z]*|herid[a-z]*|golp[a-z]*|cai|caid[a-z]*|dolor[a-z]*|duel[a-z]*|fiebre|mare[a-z]*|alerg[a-z]*|hospital|clinica|ambulancia|primeros\s+auxilios|siento\s+mal)\b/.test(normalized);
 }
 
+export function asksAboutTourPurpose(question) {
+	const normalized = String(question)
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '')
+		.toLowerCase();
+	if (/\b(objetivo|proposito|finalidad)\b/.test(normalized)) return true;
+	return /\b(para\s+que\s+(?:es|sirve|se\s+(?:hace|realiza))|que\s+busca|que\s+pretende)\b/.test(normalized)
+		&& /\bgira\b/.test(normalized);
+}
+
 export function createRetriever(fragmentos) {
 	const documents = fragmentos.map((fragmento) => ({
 		fragmento,

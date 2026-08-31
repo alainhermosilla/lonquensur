@@ -24,6 +24,12 @@
     "debeAbstenerse": false
   },
   {
+    "id": "faq-objetivo-gira",
+    "pregunta": "¿Cuál es el objetivo de esta gira?",
+    "esperaFuente": "faq:objetivo-gira",
+    "debeAbstenerse": false
+  },
+  {
     "id": "faq-participantes-informal",
     "pregunta": "participantes del gira",
     "esperaFuente": "faq:participantes-gira",

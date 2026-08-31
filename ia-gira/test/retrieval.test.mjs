@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { assertLoopback } from '../src/model.mjs';
-import { asksAboutClothing, asksAboutHealthEmergency, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from '../src/retrieval.mjs';
+import { asksAboutClothing, asksAboutHealthEmergency, asksAboutTourPurpose, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from '../src/retrieval.mjs';
 
 const fragments = [
 	{ id: 'programa:09', titulo: 'COOPEUMO', texto: 'Miércoles 9 de septiembre en Peumo.', fuente: '/programa/', visibilidad: 'publica' },
@@ -74,6 +74,17 @@ test('reconoce consultas variadas sobre accidentes y problemas de salud', () => 
 	];
 	for (const question of variants) assert.equal(asksAboutHealthEmergency(question), true, question);
 	assert.equal(asksAboutHealthEmergency('¿Qué ropa debo llevar?'), false);
+});
+
+test('reconoce consultas sobre el objetivo de la gira', () => {
+	const variants = [
+		'¿Cuál es el objetivo de esta gira?',
+		'¿Cuál es el propósito de la gira?',
+		'¿Para qué se realiza la gira?',
+		'¿Qué busca la Gira de Innovación 2026?',
+	];
+	for (const question of variants) assert.equal(asksAboutTourPurpose(question), true, question);
+	assert.equal(asksAboutTourPurpose('¿Qué debo llevar a la gira?'), false);
 });
 
 test('solo permite un modelo HTTP local', () => {
