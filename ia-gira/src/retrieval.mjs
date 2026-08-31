@@ -101,6 +101,7 @@ function normalizeForMatch(value) {
 		.replace(/\p{Diacritic}/gu, '')
 		.toLowerCase()
 		.replace(/[^a-z0-9]+/g, ' ')
+		.replace(/\bcoop+erativas\b/g, 'cooperativas')
 		.trim();
 }
 

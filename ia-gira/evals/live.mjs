@@ -15,6 +15,7 @@ const cases = [
 	['Me duele un pie, ¿qué hago?', 'faq:emergencia-salud'],
 	['¿Qué hacemos el lunes?', 'programa:2026-09-07-manana'],
 	['¿Qué visitamos el jueves?', 'programa:2026-09-10-manana'],
+	['¿Cuáles son las coopperativas que participan de la gira?', 'faq:cooperativas-participantes'],
 ];
 
 const failures = [];

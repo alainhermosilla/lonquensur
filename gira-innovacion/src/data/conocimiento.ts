@@ -1,12 +1,13 @@
 import { encuestas } from './encuestas';
 import { faqs } from './faqs';
 import { contactos, recomendaciones } from './informacion';
+import { cooperativasParticipantes } from './cooperativas-participantes';
 import { jornadas } from './programa';
 import { visitas } from './visitas';
 
 export interface FragmentoConocimiento {
 	id: string;
-	tipo: 'programa' | 'visita' | 'recomendacion' | 'contacto' | 'encuesta' | 'faq';
+	tipo: 'programa' | 'visita' | 'recomendacion' | 'contacto' | 'encuesta' | 'faq' | 'cooperativa-participante';
 	titulo: string;
 	texto: string;
 	fuente: string;
@@ -73,6 +74,43 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 		visibilidad: 'publica' as const,
 	}));
 
+	const cooperativasConfirmadas = cooperativasParticipantes.filter((cooperativa) => cooperativa.estado === 'confirmado');
+	const cooperativasConRepresentante = cooperativasConfirmadas.filter((cooperativa) => cooperativa.enviaRepresentante).length;
+	const listaCooperativas = cooperativasConfirmadas.map((cooperativa, indice) => (
+		`${indice + 1}.\n${cooperativa.nombre}\n${cooperativa.region}\nEstado: ${cooperativa.enviaRepresentante ? 'Enviará representante' : 'No enviará representante según la nómina actual'}`
+	));
+	const respuestaCooperativas = `La nómina contempla ${cooperativasConfirmadas.length} cooperativas admitidas:\n\n${listaCooperativas.join('\n\n')}\n\nSegún la nómina actual, ${cooperativasConRepresentante} cooperativas enviarán representante y ${cooperativasConfirmadas.length - cooperativasConRepresentante} no enviará representante. Esta situación puede cambiar.`;
+	const faqCooperativas = {
+		id: 'faq:cooperativas-participantes',
+		tipo: 'faq' as const,
+		titulo: '¿Cuáles son las cooperativas admitidas para la Gira?',
+		texto: respuestaCooperativas,
+		fuente: 'fuente-interna:cooperativas-participantes',
+		categorias: ['cooperativas', 'participantes', 'admitidas', 'representante', 'regiones'],
+		consultas: [
+			'¿Cuáles son las cooperativas que participan de la gira?',
+			'¿Qué cooperativas fueron admitidas?',
+			'¿Cuál es la lista de cooperativas participantes?',
+			'¿Qué cooperativas enviarán representante?',
+			'¿De qué regiones son las cooperativas participantes?',
+		],
+		respuestaDirecta: respuestaCooperativas,
+		visibilidad: 'publica' as const,
+	};
+	const cooperativas = cooperativasConfirmadas.map((cooperativa) => ({
+		id: `cooperativa-participante:${cooperativa.id}`,
+		tipo: 'cooperativa-participante' as const,
+		titulo: cooperativa.nombre,
+		texto: [
+			`Cooperativa admitida para la Gira de Innovación AGROCOOPINNOVA 2026: ${cooperativa.nombre}.`,
+			`Región: ${cooperativa.region}.`,
+			cooperativa.enviaRepresentante ? 'Enviará representante.' : 'No enviará representante según la nómina actual.',
+		].join('\n'),
+		fuente: 'fuente-interna:cooperativas-participantes',
+		categorias: ['cooperativas', 'participantes', 'admitidas', 'representante', cooperativa.region],
+		visibilidad: 'publica' as const,
+	}));
+
 	const preguntas = faqs
 		.filter((faq) => faq.estado === 'confirmado' && faq.visibilidad === 'publica')
 		.map((faq) => ({
@@ -87,5 +125,5 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 			visibilidad: 'publica' as const,
 		}));
 
-	return [...programa, ...organizaciones, ...consejos, ...equipo, ...formularios, ...preguntas];
+	return [...programa, ...organizaciones, ...consejos, ...equipo, ...formularios, faqCooperativas, ...cooperativas, ...preguntas];
 }

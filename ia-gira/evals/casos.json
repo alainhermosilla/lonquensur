@@ -36,6 +36,12 @@
     "debeAbstenerse": false
   },
   {
+    "id": "faq-cooperativas-participantes-lista",
+    "pregunta": "¿Cuáles son las coopperativas que participan de la gira?",
+    "esperaFuente": "faq:cooperativas-participantes",
+    "debeAbstenerse": false
+  },
+  {
     "id": "visita-ceta",
     "pregunta": "¿Qué podemos aprender en CeTA sobre innovación alimentaria?",
     "esperaFuente": "visita:ceta",
