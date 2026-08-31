@@ -42,6 +42,7 @@ set ssl:verify-certificate true;
 set ssl:check-hostname false;
 open -u $GIRA_FTP_USER,$GIRA_FTP_PASSWORD ftp://$FTP_HOST;
 mirror -R --verbose gira-innovacion/dist .;
+put gira-innovacion/dist/.htaccess -o .htaccess;
 bye
 "
 
