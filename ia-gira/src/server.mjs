@@ -1,4 +1,5 @@
 import { createServer } from 'node:http';
+import { clientKey } from './client-key.mjs';
 import { config } from './config.mjs';
 import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel, warmLocalModel } from './model.mjs';
@@ -164,10 +165,6 @@ function chileNow() {
 	return new Intl.DateTimeFormat('sv-SE', {
 		timeZone: 'America/Santiago', dateStyle: 'short', timeStyle: 'medium',
 	}).format(new Date());
-}
-
-function clientKey(request) {
-	return request.socket.remoteAddress ?? 'unknown';
 }
 
 function rateLimited(request) {
