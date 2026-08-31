@@ -48,6 +48,24 @@
     "debeAbstenerse": false
   },
   {
+    "id": "sitio-oficial-ceta-sigla",
+    "pregunta": "¿Dónde puedo obtener más info sobre el CETA?",
+    "esperaFuente": "faq:mas-info-ceta",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "sitio-oficial-mujeres-pelarco-alias",
+    "pregunta": "¿Dónde puedo obtener más información sobre Mujeres de Pelarco?",
+    "esperaFuente": "faq:mas-info-coopcam",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "sitio-oficial-coopcaam-error-frecuente",
+    "pregunta": "¿Cuál es la web de COOPCAAM?",
+    "esperaFuente": "faq:mas-info-coopcam",
+    "debeAbstenerse": false
+  },
+  {
     "id": "visita-ceta",
     "pregunta": "¿Qué podemos aprender en CeTA sobre innovación alimentaria?",
     "esperaFuente": "visita:ceta",

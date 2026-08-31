@@ -102,6 +102,7 @@ function normalizeForMatch(value) {
 		.toLowerCase()
 		.replace(/[^a-z0-9]+/g, ' ')
 		.replace(/\bcoop+erativas\b/g, 'cooperativas')
+		.replace(/\bcoopca+m\b/g, 'coopcam')
 		.trim();
 }
 

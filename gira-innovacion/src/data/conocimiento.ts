@@ -20,6 +20,15 @@ export interface FragmentoConocimiento {
 }
 
 export function crearFragmentosPublicos(): FragmentoConocimiento[] {
+	const aliasesPorVisita: Record<string, string[]> = {
+		'fundacion-origen': ['Fundación Origen', 'Origen'],
+		ceta: ['CeTA', 'CETA', 'Centro Tecnológico para la Innovación Alimentaria'],
+		'agricola-cinco-valles': ['Agrícola Cinco Valles', 'Cinco Valles', '5 Valles'],
+		coopeumo: ['COOPEUMO', 'Cooperativa Peumo', 'Cooperativa de Peumo'],
+		'tres-piedras': ['Cooperativa Tres Piedras', 'Cooperativa Campesina Tres Piedras', 'Tres Piedras'],
+		loncomilla: ['Cooperativa Loncomilla', 'Cooperativa Vitivinícola Loncomilla', 'Loncomilla'],
+		coopcam: ['COOPCAM', 'COOPCAAM', 'Mujeres de Pelarco', 'Cooperativa Mujeres de Pelarco', 'Cooperativa Campesina Mujeres de Pelarco'],
+	};
 	const programa = jornadas.map((jornada) => ({
 		id: `programa:${jornada.id}`,
 		tipo: 'programa' as const,
@@ -35,7 +44,7 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 		id: `visita:${visita.id}`,
 		tipo: 'visita' as const,
 		titulo: visita.nombre,
-		texto: [visita.nombre, visita.lugar, visita.descripcion, `Temas: ${visita.temas.join(', ')}`, visita.interes, visita.pregunta, visita.web ? `Sitio oficial: ${visita.web}` : ''].filter(Boolean).join('\n'),
+		texto: [visita.nombre, `También conocida como: ${(aliasesPorVisita[visita.id] ?? []).join(', ')}`, visita.lugar, visita.descripcion, `Temas: ${visita.temas.join(', ')}`, visita.interes, visita.pregunta, visita.web ? `Sitio oficial: ${visita.web}` : ''].filter(Boolean).join('\n'),
 		fuente: `/visitas/?visita=${visita.numero}`,
 		visitaId: visita.id,
 		visibilidad: 'publica' as const,
@@ -44,6 +53,11 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 		.filter((visita) => visita.web)
 		.map((visita) => {
 			const respuesta = `Puedes obtener más información sobre ${visita.nombre} en su sitio oficial: ${visita.web}`;
+			const consultasPorAlias = (aliasesPorVisita[visita.id] ?? [visita.nombre]).flatMap((alias) => [
+				`¿Dónde puedo obtener más info sobre ${alias}?`,
+				`¿Cuál es la web de ${alias}?`,
+				`¿Cuál es el sitio oficial de ${alias}?`,
+			]);
 			return {
 				id: `faq:mas-info-${visita.id}`,
 				tipo: 'faq' as const,
@@ -56,6 +70,7 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 					`¿Cuál es la página web de ${visita.nombre}?`,
 					`¿Cuál es el sitio oficial de ${visita.nombre}?`,
 					`Quiero saber más sobre ${visita.nombre}`,
+					...consultasPorAlias,
 				],
 				respuestaDirecta: respuesta,
 				visibilidad: 'publica' as const,

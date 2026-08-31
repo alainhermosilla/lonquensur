@@ -17,6 +17,9 @@ const cases = [
 	['¿Qué visitamos el jueves?', 'programa:2026-09-10-manana'],
 	['¿Cuáles son las coopperativas que participan de la gira?', 'faq:cooperativas-participantes'],
 	['¿Dónde puedo obtener más información sobre la Fundación Origen?', 'faq:mas-info-fundacion-origen'],
+	['¿Dónde puedo obtener más info sobre el CETA?', 'faq:mas-info-ceta'],
+	['¿Dónde puedo obtener más información sobre Mujeres de Pelarco?', 'faq:mas-info-coopcam'],
+	['¿Cuál es la web de COOPCAAM?', 'faq:mas-info-coopcam'],
 ];
 
 const failures = [];
