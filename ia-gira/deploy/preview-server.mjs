@@ -6,9 +6,9 @@ import { extname, join, normalize } from 'node:path';
 const host = process.env.PREVIEW_HOST || '192.168.1.145';
 const port = Number(process.env.PREVIEW_PORT || 8088);
 const root = process.env.SITE_ROOT || '/opt/ia-gira/site';
-const apiHost = '127.0.0.1';
-const apiPort = 8787;
-const allowedOrigin = 'https://gira.lonquensur.cl';
+const apiHost = process.env.API_HOST || '127.0.0.1';
+const apiPort = Number(process.env.API_PORT || 8787);
+const allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://gira.lonquensur.cl';
 
 const mime = {
   '.html': 'text/html; charset=utf-8',
