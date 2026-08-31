@@ -51,6 +51,12 @@
     ]
   },
   {
+    "id": "faq-ropa-especial",
+    "pregunta": "¿Debo llevar alguna ropa en especial?",
+    "esperaFuente": "faq:vestimenta",
+    "debeAbstenerse": false
+  },
+  {
     "id": "recomendacion-bateria",
     "pregunta": "¿Conviene llevar una batería externa?",
     "debeAbstenerse": false,

@@ -68,6 +68,14 @@ export function asksWhatToBringToVisits(question) {
 		&& /\bvisitas?\b/.test(normalized);
 }
 
+export function asksAboutClothing(question) {
+	const normalized = String(question)
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '')
+		.toLowerCase();
+	return /\b(ropa|vestimenta|vestir(?:me|se)?|calzado|zapatos?|zapatillas?|chaqueta|abrigo|impermeable|cortaviento|que\s+ponerme|como\s+vestirme)\b/.test(normalized);
+}
+
 export function createRetriever(fragmentos) {
 	const documents = fragmentos.map((fragmento) => ({
 		fragmento,

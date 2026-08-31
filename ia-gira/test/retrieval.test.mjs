@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { assertLoopback } from '../src/model.mjs';
-import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from '../src/retrieval.mjs';
+import { asksAboutClothing, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from '../src/retrieval.mjs';
 
 const fragments = [
 	{ id: 'programa:09', titulo: 'COOPEUMO', texto: 'Miércoles 9 de septiembre en Peumo.', fuente: '/programa/', visibilidad: 'publica' },
@@ -46,6 +46,13 @@ test('reconoce cuándo se visitará una organización', () => {
 test('reconoce qué se debe llevar a las visitas', () => {
 	assert.equal(asksWhatToBringToVisits('¿Qué debo llevar a las visitas?'), true);
 	assert.equal(asksWhatToBringToVisits('¿Debo llevar cargador durante las visitas?'), false);
+});
+
+test('reconoce consultas variadas sobre vestimenta', () => {
+	assert.equal(asksAboutClothing('¿Debo llevar alguna ropa en especial?'), true);
+	assert.equal(asksAboutClothing('¿Cómo debería vestirme para la gira?'), true);
+	assert.equal(asksAboutClothing('¿Qué calzado y chaqueta conviene llevar?'), true);
+	assert.equal(asksAboutClothing('¿Debo llevar cargador durante las visitas?'), false);
 });
 
 test('solo permite un modelo HTTP local', () => {

@@ -3,7 +3,7 @@ import { config } from './config.mjs';
 import { loadKnowledge } from './knowledge.mjs';
 import { askLocalModel, warmLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
-import { asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from './retrieval.mjs';
+import { asksAboutClothing, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchesVisitIdentifier } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
 import { expandTemporalQuery } from './temporal.mjs';
 
@@ -68,6 +68,13 @@ function contextsForWhatToBring(question) {
 	if (!asksWhatToBringToVisits(question)) return null;
 	return corpus.fragmentos
 		.filter((fragmento) => fragmento.id === 'faq:agua-mochila')
+		.map((fragmento) => ({ ...fragmento, score: 2 }));
+}
+
+function contextsForClothing(question) {
+	if (!asksAboutClothing(question)) return null;
+	return corpus.fragmentos
+		.filter((fragmento) => fragmento.id === 'faq:vestimenta')
 		.map((fragmento) => ({ ...fragmento, score: 2 }));
 }
 
@@ -206,6 +213,7 @@ const server = createServer(async (request, response) => {
 		const visitScheduleContexts = contextsForVisitSchedule(pregunta);
 		let contexts = explicitDateContexts
 			?? visitScheduleContexts
+			?? contextsForClothing(pregunta)
 			?? contextsForWhatToBring(pregunta)
 			?? contextsForVisitedCommunes(pregunta)
 			?? contextsForVisitedOrganizations(pregunta)
