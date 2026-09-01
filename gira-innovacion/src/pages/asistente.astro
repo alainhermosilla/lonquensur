@@ -28,6 +28,9 @@ const enabled = apiUrl.length > 0;
 
 			{enabled ? (
 				<>
+					<div class="conversation-tools">
+						<button type="button" data-clear disabled aria-label="Borrar todas las preguntas y respuestas visibles">Limpiar conversación</button>
+					</div>
 					<div class="messages" data-messages aria-live="polite"></div>
 
 					<div class="examples">
@@ -72,6 +75,11 @@ const enabled = apiUrl.length > 0;
 		const textarea = document.querySelector('#pregunta');
 		const messages = document.querySelector('[data-messages]');
 		const submit = document.querySelector('[data-submit]');
+		const clear = document.querySelector('[data-clear]');
+
+		function updateClearButton() {
+			if (clear) clear.disabled = !messages?.children.length;
+		}
 
 		function addMessage(text, type, sources = []) {
 			const article = document.createElement('div');
@@ -102,6 +110,7 @@ const enabled = apiUrl.length > 0;
 			}
 
 			messages?.append(article);
+			updateClearButton();
 			article.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 		}
 
@@ -126,6 +135,7 @@ const enabled = apiUrl.length > 0;
 			if (!submit || !textarea) return;
 			submit.disabled = true;
 			textarea.disabled = true;
+			if (clear) clear.disabled = true;
 			submit.textContent = 'Consultando…';
 			const removeProgress = addProgress();
 			const controller = new AbortController();
@@ -152,6 +162,7 @@ const enabled = apiUrl.length > 0;
 				submit.disabled = false;
 				textarea.disabled = false;
 				submit.textContent = 'Preguntar';
+				updateClearButton();
 				textarea.focus();
 			}
 		}
@@ -172,6 +183,13 @@ const enabled = apiUrl.length > 0;
 				textarea.focus();
 			});
 		});
+
+		clear?.addEventListener('click', () => {
+			messages?.replaceChildren();
+			if (textarea) textarea.value = '';
+			updateClearButton();
+			textarea?.focus();
+		});
 	</script>
 )}
 
@@ -184,16 +202,20 @@ const enabled = apiUrl.length > 0;
 	.back { display: block; margin-bottom: 24px; color: white; font-size: 14px; font-weight: 700; text-decoration: none; }
 	.eyebrow { margin-bottom: 8px; color: #e4c96e; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; }
 	h1 { margin-top: 0; margin-bottom: 10px; font-size: clamp(38px, 8vw, 58px); line-height: 1; }
-	.intro { margin-top: 0; margin-bottom: 0; font-size: 17px; line-height: 1.55; opacity: .95; }
+	.intro { margin-top: 0; margin-bottom: 0; font-size: 18px; line-height: 1.55; opacity: .95; }
 	.assistant { max-width: 720px; min-height: 520px; margin: -16px auto 0; padding: 16px; }
-	.notice { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 17px 18px; border: 2px solid #b9d2bf; border-radius: 14px; background: #f5faf6; color: #244c39; font-size: 15px; line-height: 1.5; }
+	.notice { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 17px 18px; border: 2px solid #b9d2bf; border-radius: 14px; background: #f5faf6; color: #244c39; font-size: 16px; line-height: 1.55; }
 	.notice-icon { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: #245b45; color: white; font-size: 17px; font-weight: 800; }
-	.notice strong { display: block; margin-bottom: 3px; font-size: 16px; }
+	.notice strong { display: block; margin-bottom: 3px; font-size: 18px; }
 	.notice p { margin: 0; color: #4f675b; }
 	.notice p + p { margin-top: 7px; }
+	.conversation-tools { display: flex; justify-content: flex-end; padding-top: 14px; }
+	.conversation-tools button { padding: 10px 14px; border: 1px solid #913a2c; border-radius: 9px; background: #a84935; color: white; cursor: pointer; font-size: 15px; font-weight: 800; }
+	.conversation-tools button:hover:not(:disabled), .conversation-tools button:focus-visible:not(:disabled) { border-color: #6f2b21; background: #8e382b; outline: 3px solid rgba(168,73,53,.18); }
+	.conversation-tools button:disabled { border-color: #b8bdb9; background: #d8dcda; color: #6f7671; cursor: default; opacity: 1; }
 	.messages { display: flex; flex-direction: column; gap: 12px; min-height: 90px; padding: 18px 0; }
 	.messages:empty { min-height: 22px; padding: 11px 0; }
-	.message { max-width: 88%; padding: 15px 17px; border-radius: 16px; background: white; box-shadow: 0 2px 9px rgba(25,53,42,.08); font-size: 16px; line-height: 1.6; }
+	.message { max-width: 88%; padding: 16px 18px; border-radius: 16px; background: white; box-shadow: 0 2px 9px rgba(25,53,42,.08); font-size: 17px; line-height: 1.62; }
 	.message p { margin: 0; white-space: pre-wrap; }
 	.message--user { align-self: flex-end; background: #245b45; color: white; border-bottom-right-radius: 5px; }
 	.message--assistant { align-self: flex-start; border-bottom-left-radius: 5px; }
@@ -204,19 +226,19 @@ const enabled = apiUrl.length > 0;
 	details ul { margin: 8px 0 0; padding-left: 20px; }
 	details a { color: #245b45; }
 	.examples { margin-bottom: 16px; padding: 16px; border: 1px solid #cbd9ce; border-radius: 16px; background: #f8faf8; }
-	.examples h2 { margin: 0 0 4px; color: #244c39; font-size: 18px; }
-	.examples > p { margin: 0 0 12px; color: #637068; font-size: 14px; line-height: 1.45; }
+	.examples h2 { margin: 0 0 4px; color: #244c39; font-size: 20px; }
+	.examples > p { margin: 0 0 12px; color: #637068; font-size: 15px; line-height: 1.5; }
 	.suggestions { display: flex; flex-wrap: wrap; gap: 9px; }
-	.suggestions button { padding: 10px 13px; border: 1px solid #adc5b3; border-radius: 10px; background: white; color: #244c39; cursor: pointer; font-size: 14px; line-height: 1.35; text-align: left; }
+	.suggestions button { padding: 11px 14px; border: 1px solid #adc5b3; border-radius: 10px; background: white; color: #244c39; cursor: pointer; font-size: 15px; line-height: 1.4; text-align: left; }
 	.suggestions button:hover, .suggestions button:focus-visible { border-color: #245b45; background: #eef6f0; outline: none; }
 	.question-form { padding: 15px; border-radius: 16px; background: white; box-shadow: 0 3px 14px rgba(25,53,42,.1); }
-	.question-form label { display: block; margin-bottom: 8px; font-size: 15px; font-weight: 800; }
+	.question-form label { display: block; margin-bottom: 8px; font-size: 17px; font-weight: 800; }
 	.input-row { display: flex; align-items: stretch; gap: 9px; }
-	textarea { min-height: 72px; flex: 1; resize: vertical; padding: 13px 14px; border: 2px solid #aebfb2; border-radius: 10px; font: inherit; font-size: 17px; line-height: 1.45; }
+	textarea { min-height: 78px; flex: 1; resize: vertical; padding: 14px 15px; border: 2px solid #aebfb2; border-radius: 10px; font: inherit; font-size: 18px; line-height: 1.5; }
 	textarea:focus { border-color: #245b45; outline: 3px solid rgba(36,91,69,.14); }
-	.input-row button { min-width: 112px; border: 0; border-radius: 10px; background: #245b45; color: white; cursor: pointer; font-size: 15px; font-weight: 800; }
+	.input-row button { min-width: 116px; border: 0; border-radius: 10px; background: #245b45; color: white; cursor: pointer; font-size: 17px; font-weight: 800; }
 	.input-row button:disabled { cursor: wait; opacity: .65; }
-	.form-note { margin: 12px 0 0; padding: 10px 12px; border-left: 4px solid #c79a43; border-radius: 6px; background: #fff8e8; color: #664f20; font-size: 14px; line-height: 1.45; }
+	.form-note { margin: 12px 0 0; padding: 11px 13px; border-left: 4px solid #c79a43; border-radius: 6px; background: #fff8e8; color: #664f20; font-size: 15px; line-height: 1.5; }
 	.disabled-state { margin-top: 22px; padding: 54px 24px; border-radius: 20px; background: white; box-shadow: 0 4px 18px rgba(25,53,42,.09); text-align: center; }
 	.disabled-state > span { display: block; color: #c79a43; font-size: 42px; }
 	.disabled-state h2 { margin: 10px 0; font-size: 26px; }
@@ -226,7 +248,7 @@ const enabled = apiUrl.length > 0;
 	footer p { margin: 2px 0; }
 	@media (max-width: 540px) {
 		.assistant { padding: 10px; }
-		.message { max-width: 96%; font-size: 16px; }
+		.message { max-width: 96%; font-size: 17px; }
 		.notice { grid-template-columns: 30px 1fr; padding: 15px; }
 		.examples { padding: 14px; }
 		.suggestions { display: grid; }
