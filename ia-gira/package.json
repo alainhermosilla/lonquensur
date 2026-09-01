@@ -9,6 +9,7 @@
   "scripts": {
     "start": "node src/server.mjs",
     "test": "node --test",
-    "eval": "node evals/run.mjs"
+		"eval": "node evals/run.mjs",
+		"load-test": "node deploy/loadtest.mjs"
   }
 }

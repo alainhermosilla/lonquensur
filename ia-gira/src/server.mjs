@@ -7,10 +7,16 @@ import { buildMessages, NO_INFORMATION } from './prompt.mjs';
 import { asksAboutClothing, asksAboutHealthEmergency, asksAboutTourPurpose, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchDirectFaq, matchesVisitIdentifier, programDateForWeekdayQuestion } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
 import { expandTemporalQuery } from './temporal.mjs';
+import { ModelGate } from './model-gate.mjs';
 
 const corpus = await loadKnowledge(config.knowledgePath);
 const retrieve = createRetriever(corpus.fragmentos);
 const buckets = new Map();
+const modelGate = new ModelGate({
+	concurrency: config.modelConcurrency,
+	maxQueue: config.modelMaxQueue,
+	waitMs: config.modelQueueWaitMs,
+});
 const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
 function normalizeText(value) {
@@ -159,6 +165,11 @@ function formatProgramForDate(contexts) {
 		: 'la fecha consultada';
 	const activities = contexts.map((context) => context.texto.trim()).filter(Boolean);
 	return `Según el programa del ${formattedDate}:\n\n${activities.join('\n\n')}`;
+}
+
+function formatRetrievedInformation(contexts) {
+	const excerpts = contexts.slice(0, 3).map((context) => context.texto.trim()).filter(Boolean);
+	return `Encontré esta información oficial relacionada con tu pregunta:\n\n${excerpts.join('\n\n')}`;
 }
 
 function chileNow() {
@@ -317,6 +328,15 @@ const server = createServer(async (request, response) => {
 			}, origin);
 		}
 
+		const releaseModel = await modelGate.acquire();
+		if (!releaseModel) {
+			return send(response, 200, {
+				respuesta: formatRetrievedInformation(contexts),
+				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),
+				modo: 'recuperacion',
+			}, origin);
+		}
+
 		const controller = new AbortController();
 		const timeout = setTimeout(() => controller.abort(), 30_000);
 		try {
@@ -332,9 +352,18 @@ const server = createServer(async (request, response) => {
 			return send(response, 200, {
 				respuesta,
 				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),
+				modo: 'modelo',
+			}, origin);
+		} catch (error) {
+			console.error('El modelo no respondió; se usa recuperación directa:', error.message);
+			return send(response, 200, {
+				respuesta: formatRetrievedInformation(contexts),
+				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),
+				modo: 'recuperacion-modelo-no-disponible',
 			}, origin);
 		} finally {
 			clearTimeout(timeout);
+			releaseModel();
 		}
 	} catch (error) {
 		console.error(error);

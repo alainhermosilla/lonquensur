@@ -23,7 +23,10 @@ MODEL_BASE_URL=http://127.0.0.1:11434
 MODEL_NAME=
 TOP_K=5
 MIN_SCORE=0.16
-RATE_LIMIT_PER_MINUTE=50
+RATE_LIMIT_PER_MINUTE=120
+MODEL_CONCURRENCY=1
+MODEL_MAX_QUEUE=4
+MODEL_QUEUE_WAIT_MS=1500
 ```
 
 `MODEL_NAME` es obligatorio para responder. Se deja vacío deliberadamente para no imponer ni descargar un modelo sin una decisión de infraestructura.
@@ -38,3 +41,19 @@ npm start
 ```
 
 La API escucha en localhost por defecto. Debe publicarse detrás de un proxy HTTPS con límites adicionales y sin salida general a Internet.
+
+## Concurrencia
+
+La API protege al modelo local con un límite de concurrencia. Si Ollama está ocupado y
+una consulta no obtiene turno rápidamente, responde usando directamente los fragmentos
+oficiales recuperados. De este modo una ráfaga de participantes no multiplica el consumo
+de RAM ni deja todas las preguntas esperando al modelo.
+
+Si Ollama se detiene o agota el tiempo de respuesta, la API aplica la misma recuperación
+directa en vez de devolver un error al participante.
+
+La prueba de carga, ejecutada desde la propia VPS después del despliegue, es:
+
+```sh
+CONCURRENCY=30 npm run load-test
+```
