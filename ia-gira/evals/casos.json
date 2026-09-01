@@ -231,6 +231,13 @@
     "debeAbstenerse": false
   },
   {
+    "id": "programa-fecha-viernes-sin-duplicados",
+    "pregunta": "¿Qué se visita el día 11 de septiembre?",
+    "esperaFuentes": ["programa:2026-09-11-manana", "programa:2026-09-11-tarde"],
+	"soloTipo": "programa",
+    "debeAbstenerse": false
+  },
+  {
     "id": "sin-dato-bus",
     "pregunta": "¿Quién conducirá el bus de la gira?",
     "debeAbstenerse": true

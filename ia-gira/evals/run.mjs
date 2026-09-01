@@ -12,20 +12,32 @@ const cases = JSON.parse(await readFile(casesPath, 'utf8'));
 const retrieve = createRetriever(corpus.fragmentos);
 const minScore = Number(process.env.MIN_SCORE ?? 0.16);
 const failures = [];
+const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+function explicitProgramDate(question) {
+	const normalized = String(question).normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+	const dates = new Set(corpus.fragmentos.filter((fragment) => fragment.tipo === 'programa').map((fragment) => fragment.fecha).filter(Boolean));
+	for (const date of dates) {
+		const [, month, day] = date.split('-').map(Number);
+		if (new RegExp(`\\b0?${day}\\s+de\\s+${monthNames[month - 1]}\\b`).test(normalized)) return date;
+	}
+	return null;
+}
 
 for (const testCase of cases) {
 	const now = testCase.ahora ? new Date(testCase.ahora) : new Date('2026-09-01T12:00:00-04:00');
 	const allowed = classifyQuestion(testCase.pregunta).allowed;
 	const query = expandTemporalQuery(testCase.pregunta, now);
 	const directFaq = allowed ? matchDirectFaq(testCase.pregunta, corpus.fragmentos) : null;
+	const explicitDate = allowed ? explicitProgramDate(testCase.pregunta) : null;
 	const weekdayDate = allowed ? programDateForWeekdayQuestion(testCase.pregunta) : null;
 	const clothing = allowed && asksAboutClothing(testCase.pregunta);
 	const whatToBring = allowed && asksWhatToBringToVisits(testCase.pregunta);
 	let results = !allowed
 		? []
-		: weekdayDate
+		: explicitDate || weekdayDate
 			? corpus.fragmentos
-				.filter((fragmento) => fragmento.fecha === weekdayDate)
+				.filter((fragmento) => fragmento.tipo === 'programa' && fragmento.fecha === (explicitDate ?? weekdayDate))
 				.map((fragmento) => ({ ...fragmento, score: 2 }))
 		: asksAboutHealthEmergency(testCase.pregunta)
 			? corpus.fragmentos
@@ -42,7 +54,7 @@ for (const testCase of cases) {
 			: whatToBring
 				? corpus.fragmentos.filter((fragmento) => fragmento.id === 'faq:agua-mochila').map((fragmento) => ({ ...fragmento, score: 2 }))
 			: retrieve(query, { topK: 5 });
-	if (allowed && !weekdayDate && !directFaq && !clothing && !whatToBring && !asksAboutHealthEmergency(testCase.pregunta) && !asksAboutTourPurpose(testCase.pregunta)) {
+	if (allowed && !explicitDate && !weekdayDate && !directFaq && !clothing && !whatToBring && !asksAboutHealthEmergency(testCase.pregunta) && !asksAboutTourPurpose(testCase.pregunta)) {
 		results = results.filter((result) => result.tipo !== 'faq' && result.matchedDistinctTokens >= 2);
 	}
 	const abstains = !allowed || !results.length || results[0].score < minScore;
@@ -55,6 +67,9 @@ for (const testCase of cases) {
 		const expected = testCase.esperaFuentes ?? [testCase.esperaFuente];
 		const found = results.some((result) => expected.includes(result.id) && result.score >= minScore);
 		if (!found) failures.push(`${testCase.id}: no recuperó ${testCase.esperaFuente}; obtuvo ${results.map((r) => `${r.id}:${r.score}`).join(', ')}`);
+		if (testCase.soloTipo && results.some((result) => result.tipo !== testCase.soloTipo)) {
+			failures.push(`${testCase.id}: mezcló tipos distintos de ${testCase.soloTipo}: ${results.map((result) => `${result.id}:${result.tipo}`).join(', ')}`);
+		}
 	}
 }
 

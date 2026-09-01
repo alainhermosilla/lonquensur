@@ -25,7 +25,7 @@ function contextsForExplicitDate(question) {
 		const expression = new RegExp(`\\b0?${day}\\s+de\\s+${monthNames[month - 1]}\\b`);
 		if (!expression.test(normalized)) continue;
 		return corpus.fragmentos
-			.filter((fragmento) => fragmento.fecha === date)
+			.filter((fragmento) => fragmento.tipo === 'programa' && fragmento.fecha === date)
 			.map((fragmento) => ({ ...fragmento, score: 2 }));
 	}
 	return null;
@@ -35,7 +35,7 @@ function contextsForWeekdayProgram(question) {
 	const date = programDateForWeekdayQuestion(question);
 	if (!date) return null;
 	return corpus.fragmentos
-		.filter((fragmento) => fragmento.fecha === date)
+		.filter((fragmento) => fragmento.tipo === 'programa' && fragmento.fecha === date)
 		.map((fragmento) => ({ ...fragmento, score: 2 }));
 }
 
