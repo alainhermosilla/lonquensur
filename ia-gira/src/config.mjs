@@ -20,4 +20,7 @@ export const config = Object.freeze({
 	modelContext: integer(process.env.MODEL_NUM_CTX, 4096),
 	modelMaxOutput: integer(process.env.MODEL_NUM_PREDICT, 220),
 	rateLimitPerMinute: integer(process.env.RATE_LIMIT_PER_MINUTE, 50),
+	modelConcurrency: integer(process.env.MODEL_CONCURRENCY, 1),
+	modelMaxQueue: integer(process.env.MODEL_MAX_QUEUE, 4),
+	modelQueueWaitMs: integer(process.env.MODEL_QUEUE_WAIT_MS, 1500),
 });
