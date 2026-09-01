@@ -18,22 +18,26 @@ const enabled = apiUrl.length > 0;
 
 		<section class="assistant" data-assistant data-enabled={String(enabled)}>
 			<div class="notice">
-				<strong>Respuestas basadas solo en información interna</strong>
-				<span>El asistente no navega por Internet. Si un dato no está publicado, te lo indicará.</span>
+				<span class="notice-icon" aria-hidden="true">i</span>
+				<div>
+					<strong>Información importante</strong>
+					<p>Hola. Puedo ayudarte con la información oficial disponible sobre la Gira AgrocoopInnova 2026.</p>
+					<p>Las respuestas se basan solo en información oficial interna. El asistente no navega por Internet y te indicará cuando un dato no esté publicado.</p>
+				</div>
 			</div>
 
 			{enabled ? (
 				<>
-					<div class="messages" data-messages aria-live="polite">
-						<div class="message message--assistant">
-							<p>Hola. Puedo ayudarte con la información oficial disponible sobre la Gira AgrocoopInnova 2026.</p>
-						</div>
-					</div>
+					<div class="messages" data-messages aria-live="polite"></div>
 
-					<div class="suggestions" aria-label="Preguntas sugeridas">
-						<button type="button" data-suggestion>¿Qué hacemos el 9 de septiembre?</button>
-						<button type="button" data-suggestion>¿Qué debo llevar a las visitas?</button>
-						<button type="button" data-suggestion>¿Cuándo abre la encuesta de COOPEUMO?</button>
+					<div class="examples">
+						<h2>Ejemplos de preguntas</h2>
+						<p>Selecciona una pregunta para copiarla en el recuadro.</p>
+						<div class="suggestions" aria-label="Ejemplos de preguntas">
+							<button type="button" data-suggestion>¿Qué hacemos el 9 de septiembre?</button>
+							<button type="button" data-suggestion>¿Qué debo llevar a las visitas?</button>
+							<button type="button" data-suggestion>¿Cuándo abre la encuesta de COOPEUMO?</button>
+						</div>
 					</div>
 
 					<form class="question-form" data-form method="post">
@@ -42,7 +46,7 @@ const enabled = apiUrl.length > 0;
 							<textarea id="pregunta" name="pregunta" rows="2" maxlength="500" required placeholder="Por ejemplo: ¿Qué hacemos mañana en la mañana?"></textarea>
 							<button type="submit" data-submit>Preguntar</button>
 						</div>
-						<p class="form-note">No incluyas información personal o sensible.</p>
+						<p class="form-note"><strong>Importante:</strong> no incluyas información personal o sensible.</p>
 					</form>
 				</>
 			) : (
@@ -180,30 +184,39 @@ const enabled = apiUrl.length > 0;
 	.back { display: block; margin-bottom: 24px; color: white; font-size: 14px; font-weight: 700; text-decoration: none; }
 	.eyebrow { margin-bottom: 8px; color: #e4c96e; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; }
 	h1 { margin-top: 0; margin-bottom: 10px; font-size: clamp(38px, 8vw, 58px); line-height: 1; }
-	.intro { margin-top: 0; margin-bottom: 0; font-size: 16px; line-height: 1.55; opacity: .92; }
+	.intro { margin-top: 0; margin-bottom: 0; font-size: 17px; line-height: 1.55; opacity: .95; }
 	.assistant { max-width: 720px; min-height: 520px; margin: -16px auto 0; padding: 16px; }
-	.notice { display: grid; gap: 4px; padding: 15px 17px; border: 1px solid #d6e4d9; border-radius: 14px; background: #f8fbf8; color: #315844; font-size: 13px; line-height: 1.45; }
-	.notice span { color: #637068; }
-	.messages { display: flex; flex-direction: column; gap: 12px; min-height: 230px; padding: 22px 0; }
-	.message { max-width: 86%; padding: 13px 15px; border-radius: 16px; background: white; box-shadow: 0 2px 9px rgba(25,53,42,.08); font-size: 14px; line-height: 1.5; }
+	.notice { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 17px 18px; border: 2px solid #b9d2bf; border-radius: 14px; background: #f5faf6; color: #244c39; font-size: 15px; line-height: 1.5; }
+	.notice-icon { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: #245b45; color: white; font-size: 17px; font-weight: 800; }
+	.notice strong { display: block; margin-bottom: 3px; font-size: 16px; }
+	.notice p { margin: 0; color: #4f675b; }
+	.notice p + p { margin-top: 7px; }
+	.messages { display: flex; flex-direction: column; gap: 12px; min-height: 90px; padding: 18px 0; }
+	.messages:empty { min-height: 22px; padding: 11px 0; }
+	.message { max-width: 88%; padding: 15px 17px; border-radius: 16px; background: white; box-shadow: 0 2px 9px rgba(25,53,42,.08); font-size: 16px; line-height: 1.6; }
 	.message p { margin: 0; white-space: pre-wrap; }
 	.message--user { align-self: flex-end; background: #245b45; color: white; border-bottom-right-radius: 5px; }
 	.message--assistant { align-self: flex-start; border-bottom-left-radius: 5px; }
 	.message--error { align-self: flex-start; border: 1px solid #e6c8c1; background: #fff7f5; color: #773c31; }
 	.message--progress { color: #637068; font-style: italic; }
-	details { margin-top: 10px; border-top: 1px solid #e5e9e5; padding-top: 8px; font-size: 12px; }
+	details { margin-top: 12px; border-top: 1px solid #e5e9e5; padding-top: 10px; font-size: 14px; }
 	summary { cursor: pointer; font-weight: 700; }
 	details ul { margin: 8px 0 0; padding-left: 20px; }
 	details a { color: #245b45; }
-	.suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-	.suggestions button { padding: 9px 11px; border: 1px solid #cad7cd; border-radius: 999px; background: white; color: #315844; cursor: pointer; font-size: 12px; }
+	.examples { margin-bottom: 16px; padding: 16px; border: 1px solid #cbd9ce; border-radius: 16px; background: #f8faf8; }
+	.examples h2 { margin: 0 0 4px; color: #244c39; font-size: 18px; }
+	.examples > p { margin: 0 0 12px; color: #637068; font-size: 14px; line-height: 1.45; }
+	.suggestions { display: flex; flex-wrap: wrap; gap: 9px; }
+	.suggestions button { padding: 10px 13px; border: 1px solid #adc5b3; border-radius: 10px; background: white; color: #244c39; cursor: pointer; font-size: 14px; line-height: 1.35; text-align: left; }
+	.suggestions button:hover, .suggestions button:focus-visible { border-color: #245b45; background: #eef6f0; outline: none; }
 	.question-form { padding: 15px; border-radius: 16px; background: white; box-shadow: 0 3px 14px rgba(25,53,42,.1); }
-	.question-form label { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 800; }
+	.question-form label { display: block; margin-bottom: 8px; font-size: 15px; font-weight: 800; }
 	.input-row { display: flex; align-items: stretch; gap: 9px; }
-	textarea { min-height: 58px; flex: 1; resize: vertical; padding: 12px; border: 1px solid #bdcbbf; border-radius: 10px; font: inherit; line-height: 1.4; }
-	.input-row button { min-width: 105px; border: 0; border-radius: 10px; background: #245b45; color: white; cursor: pointer; font-weight: 800; }
+	textarea { min-height: 72px; flex: 1; resize: vertical; padding: 13px 14px; border: 2px solid #aebfb2; border-radius: 10px; font: inherit; font-size: 17px; line-height: 1.45; }
+	textarea:focus { border-color: #245b45; outline: 3px solid rgba(36,91,69,.14); }
+	.input-row button { min-width: 112px; border: 0; border-radius: 10px; background: #245b45; color: white; cursor: pointer; font-size: 15px; font-weight: 800; }
 	.input-row button:disabled { cursor: wait; opacity: .65; }
-	.form-note { margin: 8px 0 0; color: #788078; font-size: 11px; }
+	.form-note { margin: 12px 0 0; padding: 10px 12px; border-left: 4px solid #c79a43; border-radius: 6px; background: #fff8e8; color: #664f20; font-size: 14px; line-height: 1.45; }
 	.disabled-state { margin-top: 22px; padding: 54px 24px; border-radius: 20px; background: white; box-shadow: 0 4px 18px rgba(25,53,42,.09); text-align: center; }
 	.disabled-state > span { display: block; color: #c79a43; font-size: 42px; }
 	.disabled-state h2 { margin: 10px 0; font-size: 26px; }
@@ -213,8 +226,11 @@ const enabled = apiUrl.length > 0;
 	footer p { margin: 2px 0; }
 	@media (max-width: 540px) {
 		.assistant { padding: 10px; }
-		.message { max-width: 94%; }
+		.message { max-width: 96%; font-size: 16px; }
+		.notice { grid-template-columns: 30px 1fr; padding: 15px; }
+		.examples { padding: 14px; }
+		.suggestions { display: grid; }
 		.input-row { display: grid; }
-		.input-row button { min-height: 46px; }
+		.input-row button { min-height: 50px; font-size: 16px; }
 	}
 </style>
