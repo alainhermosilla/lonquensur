@@ -51,7 +51,7 @@ MODEL_NUM_PREDICT=220
 TOP_K=5
 MIN_SCORE=0.16
 MAX_QUESTION_LENGTH=500
-RATE_LIMIT_PER_MINUTE=20
+RATE_LIMIT_PER_MINUTE=50
 ENV
 sudo install -o root -g ia-gira -m 0640 "$env_file" /etc/ia-gira/ia-gira.env
 sudo install -o root -g root -m 0644 "$WORKTREE/ia-gira/deploy/ia-gira.service" /etc/systemd/system/ia-gira.service

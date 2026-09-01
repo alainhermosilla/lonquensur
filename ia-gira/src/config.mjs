@@ -19,5 +19,5 @@ export const config = Object.freeze({
 	maxQuestionLength: integer(process.env.MAX_QUESTION_LENGTH, 500),
 	modelContext: integer(process.env.MODEL_NUM_CTX, 4096),
 	modelMaxOutput: integer(process.env.MODEL_NUM_PREDICT, 220),
-	rateLimitPerMinute: integer(process.env.RATE_LIMIT_PER_MINUTE, 20),
+	rateLimitPerMinute: integer(process.env.RATE_LIMIT_PER_MINUTE, 50),
 });

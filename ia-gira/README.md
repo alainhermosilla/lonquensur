@@ -23,7 +23,7 @@ MODEL_BASE_URL=http://127.0.0.1:11434
 MODEL_NAME=
 TOP_K=5
 MIN_SCORE=0.16
-RATE_LIMIT_PER_MINUTE=20
+RATE_LIMIT_PER_MINUTE=50
 ```
 
 `MODEL_NAME` es obligatorio para responder. Se deja vacío deliberadamente para no imponer ni descargar un modelo sin una decisión de infraestructura.
