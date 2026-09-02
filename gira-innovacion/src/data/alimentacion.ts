@@ -16,7 +16,7 @@ export const alimentacion: Alimentacion[] = [
 		nombre: 'Forestani Restaurant',
 		direccion: 'Av. Vicuña Mackenna 522',
 		ubicacion: 'Melipilla, Región Metropolitana',
-		detalle: 'Almuerzo durante el traslado hacia la visita de la tarde.',
+		detalle: 'Almuerzo en Melipilla antes de la visita de la tarde a Agrícola Cinco Valles.',
 		estado: 'confirmado',
 		visibilidad: 'publica',
 	},
