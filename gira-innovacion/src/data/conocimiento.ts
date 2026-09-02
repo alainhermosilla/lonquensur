@@ -311,6 +311,24 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 		respuestaDirecta: respuestaGeneralAlmuerzos,
 		visibilidad: 'publica' as const,
 	};
+	const respuestaAlmuerzoLunes = 'La información oficial disponible no publica un lugar de almuerzo para el lunes 7 de septiembre de 2026.';
+	const faqAlmuerzoLunes = {
+		id: 'faq:almuerzo-2026-09-07',
+		tipo: 'faq' as const,
+		titulo: '¿Dónde almorzamos el lunes 7 de septiembre?',
+		texto: respuestaAlmuerzoLunes,
+		fuente: 'fuente-interna:base-informacion-web',
+		fecha: '2026-09-07',
+		categorias: ['alimentación', 'almuerzo', 'pendiente', 'lunes 7'],
+		consultas: [
+			'¿Dónde almorzamos el lunes 7 de septiembre?',
+			'¿Dónde almorzaremos el día 7 de septiembre?',
+			'¿En qué restaurante comemos el 7 de septiembre?',
+			'¿Cuál es el almuerzo del 7 de septiembre?',
+		],
+		respuestaDirecta: respuestaAlmuerzoLunes,
+		visibilidad: 'publica' as const,
+	};
 
 	const consejos = recomendaciones.map((recomendacion, indice) => ({
 		id: `recomendacion:${String(indice + 1).padStart(2, '0')}`,
@@ -484,7 +502,7 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 			visibilidad: 'publica' as const,
 		}));
 
-	const fragmentos = [...programa, ...organizaciones, ...descripcionesOrganizaciones, ...ubicacionesOrganizaciones, ...fechasOrganizaciones, ...actividadesOrganizaciones, ...sitiosOficiales, ...hospedajes, faqAlojamientos, ...respuestasAlojamientos, ...almuerzos, faqAlmuerzos, ...respuestasAlmuerzos, ...consejos, ...equipo, ...respuestasContactos, ...formularios, ...respuestasEncuestas, ...traslados, faqCooperativas, ...cooperativas, ...respuestasCooperativas, ...preguntas];
+	const fragmentos = [...programa, ...organizaciones, ...descripcionesOrganizaciones, ...ubicacionesOrganizaciones, ...fechasOrganizaciones, ...actividadesOrganizaciones, ...sitiosOficiales, ...hospedajes, faqAlojamientos, ...respuestasAlojamientos, ...almuerzos, faqAlmuerzos, faqAlmuerzoLunes, ...respuestasAlmuerzos, ...consejos, ...equipo, ...respuestasContactos, ...formularios, ...respuestasEncuestas, ...traslados, faqCooperativas, ...cooperativas, ...respuestasCooperativas, ...preguntas];
 	validarFragmentosPublicos(fragmentos);
 	return fragmentos;
 }
