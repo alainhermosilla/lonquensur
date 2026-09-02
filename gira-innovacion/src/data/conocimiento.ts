@@ -274,6 +274,7 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 	const respuestasAlmuerzos = alimentacion.map((lugar) => {
 		const fecha = new Intl.DateTimeFormat('es-CL', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })
 			.format(new Date(`${lugar.fecha}T00:00:00Z`));
+		const diaMes = Number(lugar.fecha.slice(-2));
 		const pendiente = lugar.estado === 'pendiente';
 		const respuesta = pendiente
 			? `El ${fecha} está previsto almorzar en San Vicente de Tagua Tagua, pero el restaurante y la dirección todavía están por confirmar.`
@@ -291,6 +292,8 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 				`¿En qué restaurante comemos el ${fecha}?`,
 				`¿Cuál es el almuerzo del ${fecha}?`,
 				`¿Dónde será el almuerzo del ${fecha}?`,
+				`¿Dónde almorzamos el día ${diaMes} de septiembre?`,
+				`¿En qué restaurante comemos el ${diaMes} de septiembre?`,
 			],
 			respuestaDirecta: respuesta,
 			visibilidad: 'publica' as const,

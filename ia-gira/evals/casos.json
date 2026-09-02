@@ -211,6 +211,12 @@
     "debeAbstenerse": false
   },
   {
+    "id": "faq-almuerzo-dia-mes",
+    "pregunta": "¿Dónde almorzamos el día 9 de septiembre?",
+    "esperaFuente": "faq:almuerzo-2026-09-09",
+    "debeAbstenerse": false
+  },
+  {
     "id": "faq-emergencia-accidente",
     "pregunta": "¿Qué debo hacer si tengo un accidente durante la gira?",
     "esperaFuente": "faq:emergencia-salud",
