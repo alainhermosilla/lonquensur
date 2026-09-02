@@ -1,4 +1,5 @@
 export * from './alojamientos';
+export * from './alimentacion';
 export * from './cooperativas-participantes';
 export * from './encuestas';
 export * from './faqs';

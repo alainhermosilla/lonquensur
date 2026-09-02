@@ -18,6 +18,24 @@
     "debeAbstenerse": false
   },
   {
+    "id": "faq-fechas-coloquial",
+    "pregunta": "¿De qué fecha a qué fecha es?",
+    "esperaFuente": "faq:fechas-gira",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-regiones-coloquial",
+    "pregunta": "¿Por dónde será la gira?",
+    "esperaFuente": "faq:regiones",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-dispositivo-coloquial",
+    "pregunta": "¿Basta con mi teléfono?",
+    "esperaFuente": "faq:dispositivo",
+    "debeAbstenerse": false
+  },
+  {
     "id": "faq-participantes",
     "pregunta": "¿Quiénes participan de la gira?",
     "esperaFuente": "faq:participantes-gira",
@@ -151,9 +169,45 @@
     ]
   },
   {
-    "id": "faq-alojamiento",
-    "pregunta": "¿Cuál es el hotel de la gira?",
-    "esperaFuente": "faq:alojamiento",
+    "id": "faq-alojamientos",
+    "pregunta": "¿Qué hoteles están en la gira?",
+    "esperaFuente": "faq:alojamientos-gira",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-hotel-aeropuerto-direccion",
+    "pregunta": "¿Cuál es la dirección del Hotel DA Aeropuerto?",
+    "esperaFuente": "faq:hotel-da-aeropuerto",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-hotel-talca-noches",
+    "pregunta": "¿Qué noches estaremos en el Hotel DA Talca?",
+    "esperaFuente": "faq:hotel-da-talca",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-hotel-por-fecha",
+    "pregunta": "¿En qué hotel nos quedamos el día 9 de septiembre?",
+    "esperaFuente": "faq:hotel-da-talca",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-almuerzos-general",
+    "pregunta": "¿Dónde almorzamos?",
+    "esperaFuente": "faq:almuerzos-gira",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-almuerzo-martes",
+    "pregunta": "¿Dónde almorzamos el martes 8 de septiembre?",
+    "esperaFuente": "faq:almuerzo-2026-09-08",
+    "debeAbstenerse": false
+  },
+  {
+    "id": "faq-almuerzo-miercoles-pendiente",
+    "pregunta": "¿En qué restaurante comemos el miércoles 9 de septiembre?",
+    "esperaFuente": "faq:almuerzo-2026-09-09",
     "debeAbstenerse": false
   },
   {

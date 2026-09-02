@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { loadKnowledge } from '../src/knowledge.mjs';
 import { asksAboutClothing, asksAboutHealthEmergency, asksAboutTourPurpose, asksWhatToBringToVisits, createRetriever, matchDirectFaq, programDateForWeekdayQuestion } from '../src/retrieval.mjs';
-import { expandTemporalQuery } from '../src/temporal.mjs';
+import { expandTemporalQuery, resolveRelativeDate } from '../src/temporal.mjs';
 import { classifyQuestion } from '../src/guardrails.mjs';
 
 const corpusPath = resolve(process.env.KNOWLEDGE_PATH ?? '../gira-innovacion/dist/conocimiento.json');
@@ -16,6 +16,7 @@ const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'juli
 
 function explicitProgramDate(question) {
 	const normalized = String(question).normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+	if (!/\b(que hacemos|programa|actividades|itinerario|donde (?:vamos|iremos|estaremos)|que (?:se )?(?:visita|visitamos|veremos))\b/.test(normalized)) return null;
 	const dates = new Set(corpus.fragmentos.filter((fragment) => fragment.tipo === 'programa').map((fragment) => fragment.fecha).filter(Boolean));
 	for (const date of dates) {
 		const [, month, day] = date.split('-').map(Number);
@@ -29,15 +30,18 @@ for (const testCase of cases) {
 	const allowed = classifyQuestion(testCase.pregunta).allowed;
 	const query = expandTemporalQuery(testCase.pregunta, now);
 	const directFaq = allowed ? matchDirectFaq(testCase.pregunta, corpus.fragmentos) : null;
+	const normalizedQuestion = String(testCase.pregunta).normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+	const asksRelativeProgram = /\b(que hacemos|programa|actividades|itinerario|donde (?:vamos|iremos|estaremos)|que (?:se )?(?:visita|visitamos|veremos))\b/.test(normalizedQuestion);
+	const relativeDate = allowed && asksRelativeProgram ? resolveRelativeDate(testCase.pregunta, now) : null;
 	const explicitDate = allowed ? explicitProgramDate(testCase.pregunta) : null;
 	const weekdayDate = allowed ? programDateForWeekdayQuestion(testCase.pregunta) : null;
 	const clothing = allowed && asksAboutClothing(testCase.pregunta);
 	const whatToBring = allowed && asksWhatToBringToVisits(testCase.pregunta);
 	let results = !allowed
 		? []
-		: explicitDate || weekdayDate
+		: relativeDate || explicitDate || weekdayDate
 			? corpus.fragmentos
-				.filter((fragmento) => fragmento.tipo === 'programa' && fragmento.fecha === (explicitDate ?? weekdayDate))
+				.filter((fragmento) => fragmento.tipo === 'programa' && fragmento.fecha === (relativeDate ?? explicitDate ?? weekdayDate))
 				.map((fragmento) => ({ ...fragmento, score: 2 }))
 		: asksAboutHealthEmergency(testCase.pregunta)
 			? corpus.fragmentos
@@ -54,7 +58,7 @@ for (const testCase of cases) {
 			: whatToBring
 				? corpus.fragmentos.filter((fragmento) => fragmento.id === 'faq:agua-mochila').map((fragmento) => ({ ...fragmento, score: 2 }))
 			: retrieve(query, { topK: 5 });
-	if (allowed && !explicitDate && !weekdayDate && !directFaq && !clothing && !whatToBring && !asksAboutHealthEmergency(testCase.pregunta) && !asksAboutTourPurpose(testCase.pregunta)) {
+	if (allowed && !relativeDate && !explicitDate && !weekdayDate && !directFaq && !clothing && !whatToBring && !asksAboutHealthEmergency(testCase.pregunta) && !asksAboutTourPurpose(testCase.pregunta)) {
 		results = results.filter((result) => result.tipo !== 'faq' && result.matchedDistinctTokens >= 2);
 	}
 	const abstains = !allowed || !results.length || results[0].score < minScore;

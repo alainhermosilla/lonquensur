@@ -7,8 +7,10 @@ export const GET: APIRoute = () => {
 	const fragmentos = crearFragmentosPublicos();
 
 	return new Response(JSON.stringify({
-		version: 1,
+		version: 2,
 		generadoDesde: 'fuente-unica-repositorio',
+		evento: 'Gira de Innovación AGROCOOPINNOVA 2026',
+		idioma: 'es-CL',
 		zonaHoraria: 'America/Santiago',
 		navegacionWebPermitida: false,
 		total: fragmentos.length,

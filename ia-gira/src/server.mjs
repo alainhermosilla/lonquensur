@@ -6,7 +6,7 @@ import { askLocalModel, warmLocalModel } from './model.mjs';
 import { buildMessages, NO_INFORMATION } from './prompt.mjs';
 import { asksAboutClothing, asksAboutHealthEmergency, asksAboutTourPurpose, asksAboutVisitedCommunes, asksAboutVisitedOrganizations, asksAboutVisitRecommendations, asksWhatToBringToVisits, asksWhenVisitingOrganization, createRetriever, matchDirectFaq, matchesVisitIdentifier, programDateForWeekdayQuestion } from './retrieval.mjs';
 import { classifyQuestion } from './guardrails.mjs';
-import { expandTemporalQuery } from './temporal.mjs';
+import { expandTemporalQuery, resolveRelativeDate } from './temporal.mjs';
 import { ModelGate } from './model-gate.mjs';
 
 const corpus = await loadKnowledge(config.knowledgePath);
@@ -25,6 +25,7 @@ function normalizeText(value) {
 
 function contextsForExplicitDate(question) {
 	const normalized = normalizeText(question);
+	if (!/\b(que hacemos|programa|actividades|itinerario|donde (?:vamos|iremos|estaremos)|que (?:se )?(?:visita|visitamos|veremos))\b/.test(normalized)) return null;
 	const dates = new Set(corpus.fragmentos.map((fragmento) => fragmento.fecha).filter(Boolean));
 	for (const date of dates) {
 		const [, month, day] = date.split('-').map(Number);
@@ -40,6 +41,16 @@ function contextsForExplicitDate(question) {
 function contextsForWeekdayProgram(question) {
 	const date = programDateForWeekdayQuestion(question);
 	if (!date) return null;
+	return corpus.fragmentos
+		.filter((fragmento) => fragmento.tipo === 'programa' && fragmento.fecha === date)
+		.map((fragmento) => ({ ...fragmento, score: 2 }));
+}
+
+function contextsForRelativeProgramDate(question) {
+	const date = resolveRelativeDate(question);
+	if (!date) return null;
+	const normalized = normalizeText(question);
+	if (!/\b(que hacemos|programa|actividades|itinerario|donde (?:vamos|iremos|estaremos)|que (?:se )?(?:visita|visitamos|veremos))\b/.test(normalized)) return null;
 	return corpus.fragmentos
 		.filter((fragmento) => fragmento.tipo === 'programa' && fragmento.fecha === date)
 		.map((fragmento) => ({ ...fragmento, score: 2 }));
@@ -245,6 +256,7 @@ const server = createServer(async (request, response) => {
 
 		const consultaRecuperacion = expandTemporalQuery(pregunta);
 		const explicitDateContexts = contextsForExplicitDate(pregunta);
+		const relativeDateContexts = contextsForRelativeProgramDate(pregunta);
 		const weekdayProgramContexts = contextsForWeekdayProgram(pregunta);
 		const visitScheduleContexts = contextsForVisitSchedule(pregunta);
 		const healthEmergencyContexts = contextsForHealthEmergency(pregunta);
@@ -252,7 +264,8 @@ const server = createServer(async (request, response) => {
 		const directFaqContexts = contextsForDirectFaq(pregunta);
 		const clothingContexts = contextsForClothing(pregunta);
 		const whatToBringContexts = contextsForWhatToBring(pregunta);
-		let contexts = explicitDateContexts
+		let contexts = relativeDateContexts
+			?? explicitDateContexts
 			?? weekdayProgramContexts
 			?? visitScheduleContexts
 			?? healthEmergencyContexts
@@ -265,7 +278,7 @@ const server = createServer(async (request, response) => {
 			?? contextsForVisitRecommendations(pregunta)
 			?? retrieve(consultaRecuperacion, { topK: config.topK });
 		const usedApproximateFallback = !(
-			explicitDateContexts || weekdayProgramContexts || visitScheduleContexts
+			relativeDateContexts || explicitDateContexts || weekdayProgramContexts || visitScheduleContexts
 			|| healthEmergencyContexts || tourPurposeContexts || directFaqContexts
 			|| clothingContexts || whatToBringContexts
 			|| asksAboutVisitedCommunes(pregunta) || asksAboutVisitedOrganizations(pregunta)
@@ -288,7 +301,7 @@ const server = createServer(async (request, response) => {
 			}, origin);
 		}
 
-		if (explicitDateContexts || weekdayProgramContexts) {
+		if (relativeDateContexts || explicitDateContexts || weekdayProgramContexts) {
 			return send(response, 200, {
 				respuesta: formatProgramForDate(contexts),
 				fuentes: contexts.map(({ id, titulo, fuente, score }) => ({ id, titulo, fuente, score })),

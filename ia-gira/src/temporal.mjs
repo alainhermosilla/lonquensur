@@ -36,3 +36,11 @@ export function expandTemporalQuery(question, now = new Date()) {
 	}
 	return additions.length ? `${question}\n${additions.join('\n')}` : question;
 }
+
+export function resolveRelativeDate(question, now = new Date()) {
+	const normalized = String(question).normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+	if (/\bmanana\b/.test(normalized)) return relativeDate(now, 1).iso;
+	if (/\bhoy\b/.test(normalized)) return relativeDate(now, 0).iso;
+	if (/\bayer\b/.test(normalized)) return relativeDate(now, -1).iso;
+	return null;
+}

@@ -1,13 +1,15 @@
 import { encuestas } from './encuestas';
 import { faqs } from './faqs';
 import { contactos, recomendaciones } from './informacion';
+import { alojamientos } from './alojamientos';
+import { alimentacion } from './alimentacion';
 import { cooperativasParticipantes } from './cooperativas-participantes';
 import { jornadas } from './programa';
 import { visitas } from './visitas';
 
 export interface FragmentoConocimiento {
 	id: string;
-	tipo: 'programa' | 'visita' | 'recomendacion' | 'contacto' | 'encuesta' | 'faq' | 'cooperativa-participante';
+	tipo: 'programa' | 'visita' | 'alojamiento' | 'alimentacion' | 'recomendacion' | 'contacto' | 'encuesta' | 'faq' | 'cooperativa-participante';
 	titulo: string;
 	texto: string;
 	fuente: string;
@@ -17,6 +19,32 @@ export interface FragmentoConocimiento {
 	consultas?: string[];
 	respuestaDirecta?: string;
 	visibilidad: 'publica';
+}
+
+export function validarFragmentosPublicos(fragmentos: FragmentoConocimiento[]): void {
+	const ids = new Set<string>();
+	const errores: string[] = [];
+
+	for (const [indice, fragmento] of fragmentos.entries()) {
+		const referencia = fragmento.id || `posición ${indice + 1}`;
+		if (!fragmento.id.trim()) errores.push(`Fragmento sin id en la posición ${indice + 1}`);
+		if (ids.has(fragmento.id)) errores.push(`Id duplicado: ${fragmento.id}`);
+		ids.add(fragmento.id);
+		if (!fragmento.titulo.trim()) errores.push(`${referencia}: título vacío`);
+		if (!fragmento.texto.trim()) errores.push(`${referencia}: texto vacío`);
+		if (!fragmento.fuente.trim()) errores.push(`${referencia}: fuente vacía`);
+		if (fragmento.visibilidad !== 'publica') errores.push(`${referencia}: visibilidad no pública`);
+		if (fragmento.respuestaDirecta && !(fragmento.consultas?.length)) {
+			errores.push(`${referencia}: respuesta directa sin consultas asociadas`);
+		}
+		if (fragmento.consultas?.some((consulta) => !consulta.trim())) {
+			errores.push(`${referencia}: contiene una consulta vacía`);
+		}
+	}
+
+	if (errores.length) {
+		throw new Error(`Corpus público inválido:\n- ${errores.join('\n- ')}`);
+	}
 }
 
 export function crearFragmentosPublicos(): FragmentoConocimiento[] {
@@ -161,6 +189,125 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 				visibilidad: 'publica' as const,
 			};
 		});
+
+	const hospedajes = alojamientos
+		.filter((alojamiento) => alojamiento.estado === 'confirmado' && alojamiento.visibilidad === 'publica')
+		.map((alojamiento) => ({
+			id: `alojamiento:${alojamiento.id}`,
+			tipo: 'alojamiento' as const,
+			titulo: alojamiento.nombre,
+			texto: [
+				`Alojamiento oficial de la Gira: ${alojamiento.nombre}.`,
+				`Dirección: ${alojamiento.direccion}.`,
+				`Estadía desde el ${alojamiento.desde} hasta el ${alojamiento.hasta}.`,
+			].join('\n'),
+			fuente: 'fuente-interna:base-informacion-web',
+			fecha: alojamiento.desde,
+			categorias: ['alojamiento', 'hotel', 'hospedaje', 'dirección'],
+			visibilidad: 'publica' as const,
+		}));
+	const respuestaAlojamientos = 'La Gira contempla dos alojamientos oficiales:\n\n- Hotel DA Aeropuerto: Av. Américo Vespucio Oriente 1299, comuna de Pudahuel, Región Metropolitana. Corresponde a las noches del domingo 6, lunes 7 y martes 8 de septiembre.\n- Hotel DA Talca: Calle 4 Poniente 1011, comuna de Talca, Región del Maule. Corresponde a las noches del miércoles 9 y jueves 10 de septiembre.';
+	const faqAlojamientos = {
+		id: 'faq:alojamientos-gira',
+		tipo: 'faq' as const,
+		titulo: '¿Qué hoteles están incluidos en la Gira?',
+		texto: respuestaAlojamientos,
+		fuente: 'fuente-interna:base-informacion-web',
+		categorias: ['alojamiento', 'alojamientos', 'hotel', 'hoteles', 'hospedaje', 'direcciones'],
+		consultas: [
+			'¿Qué hoteles están en la gira?',
+			'¿Cuáles son los hoteles de la gira?',
+			'¿Dónde nos alojaremos durante la gira?',
+			'¿Dónde vamos a dormir?',
+			'¿Cuáles son las direcciones de los hoteles?',
+			'¿En qué hoteles nos quedaremos?',
+		],
+		respuestaDirecta: respuestaAlojamientos,
+		visibilidad: 'publica' as const,
+	};
+	const respuestasAlojamientos = alojamientos
+		.filter((alojamiento) => alojamiento.estado === 'confirmado' && alojamiento.visibilidad === 'publica')
+		.map((alojamiento) => {
+			const enTalca = alojamiento.id === 'hotel-da-talca';
+			const dias = enTalca ? [9, 10] : [6, 7, 8];
+			const noches = enTalca
+				? 'las noches del miércoles 9 y jueves 10 de septiembre de 2026'
+				: 'las noches del domingo 6, lunes 7 y martes 8 de septiembre de 2026';
+			const respuesta = `${alojamiento.nombre} está ubicado en ${alojamiento.direccion}. Es el alojamiento previsto para ${noches}.`;
+			return {
+				id: `faq:${alojamiento.id}`,
+				tipo: 'faq' as const,
+				titulo: `Información de ${alojamiento.nombre}`,
+				texto: respuesta,
+				fuente: 'fuente-interna:base-informacion-web',
+				categorias: ['alojamiento', 'hotel', 'dirección', alojamiento.nombre, enTalca ? 'Talca' : 'Pudahuel'],
+				consultas: [
+					`¿Cuál es la dirección del ${alojamiento.nombre}?`,
+					`¿Dónde queda el ${alojamiento.nombre}?`,
+					`¿Qué noches estaremos en el ${alojamiento.nombre}?`,
+					`¿Cuándo nos alojamos en el ${alojamiento.nombre}?`,
+					...dias.flatMap((dia) => [
+						`¿En qué hotel nos quedamos el día ${dia} de septiembre?`,
+						`¿Dónde dormimos el ${dia} de septiembre?`,
+					]),
+				],
+				respuestaDirecta: respuesta,
+				visibilidad: 'publica' as const,
+			};
+		});
+	const almuerzos = alimentacion.map((lugar) => ({
+		id: `alimentacion:${lugar.id}`,
+		tipo: 'alimentacion' as const,
+		titulo: lugar.nombre,
+		texto: [
+			`Almuerzo del ${lugar.fecha}: ${lugar.nombre}.`,
+			`Ubicación: ${lugar.ubicacion}.`,
+			`Dirección: ${lugar.direccion}.`,
+			lugar.detalle,
+			`Estado de la información: ${lugar.estado}.`,
+		].join('\n'),
+		fuente: 'fuente-interna:base-informacion-web',
+		fecha: lugar.fecha,
+		categorias: ['alimentación', 'almuerzo', 'restaurante', lugar.estado],
+		visibilidad: 'publica' as const,
+	}));
+	const respuestasAlmuerzos = alimentacion.map((lugar) => {
+		const fecha = new Intl.DateTimeFormat('es-CL', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })
+			.format(new Date(`${lugar.fecha}T00:00:00Z`));
+		const pendiente = lugar.estado === 'pendiente';
+		const respuesta = pendiente
+			? `El ${fecha} está previsto almorzar en San Vicente de Tagua Tagua, pero el restaurante y la dirección todavía están por confirmar.`
+			: `El ${fecha} el almuerzo está previsto en ${lugar.nombre}, ${lugar.direccion}, ${lugar.ubicacion}. ${lugar.detalle}`;
+		return {
+			id: `faq:almuerzo-${lugar.fecha}`,
+			tipo: 'faq' as const,
+			titulo: `¿Dónde almorzamos el ${fecha}?`,
+			texto: respuesta,
+			fuente: 'fuente-interna:base-informacion-web',
+			fecha: lugar.fecha,
+			categorias: ['alimentación', 'almuerzo', 'restaurante', lugar.nombre, lugar.ubicacion],
+			consultas: [
+				`¿Dónde almorzamos el ${fecha}?`,
+				`¿En qué restaurante comemos el ${fecha}?`,
+				`¿Cuál es el almuerzo del ${fecha}?`,
+				`¿Dónde será el almuerzo del ${fecha}?`,
+			],
+			respuestaDirecta: respuesta,
+			visibilidad: 'publica' as const,
+		};
+	});
+	const respuestaGeneralAlmuerzos = "La información publicada contempla estos almuerzos:\n\n- Martes 8: Forestani Restaurant, Av. Vicuña Mackenna 522, comuna de Melipilla, Región Metropolitana.\n- Miércoles 9: comuna de San Vicente de Tagua Tagua, Región de O'Higgins; el restaurante y la dirección están por confirmar.\n- Jueves 10: Toro Macho, lado oriente del río Loncomilla, comuna de Villa Alegre, Región del Maule.\n- Viernes 11: Juan y Medio, Longitudinal Sur Km 109, comuna de Rengo, Región de O'Higgins.\n\nEl documento no publica un lugar de almuerzo para el lunes 7.";
+	const faqAlmuerzos = {
+		id: 'faq:almuerzos-gira',
+		tipo: 'faq' as const,
+		titulo: '¿Dónde almorzamos durante la Gira?',
+		texto: respuestaGeneralAlmuerzos,
+		fuente: 'fuente-interna:base-informacion-web',
+		categorias: ['alimentación', 'almuerzos', 'restaurantes', 'comidas'],
+		consultas: ['¿Dónde almorzamos?', '¿Dónde serán los almuerzos?', '¿En qué restaurantes comeremos?', '¿Cuáles son los restaurantes de la gira?'],
+		respuestaDirecta: respuestaGeneralAlmuerzos,
+		visibilidad: 'publica' as const,
+	};
 
 	const consejos = recomendaciones.map((recomendacion, indice) => ({
 		id: `recomendacion:${String(indice + 1).padStart(2, '0')}`,
@@ -334,5 +481,7 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 			visibilidad: 'publica' as const,
 		}));
 
-	return [...programa, ...organizaciones, ...descripcionesOrganizaciones, ...ubicacionesOrganizaciones, ...fechasOrganizaciones, ...actividadesOrganizaciones, ...sitiosOficiales, ...consejos, ...equipo, ...respuestasContactos, ...formularios, ...respuestasEncuestas, ...traslados, faqCooperativas, ...cooperativas, ...respuestasCooperativas, ...preguntas];
+	const fragmentos = [...programa, ...organizaciones, ...descripcionesOrganizaciones, ...ubicacionesOrganizaciones, ...fechasOrganizaciones, ...actividadesOrganizaciones, ...sitiosOficiales, ...hospedajes, faqAlojamientos, ...respuestasAlojamientos, ...almuerzos, faqAlmuerzos, ...respuestasAlmuerzos, ...consejos, ...equipo, ...respuestasContactos, ...formularios, ...respuestasEncuestas, ...traslados, faqCooperativas, ...cooperativas, ...respuestasCooperativas, ...preguntas];
+	validarFragmentosPublicos(fragmentos);
+	return fragmentos;
 }
