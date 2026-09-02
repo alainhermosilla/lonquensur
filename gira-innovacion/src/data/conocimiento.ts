@@ -392,7 +392,7 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 			visibilidad: 'publica' as const,
 		};
 	});
-	const formularios = encuestas.map((encuesta) => ({
+	const formularios = encuestas.filter((encuesta) => !encuesta.esPrueba).map((encuesta) => ({
 		id: `encuesta:${encuesta.id}`,
 		tipo: 'encuesta' as const,
 		titulo: encuesta.nombre,
@@ -401,9 +401,9 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 		visitaId: encuesta.visitaId,
 		visibilidad: 'publica' as const,
 	}));
-	const respuestasEncuestas = encuestas.map((encuesta) => {
+	const respuestasEncuestas = encuestas.filter((encuesta) => !encuesta.esPrueba).map((encuesta) => {
 		const visita = visitas.find((item) => item.id === encuesta.visitaId);
-		const aliases = aliasesPorVisita[encuesta.visitaId] ?? [visita?.nombre ?? encuesta.lugar];
+		const aliases = (encuesta.visitaId ? aliasesPorVisita[encuesta.visitaId] : undefined) ?? [visita?.nombre ?? encuesta.lugar];
 		const respuesta = `${encuesta.nombre}. Abre: ${encuesta.aperturaTexto}. Cierra: ${encuesta.cierreTexto}. Horarios expresados en hora de Chile. Formulario oficial: ${encuesta.enlace}`;
 		return {
 			id: `faq:encuesta-${encuesta.id}`,

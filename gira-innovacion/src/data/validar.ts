@@ -21,7 +21,7 @@ export function validarFuenteUnica() {
 	}
 
 	for (const encuesta of encuestas) {
-		if (!idsVisitas.has(encuesta.visitaId)) {
+		if (encuesta.visitaId && !idsVisitas.has(encuesta.visitaId)) {
 			errores.push(`La encuesta ${encuesta.id} referencia una visita inexistente: ${encuesta.visitaId}`);
 		}
 		if (new Date(encuesta.apertura).getTime() >= new Date(encuesta.cierre).getTime()) {

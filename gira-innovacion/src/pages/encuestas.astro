@@ -25,7 +25,7 @@ import { encuestas } from '../data/encuestas';
 					data-url={encuesta.enlace}
 				>
 					<div class="number" aria-hidden="true">
-						{String(indice + 1).padStart(2, '0')}
+						{encuesta.esPrueba ? '00' : String(encuestas.slice(0, indice + 1).filter((item) => !item.esPrueba).length).padStart(2, '0')}
 					</div>
 
 					<div class="survey-content">
