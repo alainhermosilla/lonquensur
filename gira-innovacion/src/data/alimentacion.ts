@@ -11,6 +11,16 @@ export interface Alimentacion {
 
 export const alimentacion: Alimentacion[] = [
 	{
+		id: 'fundacion-origen',
+		fecha: '2026-09-07',
+		nombre: 'Fundación Origen',
+		direccion: 'Pirque',
+		ubicacion: 'Región Metropolitana',
+		detalle: 'Almuerzo durante la jornada en Fundación Origen.',
+		estado: 'confirmado',
+		visibilidad: 'publica',
+	},
+	{
 		id: 'forestani-restaurant',
 		fecha: '2026-09-08',
 		nombre: 'Forestani Restaurant',
