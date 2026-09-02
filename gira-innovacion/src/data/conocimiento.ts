@@ -255,6 +255,41 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 				visibilidad: 'publica' as const,
 			};
 		});
+	const cenasPorFecha = alojamientos.flatMap((alojamiento) => {
+		const dias = alojamiento.id === 'hotel-da-talca' ? [9, 10] : [6, 7, 8];
+		return dias.map((dia) => {
+			const respuesta = `La cena del ${dia} de septiembre se realizará en ${alojamiento.nombre}, ${alojamiento.direccion}.`;
+			return {
+				id: `faq:cena-2026-09-${String(dia).padStart(2, '0')}`,
+				tipo: 'faq' as const,
+				titulo: `¿Dónde cenamos el ${dia} de septiembre?`,
+				texto: respuesta,
+				fuente: 'fuente-interna:base-informacion-web',
+				fecha: `2026-09-${String(dia).padStart(2, '0')}`,
+				categorias: ['alimentación', 'cena', 'hotel', alojamiento.nombre],
+				consultas: [
+					`¿Dónde cenamos el ${dia} de septiembre?`,
+					`¿Dónde cenaremos el día ${dia} de septiembre?`,
+					`¿En qué hotel cenamos el ${dia} de septiembre?`,
+					`¿Cuál es el lugar de la cena del ${dia} de septiembre?`,
+				],
+				respuestaDirecta: respuesta,
+				visibilidad: 'publica' as const,
+			};
+		});
+	});
+	const respuestaGeneralCenas = 'Las cenas se realizarán en los hoteles de alojamiento:\n\n- Del 6 al 8 de septiembre: Hotel DA Aeropuerto, en Pudahuel.\n- El 9 y 10 de septiembre: Hotel DA Talca, en Talca.\n\nNo hay una cena publicada para el viernes 11, día de retorno de los participantes.';
+	const faqCenas = {
+		id: 'faq:cenas-gira',
+		tipo: 'faq' as const,
+		titulo: '¿Dónde serán las cenas de la Gira?',
+		texto: respuestaGeneralCenas,
+		fuente: 'fuente-interna:base-informacion-web',
+		categorias: ['alimentación', 'cenas', 'hoteles'],
+		consultas: ['¿Dónde serán las cenas?', '¿Dónde cenaremos durante la gira?', '¿En qué lugares vamos a cenar?', '¿Las cenas son en los hoteles?'],
+		respuestaDirecta: respuestaGeneralCenas,
+		visibilidad: 'publica' as const,
+	};
 	const almuerzos = alimentacion.map((lugar) => ({
 		id: `alimentacion:${lugar.id}`,
 		tipo: 'alimentacion' as const,
@@ -485,7 +520,7 @@ export function crearFragmentosPublicos(): FragmentoConocimiento[] {
 			visibilidad: 'publica' as const,
 		}));
 
-	const fragmentos = [...programa, ...organizaciones, ...descripcionesOrganizaciones, ...ubicacionesOrganizaciones, ...fechasOrganizaciones, ...actividadesOrganizaciones, ...sitiosOficiales, ...hospedajes, faqAlojamientos, ...respuestasAlojamientos, ...almuerzos, faqAlmuerzos, ...respuestasAlmuerzos, ...consejos, ...equipo, ...respuestasContactos, ...formularios, ...respuestasEncuestas, ...traslados, faqCooperativas, ...cooperativas, ...respuestasCooperativas, ...preguntas];
+	const fragmentos = [...programa, ...organizaciones, ...descripcionesOrganizaciones, ...ubicacionesOrganizaciones, ...fechasOrganizaciones, ...actividadesOrganizaciones, ...sitiosOficiales, ...hospedajes, faqAlojamientos, ...respuestasAlojamientos, faqCenas, ...cenasPorFecha, ...almuerzos, faqAlmuerzos, ...respuestasAlmuerzos, ...consejos, ...equipo, ...respuestasContactos, ...formularios, ...respuestasEncuestas, ...traslados, faqCooperativas, ...cooperativas, ...respuestasCooperativas, ...preguntas];
 	validarFragmentosPublicos(fragmentos);
 	return fragmentos;
 }
