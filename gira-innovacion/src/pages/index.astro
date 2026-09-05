@@ -18,14 +18,6 @@ import { visitas } from '../data/visitas';
 		</section>
 
 		<section class="menu" aria-label="Menú principal">
-			<a href="/avisos/" class="menu-card menu-card--notices">
-				<span class="icon icon--notices"><MenuIcon name="notices" /></span>
-				<span>
-					<strong>Avisos importantes</strong>
-					<small>Información y novedades de la gira</small>
-				</span>
-			</a>
-
 			<a href="/programa/" class="menu-card">
 				<span class="icon"><MenuIcon name="calendar" /></span>
 				<span>
@@ -63,6 +55,15 @@ import { visitas } from '../data/visitas';
 				<span>
 					<strong>Bitácora</strong>
 					<small>Mira lo que vamos viviendo</small>
+				</span>
+			</a>
+
+			<a href="/avisos/" class="menu-card menu-card--notices">
+				<span class="coming-soon"><span aria-hidden="true">⏳</span> Prontamente</span>
+				<span class="icon icon--notices"><MenuIcon name="notices" /></span>
+				<span>
+					<strong>Avisos importantes</strong>
+					<small>Información y novedades de la gira</small>
 				</span>
 			</a>
 		</section>
@@ -247,10 +248,28 @@ import { visitas } from '../data/visitas';
 	}
 
 	.menu-card--notices {
+		position: relative;
+		margin-top: 28px;
 		background: #fff0c7;
 		border: 2px solid #d89517;
 		color: #4b3205;
 		box-shadow: 0 4px 14px rgba(157, 101, 0, 0.18);
+	}
+
+	.coming-soon {
+		position: absolute;
+		top: -16px;
+		right: 14px;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 12px;
+		border-radius: 999px;
+		background: #4b3205;
+		color: #fff0c7;
+		font-size: 12px;
+		font-weight: 700;
+		line-height: 1.2;
 	}
 
 	.menu-card--notices small {
