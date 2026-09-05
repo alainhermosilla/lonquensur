@@ -1,0 +1,104 @@
+name: Publicar Gira en HostGator
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gira-hostgator-production
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PUBLIC_IA_API_URL: https://ia-gira.lonquensur.cl
+    steps:
+      - name: Descargar versión solicitada de main
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: gira-innovacion/package-lock.json
+      - name: Instalar dependencias y construir
+        working-directory: gira-innovacion
+        run: npm ci && npm run build
+      - name: Verificar API y corpus
+        run: |
+          curl --fail --silent --show-error --max-time 30 "$PUBLIC_IA_API_URL/health" > /tmp/gira-health.json
+          node -e 'if (!JSON.parse(require("fs").readFileSync("/tmp/gira-health.json")).ok) process.exit(1)'
+          npm --prefix ia-gira test
+          npm --prefix ia-gira run eval
+      - name: Instalar cliente FTPS
+        run: sudo apt-get update && sudo apt-get install -y lftp
+      - name: Publicar archivos en HostGator
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          GIRA_FTP_USER: ${{ secrets.GIRA_FTP_USER }}
+          GIRA_FTP_PASSWORD: ${{ secrets.GIRA_FTP_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import subprocess
+          from pathlib import Path
+
+          names = ('FTP_HOST', 'GIRA_FTP_USER', 'GIRA_FTP_PASSWORD')
+          for name in names:
+              if not os.environ.get(name):
+                  raise SystemExit('Falta el secreto: ' + name)
+
+          def quote(value):
+              if any(c in value for c in '\r\n\x00'):
+                  raise SystemExit('Un secreto contiene caracteres no permitidos')
+              return '"' + value.replace('\\', '\\\\').replace('"', '\\"').replace('$', '\\$').replace('`', '\\`') + '"'
+
+          root = Path('gira-innovacion/dist')
+          if not (root / 'index.html').is_file() or not (root / '.htaccess').is_file():
+              raise SystemExit('Build incompleto')
+          (root / 'deployment-version.txt').write_text(os.environ['GITHUB_SHA'] + '\n')
+          commands = [
+              'set cmd:fail-exit true',
+              'set net:timeout 30',
+              'set net:max-retries 2',
+              'set ftp:passive-mode true',
+              'set ftp:ssl-force true',
+              'set ftp:ssl-protect-data true',
+              'set ssl:verify-certificate true',
+              # Same hostname setting as the existing, working IP-based deploy.
+              'set ssl:check-hostname false',
+              'open ' + quote('ftp://' + os.environ['FTP_HOST']),
+              'user ' + quote(os.environ['GIRA_FTP_USER']) + ' ' + quote(os.environ['GIRA_FTP_PASSWORD']),
+              'mirror -R --verbose gira-innovacion/dist/_astro _astro',
+              'mirror -R --verbose --exclude-glob _astro/ --exclude-glob index.html --exclude-glob deployment-version.txt gira-innovacion/dist .',
+          ]
+          for page in sorted(root.rglob('index.html')):
+              if page == root / 'index.html':
+                  continue
+              commands.append('put ' + quote(str(page)) + ' -o ' + quote(page.relative_to(root).as_posix()))
+          commands.extend([
+              'put gira-innovacion/dist/.htaccess -o .htaccess',
+              'put gira-innovacion/dist/index.html -o index.html',
+              'put gira-innovacion/dist/deployment-version.txt -o deployment-version.txt',
+              'bye',
+          ])
+          subprocess.run(['lftp'], input='\n'.join(commands) + '\n', text=True, check=True)
+          PY
+      - name: Comprobar versión pública
+        run: |
+          for intento in 1 2 3 4 5; do
+            if curl --fail --silent --show-error --max-time 30 "https://gira.lonquensur.cl/deployment-version.txt?run=$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-$intento" | grep -Fxq "$GITHUB_SHA"; then
+              echo "Publicado y verificado: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo 'La transferencia terminó, pero no se pudo confirmar la versión pública.' >&2
+          exit 1
