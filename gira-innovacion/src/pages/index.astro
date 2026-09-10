@@ -20,64 +20,40 @@ import { visitas } from '../data/visitas';
 		<section class="menu" aria-label="Menú principal">
 			<a href="/programa/" class="menu-card">
 				<span class="icon"><MenuIcon name="calendar" /></span>
-				<span>
-					<strong>Programa</strong>
-					<small>¿Qué hacemos cada día?</small>
-				</span>
+				<span><strong>Programa</strong><small>¿Qué hacemos cada día?</small></span>
 			</a>
 
 			<a href="/visitas/" class="menu-card">
 				<span class="icon"><MenuIcon name="location" /></span>
-				<span>
-					<strong>Visitas</strong>
-					<small>Conoce los lugares que visitaremos</small>
-				</span>
+				<span><strong>Visitas</strong><small>Conoce los lugares que visitaremos</small></span>
 			</a>
 
 			<a href="/informacion/" class="menu-card">
 				<span class="icon"><MenuIcon name="document" /></span>
-				<span>
-					<strong>Información relevante</strong>
-					<small>Material para la gira</small>
-				</span>
+				<span><strong>Información relevante</strong><small>Material para la gira</small></span>
 			</a>
 
 			<a href="/encuestas/" class="menu-card">
 				<span class="icon"><MenuIcon name="survey" /></span>
-				<span>
-					<strong>Encuestas</strong>
-					<small>Cuéntanos qué te pareció cada visita</small>
-				</span>
+				<span><strong>Encuestas</strong><small>Cuéntanos qué te pareció cada visita</small></span>
 			</a>
 
 			<a href="/bitacora/" class="menu-card">
 				<span class="icon"><MenuIcon name="notebook" /></span>
-				<span>
-					<strong>Bitácora</strong>
-					<small>Mira lo que vamos viviendo</small>
-				</span>
+				<span><strong>Bitácora</strong><small>Mira lo que vamos viviendo</small></span>
 			</a>
 
 			<a href="/avisos/" class="menu-card menu-card--notices">
-				<span class="coming-soon"><span aria-hidden="true">⏳</span> Prontamente</span>
 				<span class="icon icon--notices"><MenuIcon name="notices" /></span>
-				<span>
-					<strong>Avisos importantes</strong>
-					<small>Información y novedades de la gira</small>
-				</span>
+				<span><strong>Avisos importantes</strong><small>Información y novedades de la gira</small></span>
 			</a>
 		</section>
 
 		<section class="today">
 			<p class="today-label">PRÓXIMA JORNADA</p>
-
 			<h2 id="next-visit-title">Domingo 6 de septiembre: Inicio de la experiencia</h2>
-
 			<p id="next-visit-place" class="today-place">📍 Comuna de Santiago · Llegada de participantes</p>
-
-			<a id="next-visit-link" href="/programa/?dia=06" class="today-button">
-				Ver jornada
-			</a>
+			<a id="next-visit-link" href="/programa/?dia=06" class="today-button">Ver jornada</a>
 		</section>
 
 		<footer>
@@ -86,55 +62,28 @@ import { visitas } from '../data/visitas';
 			<p>Sitio construido con ASTRO</p>
 		</footer>
 
-		<a
-			class="whatsapp-button"
-			href="https://chat.whatsapp.com/CycIeRMxwNH6EIN5hZklcG?s=cl&p=i&ilr=2"
-			target="_blank"
-			rel="noopener noreferrer"
-			aria-label="Unirse al grupo de WhatsApp de la gira"
-		>
+		<a class="whatsapp-button" href="https://chat.whatsapp.com/CycIeRMxwNH6EIN5hZklcG?s=cl&p=i&ilr=2" target="_blank" rel="noopener noreferrer" aria-label="Unirse al grupo de WhatsApp de la gira">
 			<span class="whatsapp-icon" aria-hidden="true">💬</span>
 		</a>
 	</main>
 </Layout>
 
 <script define:vars={{ visitas }}>
-
 	const ahora = new Date();
-	const partesChile = new Intl.DateTimeFormat('en-CA', {
-		timeZone: 'America/Santiago',
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-		hour: '2-digit',
-		minute: '2-digit',
-		hourCycle: 'h23',
-	}).formatToParts(ahora);
-	const parte = Object.fromEntries(
-		partesChile.map(({ type, value }) => [type, value]),
-	);
-	const momentoChile = Number(
-		`${parte.year}${parte.month}${parte.day}${parte.hour}${parte.minute}`,
-	);
+	const partesChile = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(ahora);
+	const parte = Object.fromEntries(partesChile.map(({ type, value }) => [type, value]));
+	const momentoChile = Number(`${parte.year}${parte.month}${parte.day}${parte.hour}${parte.minute}`);
 	const finJornadaLlegada = 202609062000;
-
 	const titulo = document.querySelector('#next-visit-title');
 	const lugar = document.querySelector('#next-visit-place');
 	const enlace = document.querySelector('#next-visit-link');
 
 	if (momentoChile >= finJornadaLlegada) {
 		const inicioGira = new Date(2026, 8, 7);
-		const hoy = new Date(
-			Number(parte.year),
-			Number(parte.month) - 1,
-			Number(parte.day),
-		);
-		const diasDesdeInicio = Math.floor(
-			(hoy.getTime() - inicioGira.getTime()) / (1000 * 60 * 60 * 24),
-		);
+		const hoy = new Date(Number(parte.year), Number(parte.month) - 1, Number(parte.day));
+		const diasDesdeInicio = Math.floor((hoy.getTime() - inicioGira.getTime()) / (1000 * 60 * 60 * 24));
 		const indice = Math.max(0, Math.min(visitas.length - 1, diasDesdeInicio + 1));
 		const visita = visitas[indice];
-
 		if (titulo) titulo.textContent = `Visita ${visita.numero}: ${visita.nombre}`;
 		if (lugar) lugar.textContent = `📍 ${visita.lugar}`;
 		if (enlace) enlace.setAttribute('href', `/visitas/?visita=${visita.numero}`);
@@ -142,271 +91,34 @@ import { visitas } from '../data/visitas';
 </script>
 
 <style>
-	:global(*) {
-		box-sizing: border-box;
-	}
-
-	:global(body) {
-		margin: 0;
-		font-family:
-			Arial, Helvetica, sans-serif;
-		background: #f5f3ed;
-		color: #24352a;
-	}
-
-	main {
-		min-height: 100vh;
-	}
-
-	.hero {
-		background: linear-gradient(135deg, #245b45, #173e30);
-		color: white;
-		padding: 38px 20px;
-	}
-
-	.brand {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		margin-bottom: 34px;
-		font-size: 12px;
-		font-weight: 700;
-		letter-spacing: 2px;
-	}
-
-	.brand-line {
-		width: 24px;
-		height: 2px;
-		background: #d9b85c;
-	}
-
-	.brand a {
-		color: inherit;
-		text-decoration: none;
-	}
-
-	.hero-content {
-		max-width: 680px;
-		margin: 0 auto;
-		text-align: center;
-	}
-
-	.eyebrow {
-		margin: 0 0 8px;
-		font-size: 11px;
-		font-weight: 800;
-		letter-spacing: 1.6px;
-		color: #e4c96e;
-	}
-
-	h1 {
-		margin: 0;
-		font-size: clamp(36px, 8vw, 54px);
-		line-height: 1;
-	}
-
-	.intro {
-		max-width: 560px;
-		margin: 12px auto 0;
-		font-size: 15px;
-		line-height: 1.55;
-		opacity: 0.9;
-	}
-
-	.menu {
-		max-width: 620px;
-		margin: 0 auto;
-		padding: 22px 16px 8px;
-	}
-
-	.menu-card {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-		padding: 18px 16px;
-		margin-bottom: 12px;
-		background: white;
-		border-radius: 14px;
-		color: #24352a;
-		text-decoration: none;
-		box-shadow: 0 2px 8px rgba(30, 50, 35, 0.08);
-	}
-
-	.menu-card::after {
-		content: '';
-		flex: 0 0 auto;
-		width: 10px;
-		height: 10px;
-		margin-left: auto;
-		border-top: 2px solid currentColor;
-		border-right: 2px solid currentColor;
-		transform: rotate(45deg);
-	}
-
-	.menu-card:active {
-		transform: scale(0.99);
-	}
-
-	.menu-card--notices {
-		position: relative;
-		margin-top: 28px;
-		background: #fff0c7;
-		border: 2px solid #d89517;
-		color: #4b3205;
-		box-shadow: 0 4px 14px rgba(157, 101, 0, 0.18);
-	}
-
-	.coming-soon {
-		position: absolute;
-		top: -16px;
-		right: 14px;
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		padding: 6px 12px;
-		border-radius: 999px;
-		background: #4b3205;
-		color: #fff0c7;
-		font-size: 12px;
-		font-weight: 700;
-		line-height: 1.2;
-	}
-
-	.menu-card--notices small {
-		color: #705318;
-	}
-
-	.icon {
-		flex: 0 0 46px;
-		width: 46px;
-		height: 46px;
-		display: grid;
-		place-items: center;
-		border-radius: 12px;
-		background: #edf2eb;
-		color: #173e30;
-	}
-
-	.icon--notices {
-		background: #d89517;
-	}
-
-	.menu-card strong,
-	.menu-card small {
-		display: block;
-	}
-
-	.menu-card strong {
-		font-size: 19px;
-		margin-bottom: 4px;
-	}
-
-	.menu-card small {
-		font-size: 14px;
-		line-height: 1.35;
-		color: #667268;
-	}
-
-	.today {
-		max-width: 620px;
-		margin: 14px auto 0;
-		padding: 24px 20px;
-		background: #e7ddbc;
-	}
-
-	.today-label {
-		margin: 0 0 8px;
-		font-size: 12px;
-		font-weight: 700;
-		letter-spacing: 1.4px;
-		color: #5b5133;
-	}
-
-	.today h2 {
-		margin: 0;
-		font-size: 24px;
-		line-height: 1.2;
-	}
-
-	.today-place {
-		margin: 10px 0 18px;
-		font-size: 16px;
-	}
-
-	.today-button {
-		display: inline-block;
-		padding: 13px 20px;
-		border-radius: 10px;
-		background: #294936;
-		color: white;
-		text-decoration: none;
-		font-weight: 700;
-	}
-
-	footer {
-		max-width: 620px;
-		margin: 0 auto;
-		padding: 28px 20px 36px;
-		text-align: center;
-		font-size: 12px;
-		line-height: 1.5;
-		color: #788078;
-	}
-
-	footer p {
-		margin: 3px 0;
-	}
-
-	.whatsapp-button {
-		position: fixed;
-		right: 84px;
-		bottom: calc(18px + env(safe-area-inset-bottom));
-		z-index: 10;
-		display: grid;
-		place-items: center;
-		width: 52px;
-		height: 52px;
-		padding: 0;
-		border: 2px solid white;
-		border-radius: 999px;
-		background: #25d366;
-		color: #123b20;
-		font-size: 14px;
-		font-weight: 800;
-		text-decoration: none;
-		box-shadow: 0 6px 20px rgba(20, 65, 36, 0.28);
-	}
-
-	.whatsapp-button:hover,
-	.whatsapp-button:focus-visible {
-		background: #20bd5a;
-		transform: translateY(-2px);
-	}
-
-	.whatsapp-icon {
-		display: grid;
-		place-items: center;
-		width: 34px;
-		height: 34px;
-		border-radius: 50%;
-		background: white;
-		font-size: 18px;
-	}
-
-	@media (max-width: 420px) {
-		.whatsapp-button {
-			right: 76px;
-			bottom: calc(12px + env(safe-area-inset-bottom));
-		}
-	}
-
-	@media (min-width: 700px) {
-		.hero {
-			padding: 44px 32px;
-		}
-
-		.menu {
-			padding-top: 30px;
-		}
-	}
+	:global(*) { box-sizing: border-box; }
+	:global(body) { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f5f3ed; color: #24352a; }
+	main { min-height: 100vh; }
+	.hero { background: linear-gradient(135deg, #245b45, #173e30); color: white; padding: 38px 20px; }
+	.hero-content { max-width: 680px; margin: 0 auto; text-align: center; }
+	h1 { margin: 0; font-size: clamp(36px, 8vw, 54px); line-height: 1; }
+	.intro { max-width: 560px; margin: 12px auto 0; font-size: 15px; line-height: 1.55; opacity: 0.9; }
+	.menu { max-width: 620px; margin: 0 auto; padding: 22px 16px 8px; }
+	.menu-card { display: flex; align-items: center; gap: 16px; padding: 18px 16px; margin-bottom: 12px; background: white; border-radius: 14px; color: #24352a; text-decoration: none; box-shadow: 0 2px 8px rgba(30, 50, 35, 0.08); }
+	.menu-card::after { content: ''; flex: 0 0 auto; width: 10px; height: 10px; margin-left: auto; border-top: 2px solid currentColor; border-right: 2px solid currentColor; transform: rotate(45deg); }
+	.menu-card:active { transform: scale(0.99); }
+	.menu-card--notices { position: relative; margin-top: 28px; background: #fff0c7; border: 2px solid #d89517; color: #4b3205; box-shadow: 0 4px 14px rgba(157, 101, 0, 0.18); }
+	.menu-card--notices small { color: #705318; }
+	.icon { flex: 0 0 46px; width: 46px; height: 46px; display: grid; place-items: center; border-radius: 12px; background: #edf2eb; color: #173e30; }
+	.icon--notices { background: #d89517; }
+	.menu-card strong, .menu-card small { display: block; }
+	.menu-card strong { font-size: 19px; margin-bottom: 4px; }
+	.menu-card small { font-size: 14px; line-height: 1.35; color: #667268; }
+	.today { max-width: 620px; margin: 14px auto 0; padding: 24px 20px; background: #e7ddbc; }
+	.today-label { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.4px; color: #5b5133; }
+	.today h2 { margin: 0; font-size: 24px; line-height: 1.2; }
+	.today-place { margin: 10px 0 18px; font-size: 16px; }
+	.today-button { display: inline-block; padding: 13px 20px; border-radius: 10px; background: #294936; color: white; text-decoration: none; font-weight: 700; }
+	footer { max-width: 620px; margin: 0 auto; padding: 28px 20px 36px; text-align: center; font-size: 12px; line-height: 1.5; color: #788078; }
+	footer p { margin: 3px 0; }
+	.whatsapp-button { position: fixed; right: 84px; bottom: calc(18px + env(safe-area-inset-bottom)); z-index: 10; display: grid; place-items: center; width: 52px; height: 52px; padding: 0; border: 2px solid white; border-radius: 999px; background: #25d366; color: #123b20; font-size: 14px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 20px rgba(20, 65, 36, 0.28); }
+	.whatsapp-button:hover, .whatsapp-button:focus-visible { background: #20bd5a; transform: translateY(-2px); }
+	.whatsapp-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: white; font-size: 18px; }
+	@media (max-width: 420px) { .whatsapp-button { right: 76px; bottom: calc(12px + env(safe-area-inset-bottom)); } }
+	@media (min-width: 700px) { .hero { padding: 44px 32px; } .menu { padding-top: 30px; } }
 </style>
